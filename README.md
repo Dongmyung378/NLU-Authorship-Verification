@@ -1,40 +1,91 @@
 # Authorship Verification
 
-> **Stylometric Ensemble & RoBERTa-Large Fine-tuning**
->
-> COMP34812 Natural Language Understanding · Group 33
+[한국어](./README.ko.md) · [Reproduction guide](./docs/reproduction.md) · [Model cards](./model-cards) · [Project poster](./docs/authorship-verification-poster.pdf)
 
-두 영어 텍스트 `text_1`과 `text_2`가 **동일한 저자에 의해 작성되었는지** 판별하는 이진 분류 프로젝트입니다. 서로 다른 방식의 두 모델을 구현하고, 문체적 특징과 문맥적 표현이 저자 동일성 판별에 미치는 영향을 비교했습니다.
+An English authorship-verification project that predicts whether two text passages were written by the same person. It compares an interpretable stylometric ensemble with a fine-tuned RoBERTa-Large model, showing the trade-off between efficient inference and stronger predictive performance.
 
-## 접근 방식
+## Highlights
 
-### Model A - Stylometric Ensemble
+- **0.8348 Macro F1** with RoBERTa-Large and Asymmetric Loss.
+- **0.7702 Macro F1** with a lightweight XGBoost-LightGBM ensemble that can run on CPU.
+- End-to-end notebooks for preprocessing, training, threshold optimization, evaluation, batch inference, and interactive prediction.
+- Detailed model cards covering architecture, hyperparameters, compute requirements, limitations, and responsible use.
 
-단어·문자·기능어 기반 TF-IDF와 문장 길이, 구두점 사용, 어휘 다양성 등의 문체적 특징을 추출합니다. 이후 XGBoost와 LightGBM의 예측을 결합해 최종 결과를 생성합니다.
+## Results
 
-### Model C - RoBERTa-Large with Asymmetric Loss
+Both models were evaluated on the same held-out set of 5,993 balanced text pairs.
 
-RoBERTa-Large를 텍스트 쌍 분류 문제에 맞게 파인튜닝했습니다. Asymmetric Loss를 적용해 분류하기 어려운 샘플에 더 집중하도록 학습했습니다.
+| Model | Approach | Macro F1 | Accuracy | Inference profile |
+|---|---|---:|---:|---|
+| Stylometric Ensemble | Word, character, and function-word TF-IDF; 24 style features; XGBoost + LightGBM | 0.7702 | 0.77 | CPU-friendly, under 60 MB of model artifacts |
+| RoBERTa + ASL | RoBERTa-Large pair classification with asymmetric focal penalties | **0.8348** | **0.83** | GPU recommended, about 1.32 GB of weights |
 
-## 결과
+The reported values come from the saved evaluation runs documented in the model cards.
 
-개발 세트 5,993개 텍스트 쌍을 기준으로 평가했습니다.
+## How it works
 
-| 모델 | Macro F1 | 특징 |
-|---|---:|---|
-| **Model A** | **0.7702** | 가볍고 CPU 추론 가능 |
-| **Model C** | **0.8348** | 더 높은 성능, GPU 사용 권장 |
+### Stylometric ensemble
 
-## 프로젝트 구성
+The first pipeline normalizes obvious metadata, extracts word and character n-grams, models function-word usage, and computes 24 handcrafted style signals such as sentence length, punctuation ratios, lexical diversity, and suffix patterns. Pairwise differences, products, ratios, and cosine distances are passed to XGBoost and LightGBM. Their probabilities are combined with tuned weights and a tuned decision threshold.
 
-- `Data/`: 학습·개발·테스트 데이터
-- `Group_33_AV/Category_A/`: Model A 학습 및 데모 노트북
-- `Group_33_AV/Category_C/`: Model C 학습 및 데모 노트북
-- `Group_33_AV/NLU_Group33_Poster.pdf`: 프로젝트 포스터
+### RoBERTa-Large with Asymmetric Loss
 
-실행 환경, 모델 가중치, 데이터 배치 및 재현 방법은 [상세 실행 가이드](./Group_33_AV/README.md)를 참고하세요.
+The second pipeline cleans email headers, addresses, URLs, and redundant whitespace before tokenizing each pair up to 512 tokens. RoBERTa-Large is fine-tuned with Asymmetric Loss (`gamma_neg=2`, `gamma_pos=1`) so training places more emphasis on difficult negative pairs. A threshold sweep on the development set selected `0.51` for the final classifier.
 
-## 팀
+## Dataset
+
+| Split | Pairs | Labels | Purpose |
+|---|---:|---|---|
+| `train.csv` | 27,643 | Yes | Model fitting |
+| `dev.csv` | 5,993 | Yes | Evaluation and threshold tuning |
+| `test.csv` | 5,985 | No | Batch prediction |
+| `live.csv` | 20 | No | Small inference examples |
+
+Each row contains `text_1` and `text_2`; labelled splits also contain a binary `label` where `1` means same author and `0` means different authors.
+
+## Repository structure
+
+```text
+.
+├── data/                         # Train, development, test, and sample pairs
+├── notebooks/
+│   ├── stylometric-ensemble/     # Training and inference notebooks
+│   └── roberta-asymmetric-loss/  # Training and inference notebooks
+├── model-cards/                  # Detailed model documentation
+├── models/                       # Downloaded weights (ignored by Git)
+├── results/                      # Saved test predictions
+├── docs/                         # Reproduction guide and project poster
+├── requirements.txt
+├── README.md                     # English overview
+└── README.ko.md                  # Korean overview
+```
+
+## Quick start
+
+Python 3.12 is recommended.
+
+```bash
+git clone https://github.com/Dongmyung378/NLU.git
+cd NLU
+python -m venv .venv
+
+# PowerShell
+.\.venv\Scripts\Activate.ps1
+
+pip install -r requirements.txt
+jupyter lab
+```
+
+Download the trained weights and place them under `models/stylometric-ensemble/` or `models/roberta-asymmetric-loss/`, then run the matching demo notebook. Download links, expected files, CUDA notes, and path overrides are listed in the [reproduction guide](./docs/reproduction.md).
+
+## Limitations and responsible use
+
+- The models are optimized for English and may not generalize to multilingual, code-switched, very short, or out-of-domain text.
+- RoBERTa truncates combined inputs beyond 512 tokens; the stylometric pipeline ignores unseen TF-IDF vocabulary.
+- Performance figures describe one held-out dataset and should not be treated as universal benchmarks.
+- Authorship signals can be sensitive. Do not use predictions as sole evidence for identity, attribution, punitive decisions, or deanonymization.
+
+## Contributors
 
 - Dongmyung Park
 - Juho Kim
