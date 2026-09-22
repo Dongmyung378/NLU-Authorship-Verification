@@ -7,10 +7,12 @@ tags:
   - roberta-large
   - asymmetric-loss
   - pytorch
-repo: https://github.com/Dongmyung378/NLU
+repo: https://github.com/Dongmyung378/NLU-Authorship-Verification
 ---
 
 # RoBERTa-Large with Asymmetric Loss
+
+[한국어](./roberta-asymmetric-loss.ko.md) · [Project overview](../README.md)
 
 ## Model summary
 

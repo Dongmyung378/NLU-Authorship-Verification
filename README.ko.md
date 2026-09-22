@@ -1,6 +1,6 @@
 # 저자 동일성 판별
 
-[English](./README.md) · [재현 가이드](./docs/reproduction.md) · [모델 카드](./model-cards) · [프로젝트 포스터](./docs/authorship-verification-poster.pdf)
+[English](./README.md) · [재현 가이드](./docs/reproduction.ko.md) · [문체 앙상블 모델 카드](./model-cards/stylometric-ensemble.ko.md) · [RoBERTa 모델 카드](./model-cards/roberta-asymmetric-loss.ko.md) · [프로젝트 포스터](./docs/authorship-verification-poster.pdf)
 
 두 영어 글이 같은 사람에 의해 작성되었는지 예측하는 저자 동일성 판별 프로젝트입니다. 해석 가능한 문체 기반 앙상블과 RoBERTa-Large 파인튜닝 모델을 비교해, 효율적인 추론과 높은 예측 성능 사이의 차이를 보여줍니다.
 
@@ -65,8 +65,8 @@
 Python 3.12 사용을 권장합니다.
 
 ```bash
-git clone https://github.com/Dongmyung378/NLU.git
-cd NLU
+git clone https://github.com/Dongmyung378/NLU-Authorship-Verification.git
+cd NLU-Authorship-Verification
 python -m venv .venv
 
 # PowerShell
@@ -76,7 +76,7 @@ pip install -r requirements.txt
 jupyter lab
 ```
 
-학습된 가중치를 내려받아 `models/stylometric-ensemble/` 또는 `models/roberta-asymmetric-loss/` 아래에 배치한 뒤 해당 데모 노트북을 실행합니다. 다운로드 링크, 필요한 파일, CUDA 안내, 경로 재정의 방법은 [재현 가이드](./docs/reproduction.md)에 정리되어 있습니다.
+학습된 가중치를 내려받아 `models/stylometric-ensemble/` 또는 `models/roberta-asymmetric-loss/` 아래에 배치한 뒤 해당 데모 노트북을 실행합니다. 다운로드 링크, 필요한 파일, CUDA 안내, 경로 재정의 방법은 [재현 가이드](./docs/reproduction.ko.md)에 정리되어 있습니다.
 
 ## 한계와 책임 있는 사용
 

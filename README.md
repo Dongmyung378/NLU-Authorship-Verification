@@ -1,6 +1,6 @@
 # Authorship Verification
 
-[한국어](./README.ko.md) · [Reproduction guide](./docs/reproduction.md) · [Model cards](./model-cards) · [Project poster](./docs/authorship-verification-poster.pdf)
+[한국어](./README.ko.md) · [Reproduction guide](./docs/reproduction.md) · [Stylometric model card](./model-cards/stylometric-ensemble.md) · [RoBERTa model card](./model-cards/roberta-asymmetric-loss.md) · [Project poster](./docs/authorship-verification-poster.pdf)
 
 An English authorship-verification project that predicts whether two text passages were written by the same person. It compares an interpretable stylometric ensemble with a fine-tuned RoBERTa-Large model, showing the trade-off between efficient inference and stronger predictive performance.
 
@@ -65,8 +65,8 @@ Each row contains `text_1` and `text_2`; labelled splits also contain a binary `
 Python 3.12 is recommended.
 
 ```bash
-git clone https://github.com/Dongmyung378/NLU.git
-cd NLU
+git clone https://github.com/Dongmyung378/NLU-Authorship-Verification.git
+cd NLU-Authorship-Verification
 python -m venv .venv
 
 # PowerShell

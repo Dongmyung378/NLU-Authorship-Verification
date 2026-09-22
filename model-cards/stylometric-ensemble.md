@@ -7,10 +7,12 @@ tags:
   - stylometry
   - xgboost
   - lightgbm
-repo: https://github.com/Dongmyung378/NLU
+repo: https://github.com/Dongmyung378/NLU-Authorship-Verification
 ---
 
 # Stylometric XGBoost-LightGBM Ensemble
+
+[한국어](./stylometric-ensemble.ko.md) · [Project overview](../README.md)
 
 ## Model summary
 

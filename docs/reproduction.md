@@ -1,5 +1,7 @@
 # Reproduction Guide
 
+[한국어](./reproduction.ko.md) · [Project overview](../README.md)
+
 This guide covers local setup, model artifact placement, evaluation, batch inference, and optional retraining for both authorship-verification pipelines.
 
 ## 1. Environment
@@ -9,8 +11,8 @@ The inference notebooks were validated with Python 3.12.7. Create an isolated en
 ```bash
 python -m venv .venv
 
-# Windows
-.venv\Scripts\activate
+# PowerShell
+.\.venv\Scripts\Activate.ps1
 
 # macOS or Linux
 source .venv/bin/activate
