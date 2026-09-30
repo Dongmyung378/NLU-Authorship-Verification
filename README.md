@@ -36,6 +36,15 @@ python -m venv .venv
 
 If `python` is unavailable, use your installed Python launcher to create `.venv`. Once the environment exists, the commands above and below call its interpreter directly. On macOS or Linux, use `.venv/bin/python` in place of `.\.venv\Scripts\python.exe`. For the notebooks and retraining, install the full [`requirements.txt`](./requirements.txt); see the [reproduction guide](./docs/reproduction.md) for setup and CUDA details.
 
+For **RoBERTa on an NVIDIA GPU in Windows**, install the CUDA 12.4 PyTorch build after the requirements above (and after `requirements.txt` if you also need the notebooks):
+
+```powershell
+.\.venv\Scripts\python.exe -m pip install --force-reinstall --no-deps torch==2.5.1+cu124 --index-url https://download.pytorch.org/whl/cu124
+.\.venv\Scripts\python.exe -c "import torch; print(torch.__version__, torch.version.cuda, torch.cuda.is_available()); print(torch.cuda.get_device_name(0) if torch.cuda.is_available() else 'No CUDA device')"
+```
+
+The check should print `True` for CUDA availability and your GPU name. Choose a wheel compatible with your platform and NVIDIA driver from the [official PyTorch version list](https://pytorch.org/get-started/previous-versions/) if CUDA 12.4 is unsuitable. In **Git Bash on Windows**, use `./.venv/Scripts/python.exe` in these and the demo commands.
+
 ### 2. Download one or both models
 
 Trained artifacts are hosted outside GitHub because of their size. The exact download links are:
@@ -76,14 +85,20 @@ From the repository root, enter two English passages when prompted. The default 
 .\.venv\Scripts\python.exe verify_author.py
 ```
 
-Select RoBERTa, or provide both passages on the command line:
+Select RoBERTa on the GPU, or provide both passages on the command line:
 
 ```powershell
-.\.venv\Scripts\python.exe verify_author.py --model roberta
+.\.venv\Scripts\python.exe verify_author.py --model roberta --device cuda
 .\.venv\Scripts\python.exe verify_author.py --text-1 "I walked by the river this morning and watched the boats pass." --text-2 "The rain started quietly in the evening, so I closed the windows."
 ```
 
-The script prints **Same author** or **Different authors**, the same-author probability, and the decision threshold. Use `--model-dir PATH` if the selected artifacts are elsewhere. RoBERTa can run on CPU but is much slower; a CUDA-capable GPU is recommended for practical use.
+In **Windows Git Bash**, the GPU command is:
+
+```bash
+./.venv/Scripts/python.exe verify_author.py --model roberta --device cuda
+```
+
+The script prints **Same author** or **Different authors**, the same-author probability, and the decision threshold. Use `--model-dir PATH` if the selected artifacts are elsewhere. For RoBERTa, `--device auto` (the default) uses CUDA when available. If it detects an NVIDIA GPU but PyTorch cannot use CUDA, it stops with setup guidance instead of silently running on CPU. `--device cuda` requires CUDA; use `--device cpu` only when you intentionally want slower CPU inference. The stylometric ensemble runs on CPU.
 
 ## Project layout
 

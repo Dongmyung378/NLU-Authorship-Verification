@@ -30,7 +30,16 @@ python3.12 -m venv .venv
 .venv/bin/python -m pip install -r requirements.txt
 ```
 
-The inference requirements cover the terminal script. `requirements.txt` also includes Jupyter and training dependencies. The default PyTorch installation can run on CPU. A compatible CUDA-enabled PyTorch build is recommended for practical RoBERTa-Large inference; choose it for your hardware and driver if using an NVIDIA GPU.
+The inference requirements cover the terminal script. `requirements.txt` also includes Jupyter and training dependencies.
+
+**Windows with an NVIDIA GPU:** after installing the requirements above, install the CUDA 12.4 build of PyTorch. Run this after `requirements.txt` too if you installed the full notebook dependencies:
+
+```powershell
+.\.venv\Scripts\python.exe -m pip install --force-reinstall --no-deps torch==2.5.1+cu124 --index-url https://download.pytorch.org/whl/cu124
+.\.venv\Scripts\python.exe -c "import torch; print(torch.__version__, torch.version.cuda, torch.cuda.is_available()); print(torch.cuda.get_device_name(0) if torch.cuda.is_available() else 'No CUDA device')"
+```
+
+The verification should show `2.5.1+cu124`, `12.4`, `True`, and your GPU name. If CUDA availability is `False`, check the NVIDIA driver and the installed wheel before running RoBERTa. CUDA 12.4 is an example for a compatible Windows setup; select a build for your platform and driver from the [official PyTorch previous-versions page](https://pytorch.org/get-started/previous-versions/). Installing a Python package named `torch` alone does not guarantee CUDA support. In Windows Git Bash, write the interpreter path as `./.venv/Scripts/python.exe`; the `.\.venv\Scripts\python.exe` spelling above is for PowerShell.
 
 ## 2. Download the model artifacts
 
@@ -75,12 +84,20 @@ From the repository root, start the interactive demo. It prompts for two English
 On macOS or Linux, replace `.\.venv\Scripts\python.exe` with `.venv/bin/python`. You can select RoBERTa, supply both passages on the command line, or point to a model directory outside `models/`:
 
 ```powershell
-.\.venv\Scripts\python.exe verify_author.py --model roberta
+.\.venv\Scripts\python.exe verify_author.py --model roberta --device cuda
 .\.venv\Scripts\python.exe verify_author.py --text-1 "I walked by the river this morning." --text-2 "The rain began quietly that evening."
 .\.venv\Scripts\python.exe verify_author.py --model roberta --model-dir "D:\models\Models_ASL" --text-1 "First passage." --text-2 "Second passage."
 ```
 
 For a Unix path, use `--model-dir /path/to/Models_ASL`. The `--model-dir` value must be the directory containing the files above, not its parent. Both `--text-1` and `--text-2` must be provided together; otherwise the script prompts for both.
+
+For **Git Bash on Windows**, run:
+
+```bash
+./.venv/Scripts/python.exe verify_author.py --model roberta --device cuda
+```
+
+For RoBERTa, `--device auto` is the default and selects CUDA when PyTorch can use it. If an NVIDIA GPU is detected but PyTorch cannot use CUDA, the command stops with setup guidance instead of silently using CPU. `--device cuda` requires CUDA; `--device cpu` explicitly opts into slower CPU inference. The stylometric model uses CPU.
 
 The output reports `Prediction`, `Same-author probability`, and `Decision threshold`. A score **greater than or equal to** the model's saved threshold yields “Same author”; a lower score yields “Different authors.” This is a model estimate for the supplied pair, not proof of identity or a guaranteed calibrated probability.
 
@@ -133,4 +150,4 @@ On macOS or Linux, use `AV_MODEL_DIR="$PWD/models/Models_ML" .venv/bin/jupyter l
 
 The [stylometric training notebook](../notebooks/stylometric-ensemble/training.ipynb) and [RoBERTa training notebook](../notebooks/roberta-asymmetric-loss/training.ipynb) read `train.csv` and `dev.csv`. They save artifacts to the canonical model directories by default; `AV_MODEL_DIR` can change the output directory. The RoBERTa notebook loads the base `roberta-large` model, which may need a separate download if it is not cached.
 
-The stylometric terminal demo runs on CPU. RoBERTa-Large can run on CPU but may be slow, and its training needs substantially more memory and compute than inference. The [model cards](../model-cards/) record the original model setup and results.
+RoBERTa-Large training needs substantially more memory and compute than inference. The [model cards](../model-cards/) record the original model setup and results.

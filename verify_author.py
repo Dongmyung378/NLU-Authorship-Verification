@@ -10,6 +10,8 @@ import argparse
 import json
 import os
 import re
+import shutil
+import subprocess
 import sys
 import warnings
 from pathlib import Path
@@ -37,6 +39,36 @@ REQUIRED_FILES = {
         "tokenizer_config.json",
     ),
 }
+
+
+class DeviceUnavailableError(RuntimeError):
+    """The requested GPU cannot be used by the installed PyTorch build."""
+
+
+def detect_nvidia_gpu() -> str | None:
+    """Return the first visible NVIDIA GPU, if the driver utility is available."""
+    executable = shutil.which("nvidia-smi")
+    if executable is None and os.name == "nt":
+        system_root = Path(os.environ.get("SystemRoot", r"C:\Windows"))
+        candidate = system_root / "System32" / "nvidia-smi.exe"
+        if candidate.is_file():
+            executable = str(candidate)
+    if executable is None:
+        return None
+    try:
+        result = subprocess.run(
+            [executable, "--query-gpu=name", "--format=csv,noheader"],
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+            errors="replace",
+            timeout=5,
+            check=False,
+        )
+    except (OSError, subprocess.TimeoutExpired):
+        return None
+    names = [name.strip() for name in result.stdout.splitlines() if name.strip()]
+    return names[0] if result.returncode == 0 and names else None
 
 
 def normalize_stylometric_text(text: str) -> str:
@@ -169,14 +201,31 @@ def clean_roberta_text(text: str) -> str:
     return re.sub(r"\s+", " ", text).strip()
 
 
-def predict_roberta(text_1: str, text_2: str, model_dir: Path) -> tuple[float, float]:
+def predict_roberta(
+    text_1: str, text_2: str, model_dir: Path, requested_device: str = "auto"
+) -> tuple[float, float]:
     import torch
     from transformers import AutoModelForSequenceClassification, AutoTokenizer
     from transformers.utils import logging as transformers_logging
 
     transformers_logging.disable_progress_bar()
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    print(f"Running RoBERTa on {device}...", flush=True)
+    if requested_device == "cpu":
+        device = torch.device("cpu")
+    elif torch.cuda.is_available():
+        device = torch.device("cuda:0")
+    else:
+        gpu_name = detect_nvidia_gpu()
+        if requested_device == "cuda" or gpu_name:
+            hardware = f"NVIDIA GPU detected ({gpu_name})" if gpu_name else "CUDA requested"
+            raise DeviceUnavailableError(
+                f"{hardware}, but PyTorch {torch.__version__} cannot use CUDA "
+                f"(CUDA build: {torch.version.cuda or 'none'}). Install a compatible "
+                "CUDA-enabled PyTorch build as shown in docs/reproduction.md, "
+                "then retry. Use --device cpu only if CPU inference is intentional."
+            )
+        device = torch.device("cpu")
+    device_label = torch.cuda.get_device_name(0) if device.type == "cuda" else "CPU"
+    print(f"Running RoBERTa on {device_label}...", flush=True)
     tokenizer = AutoTokenizer.from_pretrained(model_dir, local_files_only=True)
     model = AutoModelForSequenceClassification.from_pretrained(
         model_dir, local_files_only=True
@@ -211,10 +260,18 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--text-1", help="first English passage; prompts if omitted")
     parser.add_argument("--text-2", help="second English passage; prompts if omitted")
     parser.add_argument("--model-dir", type=Path, help="override the model artifact directory")
+    parser.add_argument(
+        "--device",
+        choices=("auto", "cuda", "cpu"),
+        default="auto",
+        help="RoBERTa device (default: auto; prefer GPU when available)",
+    )
     args = parser.parse_args(argv)
 
     if (args.text_1 is None) != (args.text_2 is None):
         parser.error("provide both --text-1 and --text-2, or neither")
+    if args.model == "stylometric" and args.device != "auto":
+        parser.error("--device applies only to --model roberta")
 
     model_candidates = [PROJECT_ROOT / "models" / name for name in MODEL_DIRS[args.model]]
     model_dir = args.model_dir or next(
@@ -248,7 +305,10 @@ def main(argv: list[str] | None = None) -> int:
         if args.model == "stylometric":
             probability, threshold = predict_stylometric(text_1, text_2, model_dir)
         else:
-            probability, threshold = predict_roberta(text_1, text_2, model_dir)
+            probability, threshold = predict_roberta(text_1, text_2, model_dir, args.device)
+    except DeviceUnavailableError as error:
+        print(f"GPU unavailable: {error}", file=sys.stderr)
+        return 1
     except ModuleNotFoundError as error:
         print(
             f"Missing Python dependency: {error.name}. Run: pip install -r requirements-inference.txt",

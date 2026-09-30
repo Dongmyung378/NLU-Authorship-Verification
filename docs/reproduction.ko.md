@@ -30,7 +30,16 @@ python3.12 -m venv .venv
 .venv/bin/python -m pip install -r requirements.txt
 ```
 
-`requirements-inference.txt`는 터미널 도구에 필요한 의존성을 포함합니다. `requirements.txt`에는 Jupyter 및 학습 의존성도 들어 있습니다. 기본 PyTorch 설치는 CPU에서 실행할 수 있습니다. RoBERTa-Large를 실용적인 속도로 추론하려면 NVIDIA GPU와 드라이버에 맞는 CUDA 지원 PyTorch 빌드를 권장합니다.
+`requirements-inference.txt`는 터미널 도구에 필요한 의존성을 포함합니다. `requirements.txt`에는 Jupyter 및 학습 의존성도 들어 있습니다.
+
+**NVIDIA GPU를 사용하는 Windows:** 위 의존성을 설치한 뒤 CUDA 12.4용 PyTorch를 설치하세요. 노트북용 `requirements.txt`도 설치했다면 다음 명령을 그 뒤에 실행합니다.
+
+```powershell
+.\.venv\Scripts\python.exe -m pip install --force-reinstall --no-deps torch==2.5.1+cu124 --index-url https://download.pytorch.org/whl/cu124
+.\.venv\Scripts\python.exe -c "import torch; print(torch.__version__, torch.version.cuda, torch.cuda.is_available()); print(torch.cuda.get_device_name(0) if torch.cuda.is_available() else 'No CUDA device')"
+```
+
+확인 결과에 `2.5.1+cu124`, `12.4`, `True`, GPU 이름이 표시되어야 합니다. CUDA 사용 가능 여부가 `False`이면 RoBERTa를 실행하기 전에 NVIDIA 드라이버와 설치된 PyTorch 빌드를 확인하세요. CUDA 12.4는 호환되는 Windows 환경을 위한 예시입니다. 다른 환경에서는 [PyTorch 공식 이전 버전 목록](https://pytorch.org/get-started/previous-versions/)에서 운영체제와 드라이버에 맞는 빌드를 선택하세요. `torch` 패키지가 설치됐다는 사실만으로 CUDA 지원이 보장되지는 않습니다. Windows의 Git Bash에서는 인터프리터 경로를 `./.venv/Scripts/python.exe`로 적습니다. 위의 `.\.venv\Scripts\python.exe` 표기는 PowerShell용입니다.
 
 ## 2. 모델 파일 다운로드
 
@@ -75,12 +84,20 @@ models/
 macOS 또는 Linux에서는 `.\.venv\Scripts\python.exe`를 `.venv/bin/python`으로 바꾸세요. RoBERTa를 선택하거나, 두 글을 명령행에 바로 입력하거나, `models/` 밖의 모델 폴더를 지정할 수도 있습니다.
 
 ```powershell
-.\.venv\Scripts\python.exe verify_author.py --model roberta
+.\.venv\Scripts\python.exe verify_author.py --model roberta --device cuda
 .\.venv\Scripts\python.exe verify_author.py --text-1 "I walked by the river this morning." --text-2 "The rain began quietly that evening."
 .\.venv\Scripts\python.exe verify_author.py --model roberta --model-dir "D:\models\Models_ASL" --text-1 "First passage." --text-2 "Second passage."
 ```
 
 Unix 경로라면 `--model-dir /path/to/Models_ASL`처럼 지정하세요. `--model-dir`은 상위 폴더가 아니라 위 파일이 직접 들어 있는 폴더를 가리켜야 합니다. `--text-1`과 `--text-2`는 함께 제공해야 하며, 둘 다 생략하면 입력을 요청합니다.
+
+**Windows Git Bash**에서는 다음처럼 실행합니다.
+
+```bash
+./.venv/Scripts/python.exe verify_author.py --model roberta --device cuda
+```
+
+RoBERTa의 기본값인 `--device auto`는 PyTorch가 CUDA를 사용할 수 있으면 GPU를 선택합니다. NVIDIA GPU를 감지했지만 PyTorch에서 CUDA를 사용할 수 없다면 CPU로 조용히 전환하지 않고 설정 안내와 함께 중단합니다. `--device cuda`는 CUDA를 필수로 요구하며, `--device cpu`는 느린 CPU 추론을 명시적으로 선택합니다. 문체 모델은 CPU를 사용합니다.
 
 출력에는 `Prediction`, `Same-author probability`, `Decision threshold`가 표시됩니다. 모델 점수가 저장된 임곗값 **이상**이면 “Same author”, 미만이면 “Different authors”로 판정합니다. 이 값은 입력한 글 쌍에 대한 모델 추정치이며, 신원 증명이나 보정된 확률의 보장은 아닙니다.
 
@@ -133,4 +150,4 @@ macOS 또는 Linux에서는 `AV_MODEL_DIR="$PWD/models/Models_ML" .venv/bin/jupy
 
 [문체 앙상블 학습 노트북](../notebooks/stylometric-ensemble/training.ipynb)과 [RoBERTa 학습 노트북](../notebooks/roberta-asymmetric-loss/training.ipynb)은 `train.csv`와 `dev.csv`를 읽습니다. 기본적으로 각 모델의 기본 폴더에 결과를 저장하며, `AV_MODEL_DIR`로 출력 폴더를 바꿀 수 있습니다. RoBERTa 노트북은 기본 `roberta-large` 모델을 불러오므로 캐시에 없으면 별도로 다운로드해야 할 수 있습니다.
 
-문체 모델의 터미널 시연은 CPU에서 실행됩니다. RoBERTa-Large도 CPU에서 실행할 수 있지만 느릴 수 있고, 학습에는 추론보다 훨씬 많은 메모리와 연산 자원이 필요합니다. 원래 모델의 설정과 결과는 [모델 카드](../model-cards/)에 기록되어 있습니다.
+RoBERTa-Large 학습에는 추론보다 훨씬 많은 메모리와 연산 자원이 필요합니다. 원래 모델의 설정과 결과는 [모델 카드](../model-cards/)에 기록되어 있습니다.

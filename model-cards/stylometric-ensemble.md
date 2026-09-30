@@ -114,7 +114,7 @@ python -m pip install -r requirements-inference.txt
 python verify_author.py --model stylometric
 ```
 
-To pass text on the command line, use `python verify_author.py --model stylometric --text-1 "First English passage" --text-2 "Second English passage"`. The output includes the same-author probability, the loaded model's decision threshold, and the resulting label. If the files live elsewhere, add `--model-dir PATH` with the directory that directly contains them. See the [reproduction guide](../docs/reproduction.md) for environment setup and notebook use.
+To pass text on the command line, use `python verify_author.py --model stylometric --text-1 "First English passage" --text-2 "Second English passage"`. This pipeline runs on CPU. The output includes the same-author probability, the loaded model's decision threshold, and the resulting label. If the files live elsewhere, add `--model-dir PATH` with the directory that directly contains them. See the [reproduction guide](../docs/reproduction.md) for environment setup and notebook use.
 
 ## Limitations and risks
 

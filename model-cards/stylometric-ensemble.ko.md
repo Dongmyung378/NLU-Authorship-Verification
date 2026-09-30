@@ -102,7 +102,7 @@ python -m pip install -r requirements-inference.txt
 python verify_author.py --model stylometric
 ```
 
-명령줄에서 바로 입력하려면 `python verify_author.py --model stylometric --text-1 "First English passage" --text-2 "Second English passage"`를 실행합니다. 출력에는 동일 저자 확률, 모델 파일의 분류 임계값, 판별 결과가 표시됩니다. 다른 위치에 모델을 두었다면 파일이 직접 들어 있는 폴더를 `--model-dir PATH`로 지정합니다. 환경 설정과 노트북 사용법은 [한국어 재현 가이드](../docs/reproduction.ko.md)를 참고하세요.
+명령줄에서 바로 입력하려면 `python verify_author.py --model stylometric --text-1 "First English passage" --text-2 "Second English passage"`를 실행합니다. 이 파이프라인은 CPU에서 실행됩니다. 출력에는 동일 저자 확률, 모델 파일의 분류 임계값, 판별 결과가 표시됩니다. 다른 위치에 모델을 두었다면 파일이 직접 들어 있는 폴더를 `--model-dir PATH`로 지정합니다. 환경 설정과 노트북 사용법은 [한국어 재현 가이드](../docs/reproduction.ko.md)를 참고하세요.
 
 ## 한계와 위험
 

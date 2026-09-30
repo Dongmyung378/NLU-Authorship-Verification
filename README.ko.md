@@ -36,6 +36,15 @@ python -m venv .venv
 
 `python` 명령을 사용할 수 없다면 설치된 다른 Python 실행 명령으로 `.venv`를 만드세요. 가상 환경을 만든 후에는 위와 아래의 명령이 그 안의 Python을 직접 실행합니다. macOS 또는 Linux에서는 `.\.venv\Scripts\python.exe` 대신 `.venv/bin/python`을 사용합니다. 노트북 실행과 재학습에는 전체 [`requirements.txt`](./requirements.txt)를 설치하세요. 환경 구성과 CUDA 안내는 [재현 가이드](./docs/reproduction.ko.md)에 있습니다.
 
+**Windows에서 NVIDIA GPU로 RoBERTa를 실행하려면** 위 의존성 설치 후(노트북도 사용할 경우 `requirements.txt` 설치 후) CUDA 12.4용 PyTorch를 설치하세요.
+
+```powershell
+.\.venv\Scripts\python.exe -m pip install --force-reinstall --no-deps torch==2.5.1+cu124 --index-url https://download.pytorch.org/whl/cu124
+.\.venv\Scripts\python.exe -c "import torch; print(torch.__version__, torch.version.cuda, torch.cuda.is_available()); print(torch.cuda.get_device_name(0) if torch.cuda.is_available() else 'No CUDA device')"
+```
+
+확인 결과에서 CUDA 사용 가능 여부가 `True`이고 GPU 이름이 표시되어야 합니다. CUDA 12.4가 적합하지 않으면 [PyTorch 공식 버전 목록](https://pytorch.org/get-started/previous-versions/)에서 운영체제와 NVIDIA 드라이버에 맞는 빌드를 선택하세요. **Windows의 Git Bash**에서는 아래 시연 명령을 포함해 `./.venv/Scripts/python.exe` 경로를 사용합니다.
+
 ### 2. 모델 다운로드
 
 학습된 모델 파일은 크기 때문에 GitHub 밖에 보관합니다. 다운로드 링크는 다음과 같습니다.
@@ -76,14 +85,20 @@ RoBERTa 다운로드에 다른 토크나이저 파일도 포함되어 있다면 
 .\.venv\Scripts\python.exe verify_author.py
 ```
 
-RoBERTa를 선택하거나 입력 글을 명령행 인자로 전달할 수도 있습니다.
+GPU에서 RoBERTa를 실행하거나 입력 글을 명령행 인자로 전달할 수도 있습니다.
 
 ```powershell
-.\.venv\Scripts\python.exe verify_author.py --model roberta
+.\.venv\Scripts\python.exe verify_author.py --model roberta --device cuda
 .\.venv\Scripts\python.exe verify_author.py --text-1 "I walked by the river this morning and watched the boats pass." --text-2 "The rain started quietly in the evening, so I closed the windows."
 ```
 
-실행 결과에는 **Same author**(동일 저자) 또는 **Different authors**(다른 저자), 동일 저자 확률, 분류 임계값이 표시됩니다. 모델 파일이 다른 위치에 있다면 `--model-dir PATH`를 사용하세요. RoBERTa도 CPU에서 실행할 수 있지만 훨씬 느려 실용적인 사용에는 CUDA 지원 GPU를 권장합니다.
+**Windows Git Bash**에서 실행할 때는 다음 명령을 사용합니다.
+
+```bash
+./.venv/Scripts/python.exe verify_author.py --model roberta --device cuda
+```
+
+실행 결과에는 **Same author**(동일 저자) 또는 **Different authors**(다른 저자), 동일 저자 확률, 분류 임계값이 표시됩니다. 모델 파일이 다른 위치에 있다면 `--model-dir PATH`를 사용하세요. RoBERTa의 기본값 `--device auto`는 CUDA를 사용할 수 있으면 GPU를 사용합니다. NVIDIA GPU를 감지했지만 PyTorch에서 CUDA를 사용할 수 없다면 CPU로 조용히 전환하지 않고 설정 방법을 안내하며 중단합니다. `--device cuda`는 CUDA를 필수로 요구하며, 느린 CPU 추론을 의도적으로 실행할 때만 `--device cpu`를 지정하세요. 문체 앙상블은 CPU에서 실행됩니다.
 
 ## 저장소 구성
 

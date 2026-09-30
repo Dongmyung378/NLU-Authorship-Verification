@@ -74,21 +74,21 @@ Per-class results:
 - Training hardware: one NVIDIA A100 40 GB GPU.
 - Model parameters: approximately 355 million.
 - Model weights: approximately 1.32 GB.
-- Inference: 16 GB system RAM and a CUDA-capable GPU are recommended; CPU inference is possible but slow.
+- Inference: 16 GB system RAM and a CUDA-capable GPU with a CUDA-enabled PyTorch build are recommended; CPU inference is possible but slow.
 - [Download trained artifacts](https://drive.google.com/drive/folders/1Ty9-EpOLAgzvTWPuqrHBTbehmZZuDs3V?usp=sharing). The downloaded model files are kept outside GitHub; the repository ignores `models/`.
 
 ## Run the downloaded model
 
 From the repository root, download all files from the link above and put them directly in `models/Models_ASL/` (the original download folder name) or `models/roberta-asymmetric-loss/`. The directory must contain `best_threshold.json`, `config.json`, `model.safetensors`, `tokenizer.json`, and `tokenizer_config.json`. Keep any additional downloaded tokenizer files together, and avoid an extra nested folder between the chosen directory and these files.
 
-Install the [terminal demo dependencies](../requirements-inference.txt), then enter two English passages when prompted:
+Install the [terminal demo dependencies](../requirements-inference.txt). For GPU inference, follow the [CUDA-enabled PyTorch setup in the reproduction guide](../docs/reproduction.md) and confirm that PyTorch detects your GPU. Then enter two English passages when prompted:
 
 ```bash
 python -m pip install -r requirements-inference.txt
-python verify_author.py --model roberta
+python verify_author.py --model roberta --device cuda
 ```
 
-To pass text on the command line, use `python verify_author.py --model roberta --text-1 "First English passage" --text-2 "Second English passage"`. The output includes the same-author probability, the loaded model's decision threshold, and the resulting label. If the files live elsewhere, add `--model-dir PATH` with the directory that directly contains them. CPU inference works but can take longer; a CUDA-capable GPU is recommended. See the [reproduction guide](../docs/reproduction.md) for environment setup and notebook use.
+The default `--device auto` selects CUDA when available. If an NVIDIA GPU is detected but PyTorch cannot use CUDA, it stops with setup guidance; it uses CPU when no NVIDIA GPU is detected. Use `--device cuda` to require GPU inference, or `--device cpu` to force CPU inference. To pass text on the command line, use `python verify_author.py --model roberta --text-1 "First English passage" --text-2 "Second English passage"`. The output includes the same-author probability, the loaded model's decision threshold, and the resulting label. If the files live elsewhere, add `--model-dir PATH` with the directory that directly contains them. See the [reproduction guide](../docs/reproduction.md) for environment setup and notebook use.
 
 ## Limitations and risks
 
