@@ -1,91 +1,117 @@
 # Authorship Verification
 
-[한국어](./README.ko.md) · [Reproduction guide](./docs/reproduction.md) · [Stylometric model card](./model-cards/stylometric-ensemble.md) · [RoBERTa model card](./model-cards/roberta-asymmetric-loss.md) · [Project poster](./docs/authorship-verification-poster.pdf)
+**A joint NLP project by Dongmyung Park and Juho Kim**
 
-An English authorship-verification project that predicts whether two text passages were written by the same person. It compares an interpretable stylometric ensemble with a fine-tuned RoBERTa-Large model, showing the trade-off between efficient inference and stronger predictive performance.
+[한국어](./README.ko.md) · [Reproduction guide](./docs/reproduction.md) · [Project poster](./docs/authorship-verification-poster.pdf)
 
-## Highlights
+Given two English passages, can we tell whether they were written by the same person? This project explores that question with two complete classification pipelines: a compact stylometric ensemble and a fine-tuned RoBERTa-Large model. The repository includes the data splits, training and inference notebooks, saved predictions, model documentation, and a terminal demo for trying either model on your own text.
 
-- **0.8348 Macro F1** with RoBERTa-Large and Asymmetric Loss.
-- **0.7702 Macro F1** with a lightweight XGBoost-LightGBM ensemble that can run on CPU.
-- End-to-end notebooks for preprocessing, training, threshold optimization, evaluation, batch inference, and interactive prediction.
-- Detailed model cards covering architecture, hyperparameters, compute requirements, limitations, and responsible use.
+## Results at a glance
 
-## Results
-
-Both models were evaluated on the same held-out set of 5,993 balanced text pairs.
-
-| Model | Approach | Macro F1 | Accuracy | Inference profile |
+| Model | Method | Macro F1 | Accuracy | Practical trade-off |
 |---|---|---:|---:|---|
-| Stylometric Ensemble | Word, character, and function-word TF-IDF; 24 style features; XGBoost + LightGBM | 0.7702 | 0.77 | CPU-friendly, under 60 MB of model artifacts |
-| RoBERTa + ASL | RoBERTa-Large pair classification with asymmetric focal penalties | **0.8348** | **0.83** | GPU recommended, about 1.32 GB of weights |
+| [Stylometric ensemble](./model-cards/stylometric-ensemble.md) | Word, character, and function-word TF-IDF; 24 style features; XGBoost + LightGBM | 0.7702 | 0.77 | CPU inference; artifacts under 60 MB |
+| [RoBERTa-Large + ASL](./model-cards/roberta-asymmetric-loss.md) | Paired-text transformer with Asymmetric Loss | **0.8348** | **0.83** | Higher development score; about 1.32 GB of weights |
 
-The reported values come from the saved evaluation runs documented in the model cards.
+These are scores on the same **5,993-pair labeled development split** (2,937 different-author and 3,056 same-author pairs). The development split was also used to select decision thresholds, so these figures describe the recorded development runs rather than an untouched final test. The repository's 5,985-pair test split is unlabeled; no test-set accuracy or F1 is claimed.
 
-## How it works
+## What we built
 
-### Stylometric ensemble
+The **stylometric pipeline** removes identifying metadata, then represents each passage with word and character n-grams, function-word usage, and 24 style measurements such as sentence length, punctuation, and lexical diversity. Pairwise features feed XGBoost and LightGBM; their outputs are blended with tuned weights and a `0.43` decision threshold. It is the smaller option for local CPU use.
 
-The first pipeline normalizes obvious metadata, extracts word and character n-grams, models function-word usage, and computes 24 handcrafted style signals such as sentence length, punctuation ratios, lexical diversity, and suffix patterns. Pairwise differences, products, ratios, and cosine distances are passed to XGBoost and LightGBM. Their probabilities are combined with tuned weights and a tuned decision threshold.
+The **RoBERTa pipeline** cleans email headers, addresses, and URLs, encodes both passages together up to 512 tokens, and fine-tunes `roberta-large` with Asymmetric Loss (`gamma_neg=2`, `gamma_pos=1`). Its development-set threshold is `0.51`. This approach captures contextual signals at a higher compute and storage cost.
 
-### RoBERTa-Large with Asymmetric Loss
+Both pipelines have training notebooks, inference notebooks, and model cards. [`verify_author.py`](./verify_author.py) provides one consistent command-line interface for single-pair predictions.
 
-The second pipeline cleans email headers, addresses, URLs, and redundant whitespace before tokenizing each pair up to 512 tokens. RoBERTa-Large is fine-tuned with Asymmetric Loss (`gamma_neg=2`, `gamma_pos=1`) so training places more emphasis on difficult negative pairs. A threshold sweep on the development set selected `0.51` for the final classifier.
+## Try a prediction
 
-## Dataset
+### 1. Set up Python
 
-| Split | Pairs | Labels | Purpose |
-|---|---:|---|---|
-| `train.csv` | 27,643 | Yes | Model fitting |
-| `dev.csv` | 5,993 | Yes | Evaluation and threshold tuning |
-| `test.csv` | 5,985 | No | Batch prediction |
-| `live.csv` | 20 | No | Small inference examples |
+Python 3.12 is recommended. Create a virtual environment with the Python 3.12 launcher available on your system, then install the terminal-inference dependencies. For example, in Windows PowerShell:
 
-Each row contains `text_1` and `text_2`; labelled splits also contain a binary `label` where `1` means same author and `0` means different authors.
+```powershell
+python -m venv .venv
+.\.venv\Scripts\python.exe -m pip install -r requirements-inference.txt
+```
 
-## Repository structure
+If `python` is unavailable, use your installed Python launcher to create `.venv`. Once the environment exists, the commands above and below call its interpreter directly. On macOS or Linux, use `.venv/bin/python` in place of `.\.venv\Scripts\python.exe`. For the notebooks and retraining, install the full [`requirements.txt`](./requirements.txt); see the [reproduction guide](./docs/reproduction.md) for setup and CUDA details.
+
+### 2. Download one or both models
+
+Trained artifacts are hosted outside GitHub because of their size. The exact download links are:
+
+| Model | Download | Put the files directly in either folder |
+|---|---|---|
+| Stylometric ensemble | [Google Drive: XGBoost, LightGBM, and vectorizers](https://drive.google.com/drive/folders/1mF0bMpzfs3XODpQA2Hd7H_JvXLk5AGgp?usp=sharing) | `models/stylometric-ensemble/` or `models/Models_ML/` |
+| RoBERTa-Large + ASL | [Google Drive: fine-tuned checkpoint and tokenizer](https://drive.google.com/drive/folders/1Ty9-EpOLAgzvTWPuqrHBTbehmZZuDs3V?usp=sharing) | `models/roberta-asymmetric-loss/` or `models/Models_ASL/` |
+
+The downloaded Google Drive folder names `Models_ML` and `Models_ASL` work as-is for the terminal demo. Place them inside `models/`, with the model files immediately inside each folder; avoid an extra nested folder. The canonical folders are used by the notebooks unless `AV_MODEL_DIR` is set. The `models/` directory is ignored by Git, so downloaded weights stay local.
+
+The terminal demo checks for these files:
 
 ```text
-.
-├── data/                         # Train, development, test, and sample pairs
-├── notebooks/
-│   ├── stylometric-ensemble/     # Training and inference notebooks
-│   └── roberta-asymmetric-loss/  # Training and inference notebooks
-├── model-cards/                  # Detailed model documentation
-├── models/                       # Downloaded weights (ignored by Git)
-├── results/                      # Saved test predictions
-├── docs/                         # Reproduction guide and project poster
-├── requirements.txt
-├── README.md                     # English overview
-└── README.ko.md                  # Korean overview
+models/Models_ML/                 # or models/stylometric-ensemble/
+├── ensemble_config.json
+├── lgb_model.pkl
+├── tfidf_char.pkl
+├── tfidf_fw.pkl
+├── tfidf_word.pkl
+└── xgb_model.json
+
+models/Models_ASL/                # or models/roberta-asymmetric-loss/
+├── best_threshold.json
+├── config.json
+├── model.safetensors
+├── tokenizer.json
+└── tokenizer_config.json
 ```
 
-## Quick start
+Keep any additional tokenizer files supplied with the RoBERTa download in that same folder. You only need the artifacts for the model you choose to run.
 
-Python 3.12 is recommended.
+### 3. Run the terminal demo
 
-```bash
-git clone https://github.com/Dongmyung378/NLU-Authorship-Verification.git
-cd NLU-Authorship-Verification
-python -m venv .venv
+From the repository root, enter two English passages when prompted. The default is the stylometric ensemble:
 
-# PowerShell
-.\.venv\Scripts\Activate.ps1
-
-pip install -r requirements.txt
-jupyter lab
+```powershell
+.\.venv\Scripts\python.exe verify_author.py
 ```
 
-Download the trained weights and place them under `models/stylometric-ensemble/` or `models/roberta-asymmetric-loss/`, then run the matching demo notebook. Download links, expected files, CUDA notes, and path overrides are listed in the [reproduction guide](./docs/reproduction.md).
+Select RoBERTa, or provide both passages on the command line:
 
-## Limitations and responsible use
+```powershell
+.\.venv\Scripts\python.exe verify_author.py --model roberta
+.\.venv\Scripts\python.exe verify_author.py --text-1 "I walked by the river this morning and watched the boats pass." --text-2 "The rain started quietly in the evening, so I closed the windows."
+```
 
-- The models are optimized for English and may not generalize to multilingual, code-switched, very short, or out-of-domain text.
-- RoBERTa truncates combined inputs beyond 512 tokens; the stylometric pipeline ignores unseen TF-IDF vocabulary.
-- Performance figures describe one held-out dataset and should not be treated as universal benchmarks.
-- Authorship signals can be sensitive. Do not use predictions as sole evidence for identity, attribution, punitive decisions, or deanonymization.
+The script prints **Same author** or **Different authors**, the same-author probability, and the decision threshold. Use `--model-dir PATH` if the selected artifacts are elsewhere. RoBERTa can run on CPU but is much slower; a CUDA-capable GPU is recommended for practical use.
 
-## Contributors
+## Project layout
 
-- Dongmyung Park
-- Juho Kim
+```text
+data/                       Labeled train/dev pairs and unlabeled test/live pairs
+notebooks/                  Training and demo notebooks for each pipeline
+model-cards/                Architecture, hyperparameters, evaluation, limitations
+models/                     Downloaded artifacts (Git-ignored)
+results/                    Saved predictions for the unlabeled test split
+docs/                       Reproduction guide and project poster
+verify_author.py            Interactive and argument-based terminal demo
+requirements-inference.txt  Dependencies for the terminal demo
+requirements.txt            Full notebook and training dependencies
+```
+
+The labeled [`train.csv`](./data/train.csv) split has 27,643 pairs. [`dev.csv`](./data/dev.csv) has 5,993 labeled pairs; [`test.csv`](./data/test.csv) and [`live.csv`](./data/live.csv) have 5,985 and 20 unlabeled pairs, respectively. Each pair has `text_1` and `text_2`; `label=1` means same author and `label=0` means different authors. The notebooks remain available in the repository; [`.gitattributes`](./.gitattributes) excludes `.ipynb` files from GitHub's language statistics.
+
+## Explore the work
+
+- [Reproduction guide](./docs/reproduction.md): local setup, artifact placement, inference, and retraining.
+- [Stylometric model card](./model-cards/stylometric-ensemble.md) and [RoBERTa model card](./model-cards/roberta-asymmetric-loss.md): methods, hyperparameters, compute, results, and risks.
+- [Training and demo notebooks](./notebooks/): end-to-end experiments and batch inference.
+- [Project poster](./docs/authorship-verification-poster.pdf): visual project summary.
+
+## Limitations
+
+The methods target English text and may be unreliable for very short passages, other languages, code switching, or unfamiliar genres. RoBERTa truncates combined inputs beyond 512 tokens, while the stylometric model cannot represent terms outside its fitted TF-IDF vocabulary. The reported numbers are specific to this development split. A model score is evidence about writing patterns, not proof of a person's identity; it should not be the sole basis for attribution, sanctions, or deanonymization.
+
+## Authors
+
+Dongmyung Park and Juho Kim developed this project together.

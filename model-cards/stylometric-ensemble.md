@@ -53,6 +53,7 @@ The model used 27,643 labelled English text pairs drawn from multiple domains. N
 | Column sample by tree | 0.8 |
 | Minimum child weight | 2 |
 | Max bins | 128 |
+| Early stopping patience | 200 rounds |
 
 ### LightGBM
 
@@ -62,8 +63,10 @@ The model used 27,643 labelled English text pairs drawn from multiple domains. N
 | Learning rate | 0.01 |
 | Leaves | 127 |
 | Subsample | 0.8 |
+| Subsample frequency | 1 |
 | Column sample by tree | 0.8 |
 | Max bins | 127 |
+| Early stopping patience | 100 rounds |
 
 ### Ensemble
 
@@ -75,7 +78,7 @@ The model used 27,643 labelled English text pairs drawn from multiple domains. N
 
 ## Evaluation
 
-Evaluation used 5,993 development pairs: 2,937 different-author pairs and 3,056 same-author pairs.
+Evaluation used 5,993 development pairs: 2,937 different-author pairs and 3,056 same-author pairs. The ensemble weights and decision threshold were also chosen on this split, so these figures describe development performance, not an independent test-set result.
 
 | Metric | Score |
 |---|---:|
@@ -98,7 +101,20 @@ Per-class results:
 - Training hardware: two NVIDIA T4 GPUs with 16 GB VRAM each, plus a multi-core CPU.
 - Inference: standard CPU supported; approximately 2 GB RAM recommended.
 - Serialized ensemble, vectorizers, and configuration: under 60 MB total.
-- [Download trained artifacts](https://drive.google.com/drive/folders/1mF0bMpzfs3XODpQA2Hd7H_JvXLk5AGgp?usp=sharing).
+- [Download trained artifacts](https://drive.google.com/drive/folders/1mF0bMpzfs3XODpQA2Hd7H_JvXLk5AGgp?usp=sharing). The downloaded model files are kept outside GitHub; the repository ignores `models/`.
+
+## Run the downloaded model
+
+From the repository root, download all files from the link above and put them directly in `models/Models_ML/` (the original download folder name) or `models/stylometric-ensemble/`. The directory must contain `ensemble_config.json`, `xgb_model.json`, `lgb_model.pkl`, `tfidf_word.pkl`, `tfidf_char.pkl`, and `tfidf_fw.pkl`. Avoid an extra nested folder between the chosen directory and these files.
+
+Install the [terminal demo dependencies](../requirements-inference.txt), then enter two English passages when prompted:
+
+```bash
+python -m pip install -r requirements-inference.txt
+python verify_author.py --model stylometric
+```
+
+To pass text on the command line, use `python verify_author.py --model stylometric --text-1 "First English passage" --text-2 "Second English passage"`. The output includes the same-author probability, the loaded model's decision threshold, and the resulting label. If the files live elsewhere, add `--model-dir PATH` with the directory that directly contains them. See the [reproduction guide](../docs/reproduction.md) for environment setup and notebook use.
 
 ## Limitations and risks
 

@@ -1,125 +1,136 @@
-# Reproduction Guide
+# Reproduction guide
 
 [한국어](./reproduction.ko.md) · [Project overview](../README.md)
 
-This guide covers local setup, model artifact placement, evaluation, batch inference, and optional retraining for both authorship-verification pipelines.
+Run a local same-author prediction with the terminal script, or use the notebooks to evaluate the development split and generate batch predictions. The trained model files are downloaded separately because they are too large for this GitHub repository.
 
-## 1. Environment
+## 1. Set up Python
 
-The inference notebooks were validated with Python 3.12.7. Create an isolated environment from the repository root:
+Use Python 3.12 (the notebooks were checked with 3.12.7). Run these commands from the repository root. Activation is optional; the examples call the virtual environment directly.
+
+**Windows PowerShell**
+
+```powershell
+py -3.12 -m venv .venv
+.\.venv\Scripts\python.exe -m pip install -r requirements-inference.txt
+```
+
+If `py` is unavailable, use `python` to create the environment. For Jupyter notebooks or retraining, also install the full dependency list:
+
+```powershell
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
+```
+
+**macOS or Linux**
 
 ```bash
-python -m venv .venv
-
-# PowerShell
-.\.venv\Scripts\Activate.ps1
-
-# macOS or Linux
-source .venv/bin/activate
-
-python -m pip install --upgrade pip
-pip install -r requirements.txt
-jupyter lab
+python3.12 -m venv .venv
+.venv/bin/python -m pip install -r requirements-inference.txt
+# For Jupyter notebooks or retraining:
+.venv/bin/python -m pip install -r requirements.txt
 ```
 
-The pinned `torch` package works for CPU inference. For NVIDIA acceleration, install the PyTorch build that matches the CUDA runtime on your machine before installing the remaining dependencies. Exact training-library versions are recorded in each [model card](../model-cards/).
+The inference requirements cover the terminal script. `requirements.txt` also includes Jupyter and training dependencies. The default PyTorch installation can run on CPU. A compatible CUDA-enabled PyTorch build is recommended for practical RoBERTa-Large inference; choose it for your hardware and driver if using an NVIDIA GPU.
 
-## 2. Download model artifacts
+## 2. Download the model artifacts
 
-The trained files are hosted separately because the RoBERTa checkpoint is about 1.32 GB.
+Download either model or both. Keep each model's files **directly inside** its directory, without an extra nested Google Drive folder. The entire `models/` directory is ignored by Git and is not included in a clone.
 
-### Stylometric ensemble
+| Model | Download | Canonical directory |
+|---|---|---|
+| Stylometric XGBoost + LightGBM ensemble | [Model and vectorizer files](https://drive.google.com/drive/folders/1mF0bMpzfs3XODpQA2Hd7H_JvXLk5AGgp?usp=sharing) | `models/stylometric-ensemble/` |
+| Fine-tuned RoBERTa-Large | [Checkpoint and tokenizer files](https://drive.google.com/drive/folders/1Ty9-EpOLAgzvTWPuqrHBTbehmZZuDs3V?usp=sharing) | `models/roberta-asymmetric-loss/` |
 
-[Download the XGBoost, LightGBM, and vectorizer artifacts](https://drive.google.com/drive/folders/1mF0bMpzfs3XODpQA2Hd7H_JvXLk5AGgp?usp=sharing), then place them as follows:
+Expected minimum contents:
 
 ```text
-models/stylometric-ensemble/
-├── ensemble_config.json
-├── lgb_model.pkl
-├── tfidf_char.pkl
-├── tfidf_fw.pkl
-├── tfidf_word.pkl
-└── xgb_model.json
+models/
+├── stylometric-ensemble/
+│   ├── ensemble_config.json
+│   ├── lgb_model.pkl
+│   ├── tfidf_char.pkl
+│   ├── tfidf_fw.pkl
+│   ├── tfidf_word.pkl
+│   └── xgb_model.json
+└── roberta-asymmetric-loss/
+    ├── best_threshold.json
+    ├── config.json
+    ├── model.safetensors
+    ├── tokenizer.json
+    └── tokenizer_config.json
 ```
 
-### RoBERTa-Large
+Keep any additional downloaded tokenizer or training files in the same directory. The RoBERTa weights alone are approximately 1.3 GiB, so leave enough disk space.
 
-[Download the fine-tuned RoBERTa artifacts](https://drive.google.com/drive/folders/1Ty9-EpOLAgzvTWPuqrHBTbehmZZuDs3V?usp=sharing), then place them as follows:
+The terminal script also accepts the original download folder names `models/Models_ML/` for the ensemble and `models/Models_ASL/` for RoBERTa. It searches the canonical directory first, then the matching original name, and selects a directory only when all required files are present. **The notebooks use only the canonical directory by default.** To run a notebook with an original folder name, either rename the folder to its canonical name or set `AV_MODEL_DIR` to that exact folder before starting Jupyter (section 5).
 
-```text
-models/roberta-asymmetric-loss/
-├── best_threshold.json
-├── config.json
-├── model.safetensors
-├── tokenizer.json
-└── tokenizer_config.json
+## 3. Run a terminal prediction
+
+From the repository root, start the interactive demo. It prompts for two English passages and uses the CPU-friendly stylometric ensemble by default:
+
+```powershell
+.\.venv\Scripts\python.exe verify_author.py
 ```
 
-Tokenizer folders may contain additional vocabulary files. Keep all downloaded files together in the same directory.
+On macOS or Linux, replace `.\.venv\Scripts\python.exe` with `.venv/bin/python`. You can select RoBERTa, supply both passages on the command line, or point to a model directory outside `models/`:
 
-## 3. Data layout
-
-The notebooks expect the repository datasets under `data/`:
-
-```text
-data/
-├── train.csv
-├── dev.csv
-├── test.csv
-└── live.csv
+```powershell
+.\.venv\Scripts\python.exe verify_author.py --model roberta
+.\.venv\Scripts\python.exe verify_author.py --text-1 "I walked by the river this morning." --text-2 "The rain began quietly that evening."
+.\.venv\Scripts\python.exe verify_author.py --model roberta --model-dir "D:\models\Models_ASL" --text-1 "First passage." --text-2 "Second passage."
 ```
 
-Required columns:
+For a Unix path, use `--model-dir /path/to/Models_ASL`. The `--model-dir` value must be the directory containing the files above, not its parent. Both `--text-1` and `--text-2` must be provided together; otherwise the script prompts for both.
 
-- `text_1`, `text_2`: the input passages.
-- `label`: present in training and development data; `1` indicates the same author and `0` indicates different authors.
+The output reports `Prediction`, `Same-author probability`, and `Decision threshold`. A score **greater than or equal to** the model's saved threshold yields “Same author”; a lower score yields “Different authors.” This is a model estimate for the supplied pair, not proof of identity or a guaranteed calibrated probability.
 
-## 4. Run inference
+## 4. Run the notebooks and inspect results
 
-Start Jupyter from the repository root and open one of these notebooks:
+Install `requirements.txt` as in section 1, then start Jupyter from the repository root:
 
-- [`notebooks/stylometric-ensemble/demo.ipynb`](../notebooks/stylometric-ensemble/demo.ipynb)
-- [`notebooks/roberta-asymmetric-loss/demo.ipynb`](../notebooks/roberta-asymmetric-loss/demo.ipynb)
+```powershell
+.\.venv\Scripts\jupyter.exe lab
+```
 
-Run the cells in order. Each notebook evaluates the labelled development split, generates predictions for `test.csv`, writes them to `results/`, and exposes a single-pair prediction helper.
+On macOS or Linux, run `.venv/bin/jupyter lab`. Open either [stylometric demo](../notebooks/stylometric-ensemble/demo.ipynb) or [RoBERTa demo](../notebooks/roberta-asymmetric-loss/demo.ipynb), then run the cells in order. Each notebook:
 
-The stylometric pipeline supports CPU inference. A CUDA-capable GPU is strongly recommended for practical RoBERTa-Large inference.
+1. Loads its model files and evaluates labeled `data/dev.csv`.
+2. Predicts the unlabeled `data/test.csv` rows and writes a one-column CSV under `results/`.
+3. Defines `predict_author_match` and runs a sample pair. Edit `text_a` and `text_b` in the last cell for your own passages.
 
-## 5. Retrain a model
+The saved files are `results/stylometric-ensemble.csv` and `results/roberta-asymmetric-loss.csv`. Each has a `prediction` column with one 0 or 1 per test row, in the original row order. The current `test.csv` has 5,985 rows. Here `1` means same author and `0` means different authors. The test split has no labels, so its prediction CSV is not a measured test score. Development metrics are reported on `dev.csv`, which was also used to select thresholds; interpret them as development results.
 
-Training notebooks are available at:
+## 5. Data and path overrides
 
-- [`notebooks/stylometric-ensemble/training.ipynb`](../notebooks/stylometric-ensemble/training.ipynb)
-- [`notebooks/roberta-asymmetric-loss/training.ipynb`](../notebooks/roberta-asymmetric-loss/training.ipynb)
+The supplied datasets live in `data/`:
 
-The default output folders are:
+| File | Columns | Use |
+|---|---|---|
+| `train.csv` | `text_1`, `text_2`, `label` | Training |
+| `dev.csv` | `text_1`, `text_2`, `label` | Development evaluation and threshold selection |
+| `test.csv` | `text_1`, `text_2` | Unlabeled batch inference |
+| `live.csv` | `text_1`, `text_2` | Additional unlabeled pairs |
 
-- `models/stylometric-ensemble/`
-- `models/roberta-asymmetric-loss/`
+The notebooks look upward from the working directory for a repository containing `data/`. Set these environment variables before starting Jupyter if your files are elsewhere:
 
-Training is substantially more demanding than inference. The recorded runs used two NVIDIA T4 GPUs for the boosting ensemble and one NVIDIA A100 40 GB GPU for RoBERTa-Large. Adjust batch size and device settings for the available hardware.
-
-## 6. Path overrides
-
-The notebooks locate the repository root automatically. You can override paths with environment variables when running on hosted notebook services or custom storage:
-
-| Variable | Purpose |
+| Variable | Notebook path |
 |---|---|
 | `AV_PROJECT_ROOT` | Repository root |
-| `AV_DATA_DIR` | Dataset directory |
-| `AV_MODEL_DIR` | Model input or output directory |
-| `AV_RESULTS_DIR` | Prediction output directory |
+| `AV_DATA_DIR` | Directory containing the CSV files |
+| `AV_MODEL_DIR` | Directory containing the **selected model's files** |
+| `AV_RESULTS_DIR` | Directory for output prediction CSV files |
 
-Restart the Jupyter kernel after changing installed packages or environment variables.
+For example, to keep an unrenamed ensemble download on Windows:
 
-## 7. Expected outputs
-
-Batch inference produces one-column CSV files with the header `prediction`:
-
-```text
-results/
-├── stylometric-ensemble.csv
-└── roberta-asymmetric-loss.csv
+```powershell
+$env:AV_MODEL_DIR = (Resolve-Path .\models\Models_ML).Path
+.\.venv\Scripts\jupyter.exe lab
 ```
 
-Each file contains 5,985 predictions aligned row-for-row with `data/test.csv`.
+On macOS or Linux, use `AV_MODEL_DIR="$PWD/models/Models_ML" .venv/bin/jupyter lab`. Change `Models_ML` to `Models_ASL` when running the RoBERTa notebook. The terminal script uses `--model-dir` instead of `AV_MODEL_DIR`. Restart the Jupyter kernel after changing environment variables or installed packages.
+
+## 6. Optional retraining and hardware
+
+The [stylometric training notebook](../notebooks/stylometric-ensemble/training.ipynb) and [RoBERTa training notebook](../notebooks/roberta-asymmetric-loss/training.ipynb) read `train.csv` and `dev.csv`. They save artifacts to the canonical model directories by default; `AV_MODEL_DIR` can change the output directory. The RoBERTa notebook loads the base `roberta-large` model, which may need a separate download if it is not cached.
+
+The stylometric terminal demo runs on CPU. RoBERTa-Large can run on CPU but may be slow, and its training needs substantially more memory and compute than inference. The [model cards](../model-cards/) record the original model setup and results.

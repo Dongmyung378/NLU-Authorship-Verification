@@ -1,91 +1,117 @@
 # 저자 동일성 판별
 
-[English](./README.md) · [재현 가이드](./docs/reproduction.ko.md) · [문체 앙상블 모델 카드](./model-cards/stylometric-ensemble.ko.md) · [RoBERTa 모델 카드](./model-cards/roberta-asymmetric-loss.ko.md) · [프로젝트 포스터](./docs/authorship-verification-poster.pdf)
+**Dongmyung Park과 Juho Kim의 공동 NLP 프로젝트**
 
-두 영어 글이 같은 사람에 의해 작성되었는지 예측하는 저자 동일성 판별 프로젝트입니다. 해석 가능한 문체 기반 앙상블과 RoBERTa-Large 파인튜닝 모델을 비교해, 효율적인 추론과 높은 예측 성능 사이의 차이를 보여줍니다.
+[English](./README.md) · [재현 가이드](./docs/reproduction.ko.md) · [프로젝트 포스터](./docs/authorship-verification-poster.pdf)
 
-## 핵심 성과
+두 영어 글이 같은 사람의 글인지 판별할 수 있을까요? 이 프로젝트는 가벼운 문체 기반 앙상블과 파인튜닝한 RoBERTa-Large, 두 개의 완전한 분류 파이프라인으로 그 문제를 탐구합니다. 저장소에는 데이터 분할, 학습·추론 노트북, 저장된 예측 결과, 모델 문서, 두 모델을 직접 시험할 수 있는 터미널 시연 도구가 들어 있습니다.
 
-- RoBERTa-Large와 Asymmetric Loss로 **Macro F1 0.8348** 달성
-- CPU에서도 실행 가능한 XGBoost-LightGBM 문체 앙상블로 **Macro F1 0.7702** 달성
-- 전처리, 학습, 임계값 최적화, 평가, 배치 추론, 대화형 예측을 포함한 전체 노트북 제공
-- 구조, 하이퍼파라미터, 연산 환경, 한계와 책임 있는 사용법을 모델 카드에 정리
+## 주요 결과
 
-## 결과
-
-두 모델은 동일한 5,993개 균형 개발 텍스트 쌍에서 평가했습니다.
-
-| 모델 | 접근 방식 | Macro F1 | 정확도 | 추론 특성 |
+| 모델 | 방법 | Macro F1 | 정확도 | 실용적 특징 |
 |---|---|---:|---:|---|
-| 문체 기반 앙상블 | 단어·문자·기능어 TF-IDF, 문체 특징 24개, XGBoost + LightGBM | 0.7702 | 0.77 | CPU 추론 가능, 모델 파일 60MB 미만 |
-| RoBERTa + ASL | 비대칭 초점 패널티를 적용한 RoBERTa-Large 텍스트 쌍 분류 | **0.8348** | **0.83** | GPU 권장, 가중치 약 1.32GB |
+| [문체 기반 앙상블](./model-cards/stylometric-ensemble.ko.md) | 단어·문자·기능어 TF-IDF, 문체 특징 24개, XGBoost + LightGBM | 0.7702 | 0.77 | CPU 추론 가능, 모델 파일 60MB 미만 |
+| [RoBERTa-Large + ASL](./model-cards/roberta-asymmetric-loss.ko.md) | Asymmetric Loss를 사용한 텍스트 쌍 Transformer | **0.8348** | **0.83** | 더 높은 개발 세트 점수, 약 1.32GB의 가중치 |
 
-표의 수치는 모델 카드에 기록된 저장 평가 결과를 기준으로 합니다.
+두 점수는 동일한 **라벨이 있는 개발 세트 5,993쌍**(서로 다른 저자 2,937쌍, 동일 저자 3,056쌍)에서 얻었습니다. 분류 임계값도 이 개발 세트에서 선택했으므로, 표의 값은 별도의 미사용 최종 테스트 결과가 아니라 기록된 개발 단계 평가 결과입니다. 저장소의 테스트 세트 5,985쌍에는 라벨이 없어 테스트 정확도나 F1은 제시하지 않습니다.
 
-## 모델 구성
+## 구현 내용
 
-### 문체 기반 앙상블
+**문체 기반 파이프라인**은 저자를 드러낼 수 있는 메타데이터를 정리한 뒤 단어·문자 n-gram, 기능어 사용 패턴, 문장 길이·구두점·어휘 다양성 등을 다루는 문체 특징 24개로 각 글을 표현합니다. 두 글의 특징을 조합해 XGBoost와 LightGBM에 입력하고, 조정된 가중치와 `0.43`의 분류 임계값으로 결과를 결합합니다. 로컬 CPU에서 사용하기 좋은 작은 모델입니다.
 
-명백한 메타데이터를 정규화한 뒤 단어·문자 n-gram, 기능어 사용 패턴, 문장 길이, 구두점 비율, 어휘 다양성, 접미사 패턴 등 24개의 문체 특징을 추출합니다. 두 글의 차이·곱·비율·코사인 거리를 XGBoost와 LightGBM에 입력하고, 두 모델의 확률을 최적화된 가중치와 임계값으로 결합합니다.
+**RoBERTa 파이프라인**은 이메일 헤더·주소·URL을 정리하고 두 글을 합쳐 최대 512토큰으로 인코딩합니다. `roberta-large`를 Asymmetric Loss(`gamma_neg=2`, `gamma_pos=1`)로 파인튜닝했으며, 개발 세트에서 선택한 임계값은 `0.51`입니다. 맥락 정보를 활용하는 대신 연산량과 저장 용량이 더 큽니다.
 
-### Asymmetric Loss를 적용한 RoBERTa-Large
+두 파이프라인 모두 학습·추론 노트북과 모델 카드를 제공합니다. [`verify_author.py`](./verify_author.py)는 두 모델에 공통으로 사용할 수 있는 단일 텍스트 쌍 명령행 인터페이스입니다.
 
-이메일 헤더, 주소, URL, 중복 공백을 정리한 뒤 각 텍스트 쌍을 최대 512토큰으로 변환합니다. 구분하기 어려운 다른 저자 쌍에 더 집중하도록 Asymmetric Loss(`gamma_neg=2`, `gamma_pos=1`)로 RoBERTa-Large를 파인튜닝했습니다. 개발 세트 임계값 탐색을 통해 최종 분류 임계값 `0.51`을 선택했습니다.
+## 직접 예측해 보기
 
-## 데이터셋
+### 1. Python 환경 구성
 
-| 분할 | 텍스트 쌍 | 라벨 | 용도 |
-|---|---:|---|---|
-| `train.csv` | 27,643 | 있음 | 모델 학습 |
-| `dev.csv` | 5,993 | 있음 | 평가 및 임계값 최적화 |
-| `test.csv` | 5,985 | 없음 | 배치 예측 |
-| `live.csv` | 20 | 없음 | 소규모 추론 예시 |
+Python 3.12를 권장합니다. 시스템에서 사용할 수 있는 Python 3.12 실행 명령으로 가상 환경을 만든 뒤, 터미널 추론에 필요한 패키지를 설치하세요. Windows PowerShell 예시는 다음과 같습니다.
 
-각 행은 `text_1`, `text_2`를 포함하며, 라벨이 있는 분할에는 동일 저자 `1`, 다른 저자 `0`을 나타내는 `label` 열이 있습니다.
+```powershell
+python -m venv .venv
+.\.venv\Scripts\python.exe -m pip install -r requirements-inference.txt
+```
 
-## 저장소 구조
+`python` 명령을 사용할 수 없다면 설치된 다른 Python 실행 명령으로 `.venv`를 만드세요. 가상 환경을 만든 후에는 위와 아래의 명령이 그 안의 Python을 직접 실행합니다. macOS 또는 Linux에서는 `.\.venv\Scripts\python.exe` 대신 `.venv/bin/python`을 사용합니다. 노트북 실행과 재학습에는 전체 [`requirements.txt`](./requirements.txt)를 설치하세요. 환경 구성과 CUDA 안내는 [재현 가이드](./docs/reproduction.ko.md)에 있습니다.
+
+### 2. 모델 다운로드
+
+학습된 모델 파일은 크기 때문에 GitHub 밖에 보관합니다. 다운로드 링크는 다음과 같습니다.
+
+| 모델 | 다운로드 | 파일을 바로 넣을 수 있는 폴더 |
+|---|---|---|
+| 문체 기반 앙상블 | [Google Drive: XGBoost, LightGBM, 벡터라이저](https://drive.google.com/drive/folders/1mF0bMpzfs3XODpQA2Hd7H_JvXLk5AGgp?usp=sharing) | `models/stylometric-ensemble/` 또는 `models/Models_ML/` |
+| RoBERTa-Large + ASL | [Google Drive: 파인튜닝 체크포인트와 토크나이저](https://drive.google.com/drive/folders/1Ty9-EpOLAgzvTWPuqrHBTbehmZZuDs3V?usp=sharing) | `models/roberta-asymmetric-loss/` 또는 `models/Models_ASL/` |
+
+Google Drive에서 내려받은 `Models_ML`, `Models_ASL` 폴더는 이름을 바꾸지 않아도 터미널 시연에 사용할 수 있습니다. 해당 폴더를 `models/` 안에 넣고, 모델 파일이 추가 하위 폴더 없이 바로 그 안에 있도록 배치하세요. 노트북은 `AV_MODEL_DIR`을 지정하지 않으면 위 표의 표준 폴더(`stylometric-ensemble`, `roberta-asymmetric-loss`)를 사용합니다. `models/`는 Git에서 제외되어 다운로드한 가중치는 로컬에만 남습니다.
+
+터미널 시연 도구가 확인하는 파일은 다음과 같습니다.
 
 ```text
-.
-├── data/                         # 학습·개발·테스트·예시 데이터
-├── notebooks/
-│   ├── stylometric-ensemble/     # 문체 모델 학습 및 추론
-│   └── roberta-asymmetric-loss/  # RoBERTa 모델 학습 및 추론
-├── model-cards/                  # 상세 모델 문서
-├── models/                       # 내려받은 가중치(Git 추적 제외)
-├── results/                      # 저장된 테스트 예측
-├── docs/                         # 재현 가이드와 프로젝트 포스터
-├── requirements.txt
-├── README.md                     # 영문 메인 문서
-└── README.ko.md                  # 한국어 문서
+models/Models_ML/                 # 또는 models/stylometric-ensemble/
+├── ensemble_config.json
+├── lgb_model.pkl
+├── tfidf_char.pkl
+├── tfidf_fw.pkl
+├── tfidf_word.pkl
+└── xgb_model.json
+
+models/Models_ASL/                # 또는 models/roberta-asymmetric-loss/
+├── best_threshold.json
+├── config.json
+├── model.safetensors
+├── tokenizer.json
+└── tokenizer_config.json
 ```
 
-## 빠른 시작
+RoBERTa 다운로드에 다른 토크나이저 파일도 포함되어 있다면 같은 폴더에 보관하세요. 실행할 모델의 파일만 다운로드해도 됩니다.
 
-Python 3.12 사용을 권장합니다.
+### 3. 터미널 시연 실행
 
-```bash
-git clone https://github.com/Dongmyung378/NLU-Authorship-Verification.git
-cd NLU-Authorship-Verification
-python -m venv .venv
+저장소 루트에서 실행해 영어 글 두 개를 입력합니다. 기본 모델은 문체 기반 앙상블입니다.
 
-# PowerShell
-.\.venv\Scripts\Activate.ps1
-
-pip install -r requirements.txt
-jupyter lab
+```powershell
+.\.venv\Scripts\python.exe verify_author.py
 ```
 
-학습된 가중치를 내려받아 `models/stylometric-ensemble/` 또는 `models/roberta-asymmetric-loss/` 아래에 배치한 뒤 해당 데모 노트북을 실행합니다. 다운로드 링크, 필요한 파일, CUDA 안내, 경로 재정의 방법은 [재현 가이드](./docs/reproduction.ko.md)에 정리되어 있습니다.
+RoBERTa를 선택하거나 입력 글을 명령행 인자로 전달할 수도 있습니다.
 
-## 한계와 책임 있는 사용
+```powershell
+.\.venv\Scripts\python.exe verify_author.py --model roberta
+.\.venv\Scripts\python.exe verify_author.py --text-1 "I walked by the river this morning and watched the boats pass." --text-2 "The rain started quietly in the evening, so I closed the windows."
+```
 
-- 영어 텍스트에 최적화되어 있어 다국어, 코드 스위칭, 매우 짧은 글, 학습 분포 밖의 글에서는 성능이 떨어질 수 있습니다.
-- RoBERTa는 두 입력의 합이 512토큰을 넘으면 뒷부분을 자르며, 문체 모델은 TF-IDF 학습 어휘에 없는 표현을 반영하지 못합니다.
-- 성능 수치는 하나의 개발 데이터셋에 대한 결과이며 모든 환경의 성능을 보장하지 않습니다.
-- 저자 판별 결과는 민감하게 사용될 수 있습니다. 신원 확인, 저자 귀속, 제재, 익명 해제의 단독 근거로 사용하지 마세요.
+실행 결과에는 **Same author**(동일 저자) 또는 **Different authors**(다른 저자), 동일 저자 확률, 분류 임계값이 표시됩니다. 모델 파일이 다른 위치에 있다면 `--model-dir PATH`를 사용하세요. RoBERTa도 CPU에서 실행할 수 있지만 훨씬 느려 실용적인 사용에는 CUDA 지원 GPU를 권장합니다.
 
-## 기여자
+## 저장소 구성
 
-- Dongmyung Park
-- Juho Kim
+```text
+data/                       라벨이 있는 학습·개발 쌍과 라벨 없는 테스트·예시 쌍
+notebooks/                  두 파이프라인의 학습·시연 노트북
+model-cards/                구조, 하이퍼파라미터, 평가, 한계
+models/                     다운로드한 모델 파일(Git 추적 제외)
+results/                    라벨 없는 테스트 세트의 저장된 예측 결과
+docs/                       재현 가이드와 프로젝트 포스터
+verify_author.py            대화형·인자형 터미널 시연 도구
+requirements-inference.txt  터미널 시연용 의존성
+requirements.txt            노트북·학습용 전체 의존성
+```
+
+라벨이 있는 [`train.csv`](./data/train.csv)는 27,643쌍, [`dev.csv`](./data/dev.csv)는 5,993쌍입니다. 라벨이 없는 [`test.csv`](./data/test.csv)와 [`live.csv`](./data/live.csv)는 각각 5,985쌍, 20쌍입니다. 각 쌍에는 `text_1`, `text_2`가 있으며, `label=1`은 동일 저자, `label=0`은 다른 저자를 뜻합니다. 노트북은 저장소에서 그대로 볼 수 있으며, [`.gitattributes`](./.gitattributes)가 `.ipynb` 파일을 GitHub 언어 통계에서 제외합니다.
+
+## 자세히 보기
+
+- [재현 가이드](./docs/reproduction.ko.md): 로컬 환경, 모델 파일 배치, 추론, 재학습.
+- [문체 기반 모델 카드](./model-cards/stylometric-ensemble.ko.md)와 [RoBERTa 모델 카드](./model-cards/roberta-asymmetric-loss.ko.md): 방법, 하이퍼파라미터, 연산 환경, 결과, 위험 요소.
+- [학습·시연 노트북](./notebooks/): 전체 실험과 배치 추론.
+- [프로젝트 포스터](./docs/authorship-verification-poster.pdf): 프로젝트 시각 요약.
+
+## 한계
+
+두 방법 모두 영어 텍스트를 대상으로 하며, 매우 짧은 글·다른 언어·코드 스위칭·낯선 장르에서는 결과가 불안정할 수 있습니다. RoBERTa는 두 글의 입력이 512토큰을 넘으면 일부가 잘리고, 문체 모델은 학습된 TF-IDF 어휘 밖의 표현을 담지 못합니다. 성능 수치는 이 개발 세트에 한정됩니다. 모델 점수는 문체 패턴에 대한 단서일 뿐 신원을 증명하지 않으므로, 저자 귀속·제재·익명 해제의 단독 근거로 사용하면 안 됩니다.
+
+## 개발자
+
+Dongmyung Park과 Juho Kim이 함께 개발했습니다.

@@ -1,18 +1,8 @@
-# Core utilities
-numpy==1.26.4
+# Terminal inference dependencies
+-r requirements-inference.txt
+
+# Notebook and training dependencies
 pandas==2.2.2
-scikit-learn==1.6.1
-scipy==1.16.3
-joblib==1.5.3
 jupyterlab>=4.0,<5
-
-# Stylometric ensemble
-xgboost==3.2.0
-lightgbm==4.6.0
-
-# RoBERTa-Large
-# Install a platform-specific PyTorch build separately when CUDA acceleration is needed.
-torch==2.5.1
-transformers==5.0.0
 datasets==4.0.0
 accelerate==1.13.0

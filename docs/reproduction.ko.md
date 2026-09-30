@@ -2,124 +2,135 @@
 
 [English](./reproduction.md) · [프로젝트 개요](../README.ko.md)
 
-이 문서는 두 저자 동일성 판별 파이프라인의 로컬 환경 구성, 모델 파일 배치, 평가, 배치 추론, 선택적 재학습 방법을 설명합니다.
+터미널에서 두 글의 동일 저자 여부를 예측하거나, 노트북에서 개발 데이터 평가와 일괄 예측을 실행하는 방법입니다. 학습된 모델 파일은 GitHub 저장소에 넣기에는 용량이 커서 별도로 내려받아야 합니다.
 
-## 1. 실행 환경
+## 1. Python 환경 설정
 
-추론 노트북은 Python 3.12.7에서 검증했습니다. 저장소 루트에서 격리 환경을 생성합니다.
+Python 3.12를 사용하세요. 노트북은 3.12.7에서 확인했습니다. 다음 명령은 저장소 루트에서 실행합니다. 가상 환경을 활성화하지 않아도 실행 파일을 직접 호출할 수 있습니다.
 
-~~~bash
-python -m venv .venv
+**Windows PowerShell**
 
-# PowerShell
-.\.venv\Scripts\Activate.ps1
+```powershell
+py -3.12 -m venv .venv
+.\.venv\Scripts\python.exe -m pip install -r requirements-inference.txt
+```
 
-# macOS 또는 Linux
-source .venv/bin/activate
+`py` 명령을 사용할 수 없다면 환경을 만들 때 `python`을 사용하세요. Jupyter 노트북 또는 재학습에도 사용할 경우 전체 의존성을 설치합니다.
 
-python -m pip install --upgrade pip
-pip install -r requirements.txt
-jupyter lab
-~~~
+```powershell
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
+```
 
-고정된 <code>torch</code> 패키지는 CPU 추론을 지원합니다. NVIDIA GPU를 사용하려면 나머지 의존성을 설치하기 전에 시스템의 CUDA 런타임과 호환되는 PyTorch 빌드를 설치하세요. 학습에 사용한 라이브러리 버전은 각 [모델 카드](../model-cards/)에 기록되어 있습니다.
+**macOS 또는 Linux**
+
+```bash
+python3.12 -m venv .venv
+.venv/bin/python -m pip install -r requirements-inference.txt
+# Jupyter 노트북 또는 재학습에도 사용할 경우:
+.venv/bin/python -m pip install -r requirements.txt
+```
+
+`requirements-inference.txt`는 터미널 도구에 필요한 의존성을 포함합니다. `requirements.txt`에는 Jupyter 및 학습 의존성도 들어 있습니다. 기본 PyTorch 설치는 CPU에서 실행할 수 있습니다. RoBERTa-Large를 실용적인 속도로 추론하려면 NVIDIA GPU와 드라이버에 맞는 CUDA 지원 PyTorch 빌드를 권장합니다.
 
 ## 2. 모델 파일 다운로드
 
-RoBERTa 체크포인트의 크기가 약 1.32GB이므로 학습된 모델 파일은 별도로 제공합니다.
+필요한 모델 하나만 받거나 둘 다 받을 수 있습니다. 각 모델의 파일을 아래 폴더 **바로 안에** 넣으세요. Google Drive에서 받은 바깥 폴더가 한 겹 더 들어가면 안 됩니다. `models/` 전체는 Git에서 무시하므로 저장소 복제본에는 포함되지 않습니다.
 
-### 문체 기반 앙상블
+| 모델 | 다운로드 | 기본 폴더 |
+|---|---|---|
+| 문체 특징 기반 XGBoost + LightGBM 앙상블 | [모델 및 벡터라이저 파일](https://drive.google.com/drive/folders/1mF0bMpzfs3XODpQA2Hd7H_JvXLk5AGgp?usp=sharing) | `models/stylometric-ensemble/` |
+| 파인튜닝된 RoBERTa-Large | [체크포인트 및 토크나이저 파일](https://drive.google.com/drive/folders/1Ty9-EpOLAgzvTWPuqrHBTbehmZZuDs3V?usp=sharing) | `models/roberta-asymmetric-loss/` |
 
-[XGBoost, LightGBM 및 벡터라이저 파일을 다운로드](https://drive.google.com/drive/folders/1mF0bMpzfs3XODpQA2Hd7H_JvXLk5AGgp?usp=sharing)한 뒤 다음과 같이 배치합니다.
+최소한 다음 파일이 있어야 합니다.
 
-~~~text
-models/stylometric-ensemble/
-├── ensemble_config.json
-├── lgb_model.pkl
-├── tfidf_char.pkl
-├── tfidf_fw.pkl
-├── tfidf_word.pkl
-└── xgb_model.json
-~~~
+```text
+models/
+├── stylometric-ensemble/
+│   ├── ensemble_config.json
+│   ├── lgb_model.pkl
+│   ├── tfidf_char.pkl
+│   ├── tfidf_fw.pkl
+│   ├── tfidf_word.pkl
+│   └── xgb_model.json
+└── roberta-asymmetric-loss/
+    ├── best_threshold.json
+    ├── config.json
+    ├── model.safetensors
+    ├── tokenizer.json
+    └── tokenizer_config.json
+```
 
-### RoBERTa-Large
+추가로 받은 토크나이저 또는 학습 파일도 같은 폴더에 보관하세요. RoBERTa 가중치 파일만 약 1.3GiB이므로 디스크 여유 공간을 확인하세요.
 
-[파인튜닝된 RoBERTa 파일을 다운로드](https://drive.google.com/drive/folders/1Ty9-EpOLAgzvTWPuqrHBTbehmZZuDs3V?usp=sharing)한 뒤 다음과 같이 배치합니다.
+터미널 도구는 원래 다운로드 폴더 이름인 `models/Models_ML/`(앙상블)과 `models/Models_ASL/`(RoBERTa)도 인식합니다. 기본 폴더를 먼저 확인하고, 그다음 해당 원래 이름의 폴더에서 필수 파일이 모두 있는지 확인합니다. **노트북은 기본적으로 위의 기본 폴더만 사용합니다.** 원래 이름을 그대로 쓰려면 폴더를 기본 이름으로 바꾸거나, Jupyter를 시작하기 전에 `AV_MODEL_DIR`을 실제 모델 폴더로 지정하세요(5절).
 
-~~~text
-models/roberta-asymmetric-loss/
-├── best_threshold.json
-├── config.json
-├── model.safetensors
-├── tokenizer.json
-└── tokenizer_config.json
-~~~
+## 3. 터미널에서 예측하기
 
-토크나이저 폴더에 어휘 파일이 추가로 포함되어 있을 수 있습니다. 내려받은 파일은 모두 같은 디렉터리에 보관하세요.
+저장소 루트에서 대화형 시연을 시작합니다. 영어 글 두 개를 차례로 입력하며, 기본 모델은 CPU에서 사용하기 좋은 문체 앙상블입니다.
 
-## 3. 데이터 구성
+```powershell
+.\.venv\Scripts\python.exe verify_author.py
+```
 
-노트북은 저장소의 <code>data/</code> 디렉터리에서 데이터셋을 읽습니다.
+macOS 또는 Linux에서는 `.\.venv\Scripts\python.exe`를 `.venv/bin/python`으로 바꾸세요. RoBERTa를 선택하거나, 두 글을 명령행에 바로 입력하거나, `models/` 밖의 모델 폴더를 지정할 수도 있습니다.
 
-~~~text
-data/
-├── train.csv
-├── dev.csv
-├── test.csv
-└── live.csv
-~~~
+```powershell
+.\.venv\Scripts\python.exe verify_author.py --model roberta
+.\.venv\Scripts\python.exe verify_author.py --text-1 "I walked by the river this morning." --text-2 "The rain began quietly that evening."
+.\.venv\Scripts\python.exe verify_author.py --model roberta --model-dir "D:\models\Models_ASL" --text-1 "First passage." --text-2 "Second passage."
+```
 
-필수 열:
+Unix 경로라면 `--model-dir /path/to/Models_ASL`처럼 지정하세요. `--model-dir`은 상위 폴더가 아니라 위 파일이 직접 들어 있는 폴더를 가리켜야 합니다. `--text-1`과 `--text-2`는 함께 제공해야 하며, 둘 다 생략하면 입력을 요청합니다.
 
-- <code>text_1</code>, <code>text_2</code>: 입력 텍스트
-- <code>label</code>: 학습·개발 데이터에 포함되며 동일 저자는 <code>1</code>, 다른 저자는 <code>0</code>
+출력에는 `Prediction`, `Same-author probability`, `Decision threshold`가 표시됩니다. 모델 점수가 저장된 임곗값 **이상**이면 “Same author”, 미만이면 “Different authors”로 판정합니다. 이 값은 입력한 글 쌍에 대한 모델 추정치이며, 신원 증명이나 보정된 확률의 보장은 아닙니다.
 
-## 4. 추론 실행
+## 4. 노트북 실행 및 결과 확인
 
-저장소 루트에서 Jupyter를 시작한 뒤 다음 노트북 중 하나를 엽니다.
+1절처럼 `requirements.txt`를 설치하고 저장소 루트에서 Jupyter를 시작합니다.
 
-- [문체 기반 앙상블 데모](../notebooks/stylometric-ensemble/demo.ipynb)
-- [RoBERTa-Large 데모](../notebooks/roberta-asymmetric-loss/demo.ipynb)
+```powershell
+.\.venv\Scripts\jupyter.exe lab
+```
 
-셀을 순서대로 실행하면 라벨이 있는 개발 데이터를 평가하고, <code>test.csv</code>의 예측을 생성해 <code>results/</code>에 저장하며, 단일 텍스트 쌍을 예측하는 함수도 사용할 수 있습니다.
+macOS 또는 Linux에서는 `.venv/bin/jupyter lab`을 실행하세요. [문체 앙상블 데모](../notebooks/stylometric-ensemble/demo.ipynb) 또는 [RoBERTa 데모](../notebooks/roberta-asymmetric-loss/demo.ipynb)를 열고 셀을 순서대로 실행합니다. 각 노트북은 다음 작업을 합니다.
 
-문체 기반 모델은 CPU 추론을 지원합니다. RoBERTa-Large를 실용적인 속도로 실행하려면 CUDA를 지원하는 GPU를 권장합니다.
+1. 해당 모델을 불러와 정답이 있는 `data/dev.csv`를 평가합니다.
+2. 정답이 없는 `data/test.csv`를 예측해 `results/` 아래에 한 열짜리 CSV를 저장합니다.
+3. `predict_author_match` 함수를 정의하고 예시 글 쌍을 실행합니다. 마지막 셀의 `text_a`와 `text_b`를 바꾸면 직접 쓴 글도 넣을 수 있습니다.
 
-## 5. 모델 재학습
+결과 파일은 `results/stylometric-ensemble.csv`와 `results/roberta-asymmetric-loss.csv`입니다. 각각 `prediction` 열에 테스트 데이터의 원래 행 순서대로 0 또는 1이 한 개씩 기록됩니다. 현재 `test.csv`에는 5,985행이 있습니다. `1`은 동일 저자, `0`은 다른 저자를 뜻합니다. 테스트 데이터에는 정답 열이 없으므로 이 CSV는 측정된 테스트 점수가 아닙니다. 개발 지표는 임곗값을 고를 때에도 사용한 `dev.csv`에서 얻은 값이므로 개발 데이터 결과로 해석해야 합니다.
 
-학습 노트북:
+## 5. 데이터와 경로 변경
 
-- [문체 기반 앙상블 학습](../notebooks/stylometric-ensemble/training.ipynb)
-- [RoBERTa-Large 학습](../notebooks/roberta-asymmetric-loss/training.ipynb)
+제공된 데이터는 `data/`에 있습니다.
 
-기본 출력 폴더:
+| 파일 | 열 | 용도 |
+|---|---|---|
+| `train.csv` | `text_1`, `text_2`, `label` | 학습 |
+| `dev.csv` | `text_1`, `text_2`, `label` | 개발 데이터 평가와 임곗값 선택 |
+| `test.csv` | `text_1`, `text_2` | 정답 없는 일괄 추론 |
+| `live.csv` | `text_1`, `text_2` | 추가 정답 없는 글 쌍 |
 
-- <code>models/stylometric-ensemble/</code>
-- <code>models/roberta-asymmetric-loss/</code>
+노트북은 현재 작업 폴더에서 상위로 올라가며 `data/`가 있는 저장소를 찾습니다. 파일을 다른 위치에 둔 경우 Jupyter를 시작하기 전에 다음 환경 변수를 설정하세요.
 
-학습에는 추론보다 훨씬 많은 연산 자원이 필요합니다. 기록된 실행에서는 부스팅 앙상블에 NVIDIA T4 GPU 2개를, RoBERTa-Large에 NVIDIA A100 40GB GPU 1개를 사용했습니다. 사용 가능한 하드웨어에 맞게 배치 크기와 장치 설정을 조정하세요.
-
-## 6. 경로 재정의
-
-노트북은 저장소 루트를 자동으로 찾습니다. 호스팅 노트북 환경이나 별도 스토리지를 사용할 때는 다음 환경 변수로 경로를 재정의할 수 있습니다.
-
-| 환경 변수 | 용도 |
+| 환경 변수 | 노트북에서 가리키는 경로 |
 |---|---|
-| <code>AV_PROJECT_ROOT</code> | 저장소 루트 |
-| <code>AV_DATA_DIR</code> | 데이터셋 디렉터리 |
-| <code>AV_MODEL_DIR</code> | 모델 입력 또는 출력 디렉터리 |
-| <code>AV_RESULTS_DIR</code> | 예측 결과 디렉터리 |
+| `AV_PROJECT_ROOT` | 저장소 루트 |
+| `AV_DATA_DIR` | CSV 파일이 있는 폴더 |
+| `AV_MODEL_DIR` | **선택한 모델의 파일**이 있는 폴더 |
+| `AV_RESULTS_DIR` | 예측 CSV를 저장할 폴더 |
 
-설치된 패키지나 환경 변수를 변경한 뒤에는 Jupyter 커널을 다시 시작하세요.
+예를 들어 Windows에서 문체 모델의 원래 폴더 이름을 유지하려면 다음과 같이 실행합니다.
 
-## 7. 예상 출력
+```powershell
+$env:AV_MODEL_DIR = (Resolve-Path .\models\Models_ML).Path
+.\.venv\Scripts\jupyter.exe lab
+```
 
-배치 추론은 <code>prediction</code> 열 하나로 구성된 CSV 파일을 생성합니다.
+macOS 또는 Linux에서는 `AV_MODEL_DIR="$PWD/models/Models_ML" .venv/bin/jupyter lab`을 사용하세요. RoBERTa 노트북을 실행할 때는 `Models_ML`을 `Models_ASL`로 바꾸세요. 터미널 도구는 `AV_MODEL_DIR` 대신 `--model-dir`을 사용합니다. 환경 변수나 설치 패키지를 변경했다면 Jupyter 커널을 다시 시작하세요.
 
-~~~text
-results/
-├── stylometric-ensemble.csv
-└── roberta-asymmetric-loss.csv
-~~~
+## 6. 선택적 재학습과 하드웨어
 
-각 파일에는 <code>data/test.csv</code>의 행 순서와 일치하는 5,985개의 예측이 저장됩니다.
+[문체 앙상블 학습 노트북](../notebooks/stylometric-ensemble/training.ipynb)과 [RoBERTa 학습 노트북](../notebooks/roberta-asymmetric-loss/training.ipynb)은 `train.csv`와 `dev.csv`를 읽습니다. 기본적으로 각 모델의 기본 폴더에 결과를 저장하며, `AV_MODEL_DIR`로 출력 폴더를 바꿀 수 있습니다. RoBERTa 노트북은 기본 `roberta-large` 모델을 불러오므로 캐시에 없으면 별도로 다운로드해야 할 수 있습니다.
+
+문체 모델의 터미널 시연은 CPU에서 실행됩니다. RoBERTa-Large도 CPU에서 실행할 수 있지만 느릴 수 있고, 학습에는 추론보다 훨씬 많은 메모리와 연산 자원이 필요합니다. 원래 모델의 설정과 결과는 [모델 카드](../model-cards/)에 기록되어 있습니다.
