@@ -16,7 +16,7 @@ repo: https://github.com/Dongmyung378/NLU-Authorship-Verification
 
 ## Model summary
 
-This supervised binary classifier predicts whether two English passages share an author. It combines word-, character-, and function-word TF-IDF signals with handcrafted stylometric features, then blends XGBoost and LightGBM probabilities using tuned ensemble weights and a tuned decision threshold.
+This supervised binary classifier was trained to label pairs in the supplied English text dataset as same-author or different-author. It combines word-, character-, and function-word TF-IDF signals with handcrafted stylometric features, then blends XGBoost and LightGBM outputs using tuned ensemble weights and a tuned decision threshold. Its reported performance is limited to the supplied development split.
 
 - **Developed by:** Dongmyung Park and Juho Kim
 - **Language:** English
@@ -38,7 +38,7 @@ Preprocessing removes emails, URLs, dates, phone numbers, long repeated-characte
 
 ## Training data
 
-The model used 27,643 labelled English text pairs drawn from multiple domains. No external training data was added. The repository contains the train, development, and unlabelled test splits under [`data/`](../data/).
+The model used the 27,643 labeled English text pairs in the supplied [`train.csv`](../data/train.csv); no additional labeled pairs were added for task-specific training. The labeled train and development CSVs contain passages and pair labels, but no author IDs or domain labels, so an author-separated or domain-separated evaluation cannot be verified from these files.
 
 ## Hyperparameters
 
@@ -78,7 +78,7 @@ The model used 27,643 labelled English text pairs drawn from multiple domains. N
 
 ## Evaluation
 
-Evaluation used 5,993 development pairs: 2,937 different-author pairs and 3,056 same-author pairs. The ensemble weights and decision threshold were also chosen on this split, so these figures describe development performance, not an independent test-set result.
+Evaluation used 5,993 development pairs: 2,937 different-author pairs and 3,056 same-author pairs. A comparison of the supplied CSVs found 630 development pairs (10.5%) that exactly repeat a text pair in the training split, with matching labels. The development split was also used for early stopping, ensemble weights, and the decision threshold. These figures are development results and do not establish performance on independent, unseen authors or domains.
 
 | Metric | Score |
 |---|---:|
@@ -114,12 +114,13 @@ python -m pip install -r requirements-inference.txt
 python verify_author.py --model stylometric
 ```
 
-To pass text on the command line, use `python verify_author.py --model stylometric --text-1 "First English passage" --text-2 "Second English passage"`. This pipeline runs on CPU. The output includes the same-author probability, the loaded model's decision threshold, and the resulting label. If the files live elsewhere, add `--model-dir PATH` with the directory that directly contains them. See the [reproduction guide](../docs/reproduction.md) for environment setup and notebook use.
+To pass text on the command line, use `python verify_author.py --model stylometric --text-1 "First English passage" --text-2 "Second English passage"`. This pipeline runs on CPU. The output includes `Same-author probability`, the loaded model's decision threshold, and the resulting label. Despite the displayed name, this blended classifier output has not been calibrated as the probability of a shared author. Results for arbitrary new authors or domains have not been established. If the files live elsewhere, add `--model-dir PATH` with the directory that directly contains them. See the [reproduction guide](../docs/reproduction.md) for environment setup and notebook use.
 
 ## Limitations and risks
 
 - The feature set is designed for English; multilingual or code-switched inputs are not supported reliably.
 - Style features become less informative on passages shorter than five words.
+- Short passages may be unreliable: the median training passage has about 123 whitespace-separated words, much longer than a short terminal example.
 - TF-IDF ignores terms outside the fitted vocabulary.
 - Genre shifts can change stylistic patterns and reduce accuracy.
 - Authorship predictions can enable unwanted deanonymization. They should not be treated as conclusive identity evidence.

@@ -2,7 +2,7 @@
 
 [한국어](./reproduction.ko.md) · [Project overview](../README.md)
 
-Run a local same-author prediction with the terminal script, or use the notebooks to evaluate the development split and generate batch predictions. The trained model files are downloaded separately because they are too large for this GitHub repository.
+Reproduce the models' results on the supplied English text-pair development split, or explore their outputs on other text with the terminal script. The reported performance applies to that development split; accuracy on new authors or domains has not been measured. The trained model files are downloaded separately because they are too large for this GitHub repository.
 
 ## 1. Set up Python
 
@@ -99,7 +99,9 @@ For **Git Bash on Windows**, run:
 
 For RoBERTa, `--device auto` is the default and selects CUDA when PyTorch can use it. If an NVIDIA GPU is detected but PyTorch cannot use CUDA, the command stops with setup guidance instead of silently using CPU. `--device cuda` requires CUDA; `--device cpu` explicitly opts into slower CPU inference. The stylometric model uses CPU.
 
-The output reports `Prediction`, `Same-author probability`, and `Decision threshold`. A score **greater than or equal to** the model's saved threshold yields “Same author”; a lower score yields “Different authors.” This is a model estimate for the supplied pair, not proof of identity or a guaranteed calibrated probability.
+The output reports `Prediction`, `Same-author probability`, and `Decision threshold`. A score **greater than or equal to** the model's saved threshold yields “Same author”; a lower score yields “Different authors.” Despite the output label, this is an uncalibrated model score, not the measured probability that the two authors match. Very short passages can give unreliable results, even when the displayed score is high.
+
+Scores and thresholds are displayed as percentages.
 
 ## 4. Run the notebooks and inspect results
 
@@ -115,7 +117,7 @@ On macOS or Linux, run `.venv/bin/jupyter lab`. Open either [stylometric demo](.
 2. Predicts the unlabeled `data/test.csv` rows and writes a one-column CSV under `results/`.
 3. Defines `predict_author_match` and runs a sample pair. Edit `text_a` and `text_b` in the last cell for your own passages.
 
-The saved files are `results/stylometric-ensemble.csv` and `results/roberta-asymmetric-loss.csv`. Each has a `prediction` column with one 0 or 1 per test row, in the original row order. The current `test.csv` has 5,985 rows. Here `1` means same author and `0` means different authors. The test split has no labels, so its prediction CSV is not a measured test score. Development metrics are reported on `dev.csv`, which was also used to select thresholds; interpret them as development results.
+The saved files are `results/stylometric-ensemble.csv` and `results/roberta-asymmetric-loss.csv`. Each has a `prediction` column with one 0 or 1 per test row, in the original row order. The current `test.csv` has 5,985 rows. Here `1` means same author and `0` means different authors. The test split has no labels, so its prediction CSV is not a measured test score. The reported metrics come from `dev.csv`; this split was also used to select thresholds and RoBERTa's best checkpoint. A direct comparison of the supplied `train.csv` and `dev.csv` found **630 of 5,993 development pairs (10.5%) that exactly duplicate training pairs**. These metrics therefore do not establish performance on independent new authors or domains. A separate labeled evaluation with authors and domains held out is needed to assess generalization.
 
 ## 5. Data and path overrides
 

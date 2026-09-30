@@ -4,16 +4,16 @@
 
 [한국어](./README.ko.md) · [Reproduction guide](./docs/reproduction.md) · [Project poster](./docs/authorship-verification-poster.pdf)
 
-Given two English passages, can we tell whether they were written by the same person? This project explores that question with two complete classification pipelines: a compact stylometric ensemble and a fine-tuned RoBERTa-Large model. The repository includes the data splits, training and inference notebooks, saved predictions, model documentation, and a terminal demo for trying either model on your own text.
+This portfolio project compares a stylometric ensemble and a fine-tuned RoBERTa-Large model on the supplied English same-author/different-author text-pair dataset. The reported metrics describe the supplied development split. The repository includes the data, training and inference notebooks, saved predictions, model documentation, and a terminal demo for exploring model outputs on other text; performance on new authors or domains has not been established.
 
-## Results at a glance
+## Results on the supplied development split
 
-| Model | Method | Macro F1 | Accuracy | Practical trade-off |
+| Model | Method | Dev Macro F1 | Dev accuracy | Practical trade-off |
 |---|---|---:|---:|---|
 | [Stylometric ensemble](./model-cards/stylometric-ensemble.md) | Word, character, and function-word TF-IDF; 24 style features; XGBoost + LightGBM | 0.7702 | 0.77 | CPU inference; artifacts under 60 MB |
-| [RoBERTa-Large + ASL](./model-cards/roberta-asymmetric-loss.md) | Paired-text transformer with Asymmetric Loss | **0.8348** | **0.83** | Higher development score; about 1.32 GB of weights |
+| [RoBERTa-Large + ASL](./model-cards/roberta-asymmetric-loss.md) | Paired-text transformer with Asymmetric Loss | **0.8348** | **0.83** | Higher score on the supplied dev split; about 1.32 GB of weights |
 
-These are scores on the same **5,993-pair labeled development split** (2,937 different-author and 3,056 same-author pairs). The development split was also used to select decision thresholds, so these figures describe the recorded development runs rather than an untouched final test. The repository's 5,985-pair test split is unlabeled; no test-set accuracy or F1 is claimed.
+These are scores on the same **5,993-pair labeled development split** (2,937 different-author and 3,056 same-author pairs). A direct comparison of the supplied CSVs found **630 development pairs (10.5%) that exactly duplicate training pairs**. The development split was also used to select decision thresholds and, for RoBERTa, the best checkpoint. These figures describe the recorded development runs; they do not establish performance on independent new authors or domains. The repository's 5,985-pair test split is unlabeled, so no test-set accuracy or F1 is claimed.
 
 ## What we built
 
@@ -98,7 +98,9 @@ In **Windows Git Bash**, the GPU command is:
 ./.venv/Scripts/python.exe verify_author.py --model roberta --device cuda
 ```
 
-The script prints **Same author** or **Different authors**, the same-author probability, and the decision threshold. Use `--model-dir PATH` if the selected artifacts are elsewhere. For RoBERTa, `--device auto` (the default) uses CUDA when available. If it detects an NVIDIA GPU but PyTorch cannot use CUDA, it stops with setup guidance instead of silently running on CPU. `--device cuda` requires CUDA; use `--device cpu` only when you intentionally want slower CPU inference. The stylometric ensemble runs on CPU.
+The script prints **Same author** or **Different authors**, `Same-author probability`, and the decision threshold. Despite that output label, the number is an uncalibrated model score, not a measured probability that the authors match; a high score on a new passage does not establish accuracy. Use `--model-dir PATH` if the selected artifacts are elsewhere. For RoBERTa, `--device auto` (the default) uses CUDA when available. If it detects an NVIDIA GPU but PyTorch cannot use CUDA, it stops with setup guidance instead of silently running on CPU. `--device cuda` requires CUDA; use `--device cpu` only when you intentionally want slower CPU inference. The stylometric ensemble runs on CPU.
+
+Scores and thresholds are displayed as percentages.
 
 ## Project layout
 
@@ -125,7 +127,7 @@ The labeled [`train.csv`](./data/train.csv) split has 27,643 pairs. [`dev.csv`](
 
 ## Limitations
 
-The methods target English text and may be unreliable for very short passages, other languages, code switching, or unfamiliar genres. RoBERTa truncates combined inputs beyond 512 tokens, while the stylometric model cannot represent terms outside its fitted TF-IDF vocabulary. The reported numbers are specific to this development split. A model score is evidence about writing patterns, not proof of a person's identity; it should not be the sole basis for attribution, sanctions, or deanonymization.
+The methods target English text and may be unreliable for very short passages, other languages, code switching, or unfamiliar genres. RoBERTa truncates combined inputs beyond 512 tokens, while the stylometric model cannot represent terms outside its fitted TF-IDF vocabulary. The reported numbers come from a development split containing exact training-pair duplicates and used for model selection; an independent, author- and domain-separated labeled evaluation is needed to measure generalization. The uncalibrated score reflects patterns learned from the supplied training data, not proof of a person's identity; it should not be the sole basis for attribution, sanctions, or deanonymization.
 
 ## Authors
 

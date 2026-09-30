@@ -16,7 +16,7 @@ repo: https://github.com/Dongmyung378/NLU-Authorship-Verification
 
 ## Model summary
 
-This supervised binary classifier predicts whether two English passages share an author. It fine-tunes `roberta-large` with a sequence-classification head and Asymmetric Loss, placing extra emphasis on difficult negative pairs with subtle stylistic differences.
+This supervised binary classifier was trained to label pairs in the supplied English text dataset as same-author or different-author. It fine-tunes `roberta-large` with a sequence-classification head and Asymmetric Loss, placing extra emphasis on difficult negative pairs with subtle stylistic differences. Its reported performance is limited to the supplied development split.
 
 - **Developed by:** Dongmyung Park and Juho Kim
 - **Language:** English
@@ -32,7 +32,7 @@ The model replaces cross-entropy with Asymmetric Loss using `gamma_neg=2` and `g
 
 ## Training data
 
-The model used 27,643 labelled English text pairs drawn from multiple domains. No external training data was added. The repository contains the train, development, and unlabelled test splits under [`data/`](../data/).
+The model used the 27,643 labeled English text pairs in the supplied [`train.csv`](../data/train.csv); no additional labeled pairs were added for task-specific training. The labeled train and development CSVs contain passages and pair labels, but no author IDs or domain labels, so an author-separated or domain-separated evaluation cannot be verified from these files.
 
 ## Hyperparameters
 
@@ -51,7 +51,7 @@ The model used 27,643 labelled English text pairs drawn from multiple domains. N
 
 ## Evaluation
 
-Evaluation used 5,993 development pairs: 2,937 different-author pairs and 3,056 same-author pairs. The decision threshold was selected on this same split, so these figures describe development performance, not an independent test-set result.
+Evaluation used 5,993 development pairs: 2,937 different-author pairs and 3,056 same-author pairs. A comparison of the supplied CSVs found 630 development pairs (10.5%) that exactly repeat a text pair in the training split, with matching labels. The development split was also used for checkpoint selection and the decision threshold. These figures are development results and do not establish performance on independent, unseen authors or domains.
 
 | Metric | Score |
 |---|---:|
@@ -60,6 +60,17 @@ Evaluation used 5,993 development pairs: 2,937 different-author pairs and 3,056 
 | Accuracy | 0.83 |
 | Macro precision | 0.83 |
 | Macro recall | 0.83 |
+
+An additional audit reran the saved checkpoint on the same `data/dev.csv` using the notebook's preprocessing and the saved 0.51 threshold. It found:
+
+| Development subset | Pairs | Macro F1 |
+|---|---:|---:|
+| Combined passage length of 50 words or fewer | 554 | 0.6680 |
+| Combined passage length over 100 words | 4,775 | 0.8599 |
+| Exact text-pair repeats from training | 630 | 0.9857 |
+| Excluding exact text-pair repeats | 5,363 | 0.8170 |
+
+Word counts use whitespace splitting. These are overlapping, post-hoc views of the same development split, not independent tests or estimates for new domains.
 
 Per-class results:
 
@@ -88,11 +99,12 @@ python -m pip install -r requirements-inference.txt
 python verify_author.py --model roberta --device cuda
 ```
 
-The default `--device auto` selects CUDA when available. If an NVIDIA GPU is detected but PyTorch cannot use CUDA, it stops with setup guidance; it uses CPU when no NVIDIA GPU is detected. Use `--device cuda` to require GPU inference, or `--device cpu` to force CPU inference. To pass text on the command line, use `python verify_author.py --model roberta --text-1 "First English passage" --text-2 "Second English passage"`. The output includes the same-author probability, the loaded model's decision threshold, and the resulting label. If the files live elsewhere, add `--model-dir PATH` with the directory that directly contains them. See the [reproduction guide](../docs/reproduction.md) for environment setup and notebook use.
+The default `--device auto` selects CUDA when available. If an NVIDIA GPU is detected but PyTorch cannot use CUDA, it stops with setup guidance; it uses CPU when no NVIDIA GPU is detected. Use `--device cuda` to require GPU inference, or `--device cpu` to force CPU inference. To pass text on the command line, use `python verify_author.py --model roberta --text-1 "First English passage" --text-2 "Second English passage"`. The output includes `Same-author probability`, the loaded model's decision threshold, and the resulting label. Despite the displayed name, this is a raw class-1 softmax score, not a calibrated probability that the passages share an author. Results for arbitrary new authors or domains have not been established. If the files live elsewhere, add `--model-dir PATH` with the directory that directly contains them. See the [reproduction guide](../docs/reproduction.md) for environment setup and notebook use.
 
 ## Limitations and risks
 
 - Combined inputs longer than 512 tokens are truncated and may lose useful evidence.
+- Very short passages may be unreliable: the median training passage has about 123 whitespace-separated words, much longer than a short terminal example.
 - The base model and fine-tuning data are English-focused; multilingual, code-switched, or dialect-heavy inputs may be unreliable.
 - The model is costly to train and comparatively heavy to deploy.
 - Genre and domain shifts can reduce accuracy.

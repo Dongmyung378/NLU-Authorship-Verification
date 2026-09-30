@@ -2,7 +2,7 @@
 
 [English](./reproduction.md) · [프로젝트 개요](../README.ko.md)
 
-터미널에서 두 글의 동일 저자 여부를 예측하거나, 노트북에서 개발 데이터 평가와 일괄 예측을 실행하는 방법입니다. 학습된 모델 파일은 GitHub 저장소에 넣기에는 용량이 커서 별도로 내려받아야 합니다.
+제공된 영어 글 쌍 개발 세트에서 모델 결과를 재현하고, 터미널에서 다른 글에 대한 모델 출력을 시험하는 방법입니다. 보고된 성능은 이 개발 세트에 한정되며 새로운 저자나 도메인의 정확도는 측정되지 않았습니다. 학습된 모델 파일은 GitHub 저장소에 넣기에는 용량이 커서 별도로 내려받아야 합니다.
 
 ## 1. Python 환경 설정
 
@@ -99,7 +99,9 @@ Unix 경로라면 `--model-dir /path/to/Models_ASL`처럼 지정하세요. `--mo
 
 RoBERTa의 기본값인 `--device auto`는 PyTorch가 CUDA를 사용할 수 있으면 GPU를 선택합니다. NVIDIA GPU를 감지했지만 PyTorch에서 CUDA를 사용할 수 없다면 CPU로 조용히 전환하지 않고 설정 안내와 함께 중단합니다. `--device cuda`는 CUDA를 필수로 요구하며, `--device cpu`는 느린 CPU 추론을 명시적으로 선택합니다. 문체 모델은 CPU를 사용합니다.
 
-출력에는 `Prediction`, `Same-author probability`, `Decision threshold`가 표시됩니다. 모델 점수가 저장된 임곗값 **이상**이면 “Same author”, 미만이면 “Different authors”로 판정합니다. 이 값은 입력한 글 쌍에 대한 모델 추정치이며, 신원 증명이나 보정된 확률의 보장은 아닙니다.
+출력에는 `Prediction`, `Same-author probability`, `Decision threshold`가 표시됩니다. 모델 점수가 저장된 임곗값 **이상**이면 “Same author”, 미만이면 “Different authors”로 판정합니다. 출력 이름과 달리 이 수치는 두 글이 같은 저자의 글일 실제 확률이 아니라 보정되지 않은 모델 점수입니다. 매우 짧은 글은 표시되는 점수가 높더라도 결과가 불안정할 수 있습니다.
+
+점수와 임곗값은 백분율로 표시됩니다.
 
 ## 4. 노트북 실행 및 결과 확인
 
@@ -115,7 +117,7 @@ macOS 또는 Linux에서는 `.venv/bin/jupyter lab`을 실행하세요. [문체 
 2. 정답이 없는 `data/test.csv`를 예측해 `results/` 아래에 한 열짜리 CSV를 저장합니다.
 3. `predict_author_match` 함수를 정의하고 예시 글 쌍을 실행합니다. 마지막 셀의 `text_a`와 `text_b`를 바꾸면 직접 쓴 글도 넣을 수 있습니다.
 
-결과 파일은 `results/stylometric-ensemble.csv`와 `results/roberta-asymmetric-loss.csv`입니다. 각각 `prediction` 열에 테스트 데이터의 원래 행 순서대로 0 또는 1이 한 개씩 기록됩니다. 현재 `test.csv`에는 5,985행이 있습니다. `1`은 동일 저자, `0`은 다른 저자를 뜻합니다. 테스트 데이터에는 정답 열이 없으므로 이 CSV는 측정된 테스트 점수가 아닙니다. 개발 지표는 임곗값을 고를 때에도 사용한 `dev.csv`에서 얻은 값이므로 개발 데이터 결과로 해석해야 합니다.
+결과 파일은 `results/stylometric-ensemble.csv`와 `results/roberta-asymmetric-loss.csv`입니다. 각각 `prediction` 열에 테스트 데이터의 원래 행 순서대로 0 또는 1이 한 개씩 기록됩니다. 현재 `test.csv`에는 5,985행이 있습니다. `1`은 동일 저자, `0`은 다른 저자를 뜻합니다. 테스트 데이터에는 정답 열이 없으므로 이 CSV는 측정된 테스트 점수가 아닙니다. 공개된 개발 지표는 임곗값과 RoBERTa의 최적 체크포인트를 고를 때에도 사용한 `dev.csv`에서 얻었습니다. 제공된 `train.csv`와 `dev.csv`를 직접 비교하면 **개발 세트 5,993쌍 중 630쌍(10.5%)이 학습 쌍과 완전히 동일**합니다. 따라서 이 지표는 새로운 저자나 도메인에서의 독립적인 성능을 입증하지 않습니다. 일반화 성능을 평가하려면 저자와 도메인을 분리한 별도의 라벨 있는 데이터가 필요합니다.
 
 ## 5. 데이터와 경로 변경
 
