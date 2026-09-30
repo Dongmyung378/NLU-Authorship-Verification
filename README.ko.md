@@ -2,7 +2,7 @@
 
 **Dongmyung Park과 Juho Kim의 공동 NLP 프로젝트**
 
-[English](./README.md) · [재현 가이드](./docs/reproduction.ko.md) · [프로젝트 포스터](./docs/authorship-verification-poster.pdf)
+[English](./README.md) · [재현 가이드](./docs/reproduction.ko.md) · [기존 수업 포스터](./docs/authorship-verification-poster.pdf)
 
 이 포트폴리오 프로젝트는 제공된 영어 글 쌍의 동일 저자·다른 저자 분류 데이터에서 문체 기반 앙상블과 파인튜닝한 RoBERTa-Large를 비교합니다. 보고된 성능은 제공된 개발 세트의 결과입니다. 저장소에는 데이터, 학습·추론 노트북, 저장된 예측 결과, 모델 문서와 다른 글에 대한 모델 출력을 시험하는 터미널 시연 도구가 있습니다. 새로운 저자나 도메인에서의 성능은 검증되지 않았습니다.
 
@@ -123,7 +123,7 @@ requirements.txt            노트북·학습용 전체 의존성
 - [재현 가이드](./docs/reproduction.ko.md): 로컬 환경, 모델 파일 배치, 추론, 재학습.
 - [문체 기반 모델 카드](./model-cards/stylometric-ensemble.ko.md)와 [RoBERTa 모델 카드](./model-cards/roberta-asymmetric-loss.ko.md): 방법, 하이퍼파라미터, 연산 환경, 결과, 위험 요소.
 - [학습·시연 노트북](./notebooks/): 전체 실험과 배치 추론.
-- [프로젝트 포스터](./docs/authorship-verification-poster.pdf): 프로젝트 시각 요약.
+- [기존 수업 포스터](./docs/authorship-verification-poster.pdf): 당시 발표 자료입니다. 포스터의 도메인 변화에 따른 과적합 감소 주장은 독립적인 도메인 분리 평가로 검증되지 않았으며, 저장소 링크도 이전 프로젝트 위치를 가리킵니다. 평가 범위는 현재 모델 카드를, 모델 파일은 위의 다운로드 링크를 확인하세요.
 
 ## 한계
 
