@@ -2,7 +2,7 @@
 
 **A joint NLP project by Dongmyung Park and Juho Kim**
 
-[한국어](./README.ko.md) · [Reproduction guide](./docs/reproduction.md) · [Original course poster](./docs/authorship-verification-poster.pdf)
+[한국어](./README.ko.md) · [Reproduction guide](./docs/reproduction.md) · [Poster preview (PNG)](./docs/authorship-verification-poster-preview.png) · [Download poster PDF](./docs/authorship-verification-poster.pdf?raw=1)
 
 This portfolio project compares a stylometric ensemble and a fine-tuned RoBERTa-Large model on the supplied English same-author/different-author text-pair dataset. The reported metrics describe the supplied development split. The repository includes the data, training and inference notebooks, saved predictions, model documentation, and a terminal demo for exploring model outputs on other text; performance on new authors or domains has not been established.
 
@@ -123,7 +123,7 @@ The labeled [`train.csv`](./data/train.csv) split has 27,643 pairs. [`dev.csv`](
 - [Reproduction guide](./docs/reproduction.md): local setup, artifact placement, inference, and retraining.
 - [Stylometric model card](./model-cards/stylometric-ensemble.md) and [RoBERTa model card](./model-cards/roberta-asymmetric-loss.md): methods, hyperparameters, compute, results, and risks.
 - [Training and demo notebooks](./notebooks/): end-to-end experiments and batch inference.
-- [Original course poster](./docs/authorship-verification-poster.pdf): historical presentation. Its claim about reducing domain-shift overfitting has not been verified on an independent cross-domain evaluation, and its repository link points to an earlier project location. Use the current model cards for the evaluated scope and the download links above for artifacts.
+- [Original course poster preview](./docs/authorship-verification-poster-preview.png) ([download PDF](./docs/authorship-verification-poster.pdf?raw=1)): historical presentation. The download link bypasses GitHub's PDF preview. The poster's claim about reducing domain-shift overfitting has not been verified on an independent cross-domain evaluation. Use the current model cards for the evaluated scope and the download links above for artifacts.
 
 ## Limitations
 
