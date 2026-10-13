@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
+<title id="title">문체와 문맥을 이용한 동일 저자 판별</title>
+<desc id="desc">영어 글 두 편의 문체 특징과 문맥을 독립적인 모델로 비교합니다. 고정 평가 4,708쌍에서 선택된 RoBERTa-Large CE의 Macro F1은 0.8084입니다.</desc>
+<style>text{font-family:'Noto Sans KR', 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif;font-variant-numeric:tabular-nums} .axis{fill:#64696B}</style>
+<rect x="0" y="0" width="1200" height="760" fill="#F8F3F0" rx="0" stroke-width="1"/>
+<text x="54" y="81" fill="#39272A" font-size="47" font-weight="750" text-anchor="start">문체와 문맥을 이용한 저자 판별</text>
+<text x="54" y="134" fill="#64696B" font-size="31" font-weight="400" text-anchor="start">문체와 문맥을 이용한 동일 저자 판별</text>
+<rect x="56" y="186" width="332" height="292" fill="#FFFFFF" rx="20" stroke="#DDDDE0" stroke-width="1"/>
+<text x="84" y="239" fill="#39272A" font-size="38" font-weight="750" text-anchor="start">글 A</text>
+<line x1="85" y1="292" x2="345" y2="292" stroke="#CEBAB6" stroke-width="5"/>
+<line x1="85" y1="328" x2="311" y2="328" stroke="#CEBAB6" stroke-width="5"/>
+<line x1="85" y1="364" x2="339" y2="364" stroke="#CEBAB6" stroke-width="5"/>
+<line x1="85" y1="400" x2="288" y2="400" stroke="#CEBAB6" stroke-width="5"/>
+<rect x="85" y="440" width="144" height="10" fill="#7D3548" rx="4" stroke-width="1"/>
+<rect x="435" y="186" width="332" height="292" fill="#FFFFFF" rx="20" stroke="#DDDDE0" stroke-width="1"/>
+<text x="463" y="239" fill="#39272A" font-size="38" font-weight="750" text-anchor="start">글 B</text>
+<line x1="464" y1="292" x2="689" y2="292" stroke="#CEBAB6" stroke-width="5"/>
+<line x1="464" y1="328" x2="725" y2="328" stroke="#CEBAB6" stroke-width="5"/>
+<line x1="464" y1="364" x2="670" y2="364" stroke="#CEBAB6" stroke-width="5"/>
+<line x1="464" y1="400" x2="715" y2="400" stroke="#CEBAB6" stroke-width="5"/>
+<rect x="464" y="440" width="144" height="10" fill="#2D666E" rx="4" stroke-width="1"/>
+<rect x="838" y="186" width="306" height="292" fill="#FFFFFF" rx="20" stroke="#DDDDE0" stroke-width="1"/>
+<text x="863" y="243" fill="#39272A" font-size="35" font-weight="750" text-anchor="start">비교 모델</text>
+<text x="863" y="310" fill="#2D666E" font-size="30" font-weight="700" text-anchor="start">문체 앙상블</text>
+<text x="863" y="376" fill="#7D3548" font-size="27" font-weight="700" text-anchor="start">RoBERTa-Large</text>
+<line x1="783" y1="333" x2="827" y2="333" stroke="#7D3548" stroke-width="4"/>
+<path d="M811.692,340.394 L827.000,333.000 L811.692,325.606" fill="none" stroke="#7D3548" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="56" y="527" width="1088" height="184" fill="#7D3548" rx="18" stroke-width="1"/>
+<text x="84" y="578" fill="#FFFFFF" font-size="35" font-weight="750" text-anchor="start">배포용 Large CE</text>
+<text x="84" y="633" fill="#F6E8E9" font-size="30" font-weight="400" text-anchor="start">문서가 분리된 4,708쌍 평가</text>
+<text x="84" y="684" fill="#F6E8E9" font-size="29" font-weight="400" text-anchor="start">Macro F1</text>
+<text x="1108" y="656" fill="#FFFFFF" font-size="82" font-weight="750" text-anchor="end">0.8084</text>
+<metadata>{"project_id": "project-05", "visual_data_sha256": "de27ebff609c1c1d4be7e994ffdefc059b712428ccb478228f4df03686dd4812", "generated_from_published_measurements": true}</metadata>
+</svg>

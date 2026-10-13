@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "status": "generated_from_published_measurements",
+  "visual_data_sha256": "de27ebff609c1c1d4be7e994ffdefc059b712428ccb478228f4df03686dd4812",
+  "project_ids": [
+    "project-05"
+  ],
+  "files": [
+    {
+      "filename": "nlu-thumbnail.svg",
+      "project_id": "project-05",
+      "bytes": 3555,
+      "sha256": "a4f7f779dacf8e60ad1c7ee5368c68ec418d57ffac7a59f30ba085c83145e254"
+    },
+    {
+      "filename": "nlu-results.svg",
+      "project_id": "project-05",
+      "bytes": 4857,
+      "sha256": "1ce503bc556791c398d89d310cdc2ce1295bd7e6b2bde2d446a5cb3228927efa"
+    },
+    {
+      "filename": "nlu-calibration.svg",
+      "project_id": "project-05",
+      "bytes": 5678,
+      "sha256": "1c049c8f64922c76c343e7bfe7bf7b767c05540d5b0ad65c260e35c3de63de60"
+    }
+  ],
+  "network_or_model_execution_performed": false,
+  "source_paths_read": false
+}
