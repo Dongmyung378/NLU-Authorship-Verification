@@ -6,6 +6,8 @@
 
 This project compares the original two model families for English passage-pair authorship verification: a stylometric XGBoost-LightGBM ensemble and RoBERTa-Large. The new pipeline adds document-disjoint data splits, matched CE versus custom binary asymmetric focal training, independent calibration, immutable evaluation and hash-verified CPU replay. It predicts different-author (`0`) or same-author (`1`) labels; it does not establish a person's identity on arbitrary new text.
 
+The model named **custom focal** in the reports is the project's original **ASL implementation**, identified as `custom_asl` in the runtime and model files. Its class-dependent binary focal loss reduces the contribution of already-correct, easy examples. The technical description distinguishes this project-specific implementation from the published ASL recipe.
+
 ## Current release status
 
 Fresh RoBERTa-Large CE and custom focal training, the bounded train-only stylometric study and the frozen Kaggle evaluation have completed. Both Large models completed six matched epochs and retained epoch-five checkpoints. English and Korean [measured results](./docs/results.md) report the classification, calibration, order, length and abstention outcomes.
@@ -14,7 +16,7 @@ Fresh RoBERTa-Large CE and custom focal training, the bounded train-only stylome
 |---|---:|---:|---:|
 | Stylometric XGBoost-LightGBM ensemble | 0.741498 | 74.1504% | 3,491 |
 | RoBERTa-Large CE, deployed | 0.808383 | 80.8624% | 3,807 |
-| RoBERTa-Large custom focal, retained comparator | 0.815170 | 81.5208% | 3,838 |
+| RoBERTa-Large project-specific ASL, retained comparator | 0.815170 | 81.5208% | 3,838 |
 
 CE was selected before holdout using the fixed calibrated pipelines on selection data. The later focal holdout advantage does not change that choice. Historical development F1 0.8348 uses different evaluation conditions and is not a before/after comparator. Calibration reduced ECE/NLL for all three models, but F1 did not improve uniformly and the 90% accepted-accuracy abstention goal was unmet.
 

@@ -4,13 +4,15 @@
 
 The completed Kaggle release evaluates all 4,708 locked-holdout pairs after freezing every model, tokenizer, source file, split and calibration decision. This is a single-seed, document-disjoint experiment on the supplied corpus. Dongmyung Park and Juho Kim's original joint development period remains February to May 2026.
 
+**Naming:** custom focal refers to the project's original ASL implementation (`custom_asl`), a class-dependent binary focal loss. This is the same retained model family described as project-specific ASL below; figures and immutable reports retain the technical focal label.
+
 ## Classification and deployment
 
 | Model | Raw AB F1 | Chosen-order F1 | Frozen pipeline F1 | Accuracy | Correct |
 |---|---:|---:|---:|---:|---:|
 | Stylometric ensemble | 0.743335 | 0.743335 | 0.741498 | 74.1504% | 3,491 / 4,708 |
 | Large CE (deployed) | 0.807724 | 0.808149 | 0.808383 | 80.8624% | 3,807 / 4,708 |
-| Large custom focal | 0.808153 | 0.816451 | 0.815170 | 81.5208% | 3,838 / 4,708 |
+| Large project-specific ASL | 0.808153 | 0.816451 | 0.815170 | 81.5208% | 3,838 / 4,708 |
 
 ![Frozen classification, selected CE length slices and positive-class ECE on the same holdout](./figures/frozen-evaluation.png)
 
