@@ -1,0 +1,20 @@
+{
+  "microbatch": 2,
+  "effective_batch": 32,
+  "optimizer_steps": 40,
+  "median_optimizer_step_seconds": 5.136252051999918,
+  "projected_training_seconds_including_30pct_margin": 27523.120245846763,
+  "budget_seconds": 36000,
+  "peak_allocated_gpu_bytes": 6539184640,
+  "peak_reserved_gpu_bytes": 6836715520,
+  "gpu_name": "Tesla T4",
+  "visible_gpu_count": 2,
+  "gpu_total_bytes": 15636037632,
+  "successful_optimizer_updates": 39,
+  "parameter_count": 355361794,
+  "within_training_budget": true,
+  "initial_state_sha256": "ffe7ba5e9107a846e6c9303dc914893535a441412c12fee323111b17a754acd3",
+  "overflow_skipped_steps": 1,
+  "oom_attempts": [],
+  "profile_weights_discarded": true
+}

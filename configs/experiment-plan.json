@@ -1,0 +1,254 @@
+{
+  "schema_version": 1,
+  "seed": 378,
+  "dataset_protocol": {
+    "labeled_sources": [
+      "data/train.csv",
+      "data/dev.csv"
+    ],
+    "identity_modes": [
+      "exact",
+      "nfc_whitespace",
+      "roberta",
+      "stylometric",
+      "nfc_then_roberta",
+      "nfc_then_stylometric"
+    ],
+    "exclude_empty_cleaned_documents": true,
+    "conflicting_unordered_pair_labels": "quarantine_all_without_relabeling",
+    "consistent_unordered_pair_duplicates": "retain_smallest_stable_record_id",
+    "group": "connected_components_of_shared_document_identity",
+    "fractions": {
+      "train": 0.7,
+      "selection": 0.1,
+      "calibration": 0.05,
+      "locked_holdout": 0.15
+    },
+    "generalization_scope": "document_disjoint; author_and_domain_ids_unavailable",
+    "unlabeled_test_live_used_for_training_or_selection": false
+  },
+  "pretrained": {
+    "model_id": "FacebookAI/roberta-large",
+    "revision": "722cf37b1afa9454edce342e7895e588b6ff1d59",
+    "safetensors_sha256": "047c85f0b96269cd62e6f732644f067004eebd95af5b5d35965ae2528f13bf38",
+    "safetensors_bytes": 1421700479,
+    "reason": "Preserve the original Large architecture; measure T4 capability before matched fresh training"
+  },
+  "transformer": {
+    "losses": [
+      "cross_entropy",
+      "custom_binary_asymmetric_focal"
+    ],
+    "gamma_negative": 2.0,
+    "gamma_positive": 1.0,
+    "max_length": 512,
+    "epochs": 6,
+    "learning_rate": 5e-06,
+    "weight_decay": 0.01,
+    "warmup_ratio": 0.1,
+    "max_grad_norm": 1.0,
+    "micro_batch_size": 2,
+    "effective_batch_size": 32,
+    "gradient_checkpointing": true,
+    "fp16_cuda": true,
+    "loss_float32": true,
+    "orientation_augmentation": "seeded_50pct_swap_per_pair_per_epoch_without_doubling_rows",
+    "checkpoint_selection": "selection_macro_f1_at_threshold_0.5",
+    "matched_initial_weights_and_orders": true,
+    "profiling_updates": 40,
+    "max_project_training_wall_seconds": 32400,
+    "execution_mode": "parallel_independent_loss_workers",
+    "max_parallel_worker_gpu_hours": 18.0,
+    "common_early_stopping_patience": 3,
+    "profile_oom_restarts": 1,
+    "post_holdout_training_or_selection": false,
+    "seed_repeats": 1
+  },
+  "stylometric": {
+    "tfidf_fit_split": "train",
+    "word_and_character_max_features_each": 7000,
+    "style_measurements": 24,
+    "xgb_estimators_cap": 500,
+    "xgb_learning_rate": 0.03,
+    "xgb_max_depth": 6,
+    "xgb_max_bin": 128,
+    "xgb_min_child_weight": 2,
+    "lgb_estimators_cap": 500,
+    "lgb_learning_rate": 0.03,
+    "lgb_num_leaves": 63,
+    "lgb_max_bin": 127,
+    "subsample": 0.8,
+    "colsample_bytree": 0.8,
+    "xgb_weight": 0.5,
+    "lgb_weight": 0.5,
+    "early_stopping_rounds": 30,
+    "selection_threshold": 0.5,
+    "cpu_threads": 2,
+    "recipes": 4,
+    "top_level_parameters_apply_to": "full-pilot reference",
+    "bounded_selection_study": {
+      "schema_version": 1,
+      "protocol": "nlu-stylometric-bounded-v1",
+      "seed": 378,
+      "cpu_threads": 2,
+      "total_budget_seconds": 7200,
+      "promotion_macro_f1_gain": 0.002,
+      "reported_xgb_weights": [
+        0.0,
+        0.25,
+        0.5,
+        0.75,
+        1.0
+      ],
+      "final_xgb_weights": [
+        0.25,
+        0.5,
+        0.75
+      ],
+      "decision_threshold": 0.5,
+      "reference_recipe": "full-pilot",
+      "reference_xgb_weight": 0.5,
+      "component_checkpoint_metric": "selection logloss; native best iteration",
+      "recipes": [
+        {
+          "name": "full-pilot",
+          "feature_mode": "full",
+          "xgb_cap": 500,
+          "lgb_cap": 500,
+          "learning_rate": 0.03,
+          "max_depth": 6,
+          "num_leaves": 63,
+          "xgb_patience": 30,
+          "lgb_patience": 30,
+          "fit_budget_seconds": 600
+        },
+        {
+          "name": "tfidf-pilot",
+          "feature_mode": "tfidf_only",
+          "xgb_cap": 500,
+          "lgb_cap": 500,
+          "learning_rate": 0.03,
+          "max_depth": 6,
+          "num_leaves": 63,
+          "xgb_patience": 30,
+          "lgb_patience": 30,
+          "fit_budget_seconds": 600
+        },
+        {
+          "name": "style-pilot",
+          "feature_mode": "style_only",
+          "xgb_cap": 500,
+          "lgb_cap": 500,
+          "learning_rate": 0.03,
+          "max_depth": 6,
+          "num_leaves": 63,
+          "xgb_patience": 30,
+          "lgb_patience": 30,
+          "fit_budget_seconds": 600
+        },
+        {
+          "name": "full-original-caps",
+          "feature_mode": "full",
+          "xgb_cap": 7000,
+          "lgb_cap": 2000,
+          "learning_rate": 0.01,
+          "max_depth": 7,
+          "num_leaves": 127,
+          "xgb_patience": 200,
+          "lgb_patience": 100,
+          "fit_budget_seconds": 1800
+        }
+      ],
+      "tie_policy": "Prefer full features, then weight closest to0.5, then pilot, then lower XGB weight",
+      "singles_are_diagnostics_only": true,
+      "calibration_used": false,
+      "locked_holdout_used": false
+    },
+    "training_location": "local_isolated_cpu"
+  },
+  "selection": {
+    "asymmetric_loss_min_macro_f1_gain": 0.002,
+    "symmetric_logit_mean_min_macro_f1_gain": 0.002,
+    "symmetric_allowed_if_invariance_improves_and_macro_f1_loss_at_most": 0.002,
+    "decision_data": "selection",
+    "final_holdout_reselects_models": false,
+    "final_loss_decision": "selection_macro_f1_after_independent_calibration_parameters_are_fixed",
+    "raw_loss_analysis": "same_threshold_0.5_preserved_separately"
+  },
+  "calibration": {
+    "fit_data": "calibration",
+    "temperature_bounds": [
+      0.05,
+      20.0
+    ],
+    "accept_if_calibration_nll_no_worse_than_identity": true,
+    "threshold_objective": "macro_f1",
+    "ece_fixed_bins": 10,
+    "abstention_target_minimum_coverage": 0.8,
+    "abstention_target_minimum_accepted_accuracy": 0.9,
+    "report_unmet_targets": true,
+    "holdout_refitting": false
+  },
+  "diagnostics": {
+    "orientations": [
+      "ab",
+      "ba",
+      "symmetric_logit_mean"
+    ],
+    "minimum_word_length_bins": [
+      50,
+      200
+    ],
+    "lengths_measured_before_truncation": true,
+    "short_empty_oversized_input_guards": true
+  },
+  "runtime": {
+    "python": "3.12.15",
+    "training_device": "kaggle_gpu",
+    "public_default_device": "cpu",
+    "cpu_threads": 1,
+    "public_artifacts_require_size_sha256_inventory": true,
+    "english_default_and_korean_documentation": true
+  },
+  "gpu_budget": {
+    "user_stated_limit_hours": 22.0,
+    "paired_worker_gpu_hours_cap": 18.0,
+    "paired_wall_hours_cap": 9.0,
+    "reserve_for_capability_setup_release_and_failures_hours": 4.0,
+    "accounting": "Conservative sum of two assigned workers active wall times; not a claim about Kaggle official T4x2 charging.",
+    "profile_kernel": "dongmyungpark/nlu-roberta-large-t4-profile-20261012/1",
+    "profile_source_archive_sha256": "bf943f476239b2997fa2193d558a0dc6c343c8cbcab6c36050ede1289cad509c",
+    "profile_optimizer_median_seconds": 5.136252051999918,
+    "profile_peak_allocated_bytes": 6539184640,
+    "profile_successful_updates": 39,
+    "profile_attempts": 40,
+    "throughput_kernel": "dongmyungpark/nlu-large-t4-throughput-20261012/1",
+    "throughput_candidates": [2, 8, 32],
+    "throughput_decision_uses": "train-only timing and memory; no model-quality evaluation",
+    "throughput_minimum_adoption_speedup": 1.05,
+    "throughput_selected_micro_batch_size": 2,
+    "throughput_weights_discarded": true,
+    "maximum_epochs_reason": "Six matched epochs fit the conservative assigned-worker budget with setup, selection, checkpoint, calibration, frozen evaluation and failure reserve; no validation score was used to set the cap."
+  },
+  "uncertainty": {
+    "schema_version": 1,
+    "method": "paired_document_component_percentile_bootstrap",
+    "draws": 1000,
+    "seed": 378,
+    "confidence_level": 0.95,
+    "resample_unit": "group_id",
+    "group_draw_count": "number_of_locked_holdout_groups",
+    "replacement": true,
+    "paired_models": [
+      "ce",
+      "custom_asl",
+      "stylometric"
+    ],
+    "metrics": [
+      "accuracy",
+      "macro_f1"
+    ],
+    "paired_difference": "custom_asl_minus_ce_calibrated_macro_f1",
+    "decision_role": "report_only_no_reselection"
+  }
+}

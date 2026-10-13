@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "files": [
+    {
+      "path": "ensemble_config.json",
+      "bytes": 2714,
+      "sha256": "dea8f62f0f7a4bc15163d58cc02275a9dd48b8e0ab810a5e7fc2ccc9a3ee6b8d"
+    },
+    {
+      "path": "lgb_model.pkl",
+      "bytes": 4589436,
+      "sha256": "c3b7a016ec14305e0dea661177619dbfef32882582e7255d2d33075b8352e49d"
+    },
+    {
+      "path": "tfidf_char.pkl",
+      "bytes": 179162,
+      "sha256": "86b67006c3ac011903f9b740739627eb62705c5c4eafe136bfe3f4344ba2063a"
+    },
+    {
+      "path": "tfidf_fw.pkl",
+      "bytes": 4443,
+      "sha256": "1660621c44eed894dd4c8dd953866da2d933d98aaac600027b71e366c562d94a"
+    },
+    {
+      "path": "tfidf_word.pkl",
+      "bytes": 205558,
+      "sha256": "41f6cf4935853ddf10673695a5d2b981875f6ec9434a22e74b55d966bb80d5ea"
+    },
+    {
+      "path": "xgb_model.json",
+      "bytes": 1083775,
+      "sha256": "94dcce8b6dbfb4726813bb648ffa91a8d3f2bcc0ea6aaa39a653df09ff54d24c"
+    }
+  ]
+}

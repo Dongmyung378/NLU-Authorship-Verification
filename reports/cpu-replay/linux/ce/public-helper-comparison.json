@@ -1,0 +1,57 @@
+{
+  "status": "failed",
+  "count": 4708,
+  "all_frozen_bindings_match": true,
+  "record_ids_match_manifest_exactly": true,
+  "exact_row_mismatch_counts": {
+    "id": 0,
+    "label": 0,
+    "group_id": 0,
+    "split": 0,
+    "prediction": 0,
+    "accepted": 0,
+    "inference_method": 0,
+    "minimum_cleaned_words": 0,
+    "length_bin": 0
+  },
+  "row_mismatch_examples": [],
+  "metric_difference_count": 2,
+  "metric_differences": [
+    {
+      "field": ".swapped_input_diagnostics_calibrated.max_absolute_probability_gap",
+      "evaluated": 0.7306435928971085,
+      "reference": 0.7306480094980282,
+      "absolute_tolerance": 1e-06
+    },
+    {
+      "field": ".swapped_input_diagnostics_raw.max_absolute_probability_gap",
+      "evaluated": 0.8458220725818887,
+      "reference": 0.8458268963441596,
+      "absolute_tolerance": 1e-06
+    }
+  ],
+  "probability_absolute_tolerance": 1e-05,
+  "numeric_metric_absolute_tolerance": 1e-06,
+  "maximum_absolute_probability_difference": {
+    "raw_probability_ab": 1.2727074418017459e-05,
+    "raw_probability_ba": 1.1479523922552914e-05,
+    "raw_probability_symmetric": 8.664330762631067e-06,
+    "raw_probability_selected": 8.664330762631067e-06,
+    "calibrated_probability": 8.806711984998827e-06,
+    "calibrated_probability_swapped_selected_policy": 8.806711984998827e-06,
+    "confidence": 8.806711984998827e-06
+  },
+  "evaluated_predictions_sha256": "d7f09109ca6ed4ce1eee5cb7588ffe216495192c417c9a665fd18ebaa9954519",
+  "reference_predictions_sha256": "836a4084afc79a90faba8526f63a22eb6ca59600bbe490a38c93847e5276cac7",
+  "prediction_files_byte_identical": false,
+  "exact_discrete_predictions_acceptance_counts_f1_accuracy_required": true,
+  "no_inference_refit_reselection_or_tolerance_adjustment": true,
+  "anonymous_public_model_download_verified": false,
+  "schema_version": 1,
+  "model_name": "ce",
+  "evaluation_origin_platform": "Linux CPU",
+  "reference_execution_device": "Kaggle CUDA/T4",
+  "helper_sha256": "c46deec649622a3757413d9e2456bd1aac93959b38ca585816458e5f97cdcaf3",
+  "freeze_sha256": "e8fc94ee17d7ea575ecf8002e3d104d1ec70600b68cc59239f1189b0b955f924",
+  "scope": "Existing public helper: exact discrete/count/F1/accuracy plus recursively checked floating metrics. This is distinct from the original selected-main-metrics comparison."
+}

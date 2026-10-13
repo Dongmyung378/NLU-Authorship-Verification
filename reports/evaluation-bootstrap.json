@@ -1,0 +1,155 @@
+{
+  "models": {
+    "ce": {
+      "accuracy": {
+        "point": 0.8086236193712829,
+        "lower": 0.7924278418543619,
+        "upper": 0.8221574505849029
+      },
+      "macro_f1": {
+        "point": 0.8083825205111266,
+        "lower": 0.7922426186205765,
+        "upper": 0.8218634045934786
+      }
+    },
+    "custom_asl": {
+      "accuracy": {
+        "point": 0.8152081563296517,
+        "lower": 0.7999901011878575,
+        "upper": 0.8281086058280073
+      },
+      "macro_f1": {
+        "point": 0.8151695979899498,
+        "lower": 0.7997020519489942,
+        "upper": 0.8280748367310198
+      }
+    },
+    "stylometric": {
+      "accuracy": {
+        "point": 0.7415038232795242,
+        "lower": 0.7236661733009911,
+        "upper": 0.7585845009567017
+      },
+      "macro_f1": {
+        "point": 0.7414976538181034,
+        "lower": 0.7236624752127967,
+        "upper": 0.7585841623671725
+      }
+    }
+  },
+  "paired_difference": {
+    "direction": "custom_asl_minus_ce",
+    "metric": "calibrated_macro_f1",
+    "point": 0.0067870774788232335,
+    "lower": 6.298330615343853e-05,
+    "upper": 0.013470955222697072
+  },
+  "document_component_count": 3207,
+  "evaluated_pair_count": 4708,
+  "sampled_pair_count": {
+    "minimum": 4361,
+    "maximum": 5202,
+    "median": 4700.5,
+    "variable_counts_allowed": true
+  },
+  "group_draw_weights_sha256": "f747dcdb1d2dc3cbdf2f066149a98ba1f7bf9f84d63a8cbb0e2ee20e3b799443",
+  "ordered_group_ids_sha256": "a34d3537d71b0a2b0116f49750236ff558b3faf2b91d30b3637177af3e0783e3",
+  "shared_draws_for_all_models": true,
+  "pair_weighting": "All pairs in each sampled group repeat by that group's multiplicity; metrics weight pairs equally.",
+  "undefined_class_f1": 0.0,
+  "schema_version": 1,
+  "status": "completed",
+  "protocol": {
+    "schema_version": 1,
+    "method": "paired_document_component_percentile_bootstrap",
+    "draws": 1000,
+    "seed": 378,
+    "confidence_level": 0.95,
+    "resample_unit": "group_id",
+    "group_draw_count": "number_of_locked_holdout_groups",
+    "replacement": true,
+    "paired_models": [
+      "ce",
+      "custom_asl",
+      "stylometric"
+    ],
+    "metrics": [
+      "accuracy",
+      "macro_f1"
+    ],
+    "paired_difference": "custom_asl_minus_ce_calibrated_macro_f1",
+    "decision_role": "report_only_no_reselection"
+  },
+  "split": "locked_holdout",
+  "freeze_sha256": "e8fc94ee17d7ea575ecf8002e3d104d1ec70600b68cc59239f1189b0b955f924",
+  "manifest_sha256": "4c110a05134a75bc16fb6b82b098bb5559f59c18d40ccba94f09d2cf91452cae",
+  "manifest_file_sha256": "bdaef137cf8f3ec48698352af1130dbbc9cb9d0e7569eb208dfa52c91ddcfdb3",
+  "freeze_file_sha256": "222f550a39d9e419c730a269439060106a90da826b7595fd6a4adef1b144835f",
+  "release_summary_file_sha256": "985e961ccfea41fa03fccd6b6cb436d777c9b20fcafd1c8b8134ce0b2729479c",
+  "predictions_evidence": {
+    "ce": {
+      "predictions_sha256": "836a4084afc79a90faba8526f63a22eb6ca59600bbe490a38c93847e5276cac7",
+      "metrics_file_sha256": "ba792a16acc90bfd20e0e746de5fbb9f9865b6c77abfcbb7943f039262acb376",
+      "model_content_sha256": "a5f0c30f03f44bfc52acd8436a58594aac556bdf0fc28f1b285d345ad9970a5d",
+      "calibration_sha256": "be975356578accd852b2895134cfee968807435a1e4200eb2dedda12f6195823"
+    },
+    "custom_asl": {
+      "predictions_sha256": "aca3ae2f0434aba99242df1a2401c07f12d5b272e663e449ef12a8366aa5e178",
+      "metrics_file_sha256": "cefe7c05065f6c2951951fba594c7f22976db940cf06e7f9a228dc77536b6445",
+      "model_content_sha256": "10ffa6bd384121062ab9acea49ecc5702bbd7bd15733dd2d4b7002e32f5b478e",
+      "calibration_sha256": "abab558c1f020f2fb82bc55381b3040edbe12d6c2d150c0ee0ae593f2d70672e"
+    },
+    "stylometric": {
+      "predictions_sha256": "c688f079a49c376ad00b18294a9cea883e1b7acd0f5f293e1d43b7b23e57c7fa",
+      "metrics_file_sha256": "3368f5565bef1a5fc44c8be44bcd48ee428202b06b490e15c23db04a81b71399",
+      "model_content_sha256": "eb7e99a46cce03890409ff5bf0c646b3fc6574b17bc47fe1599b34d079b11aa1",
+      "calibration_sha256": "15dedf9554ad18299efd52786a393b49c91302ebb8d3b01313368a97afd657fd"
+    }
+  },
+  "source_sha256": {
+    "configs/experiment-plan.json": "7e614b6320b922a036939bc262ef1fc2b4a1108b353e8ca430ece784ca39ea0d",
+    "launch-nlu.bat": "384a75d9ab39b95d88cff3b199759a0eeb502b7f85b8b42edc8a46d89d21bc76",
+    "launch-nlu.sh": "c8f0d655b53ccd841c583384d7e30194ed3880052a3e27f059e4b4174ac9938d",
+    "nlu_authorship/__init__.py": "2bad8cb8c8ca252223faa29a713c97d1f88f4e5e9599fe0e63ca7435f207eeb8",
+    "nlu_authorship/__main__.py": "bd045ddd5242d002f692dac452be9afba38deef5cde541a5fc074bfef5987b91",
+    "nlu_authorship/calibration.py": "f0bc838911c29aeaa71335aa6cf5f15d34f77cb571909587e95abdec22eb37e7",
+    "nlu_authorship/cli.py": "f97e70f4f98be8708adf1bff6efdc3877fb7e55679ca273abf26451d10441a9d",
+    "nlu_authorship/data.py": "384cfb0b8311c53cd0a2d70a22c8abb134fd5981e917e94718c4533a78671b57",
+    "nlu_authorship/evaluation.py": "189032d14ed26ee9c520745bcdeab8e759a28a17819c7ced4ec603442a4230b0",
+    "nlu_authorship/losses.py": "54efd41a4cf3ac972d7564854b0d0ffb237026107d00943f08002bd9251c454e",
+    "nlu_authorship/metrics.py": "0d156ab4c3172e02a77431c1b23ccb892ed354b44a4f37085e92a7b5eae42045",
+    "nlu_authorship/models.py": "a3783baca35b27c72c403e2e69599842028cc5206ae39cf1fe255672116eae83",
+    "nlu_authorship/normalization.py": "a9426338a4c4335884e552085b7278c53bc94043b44756ed768cd8c89cdd6d39",
+    "nlu_authorship/release.py": "db6306a74988c22c79dbe2daa3e9aeb0f997f0f6144ad8aae1fa4ff75074f4a0",
+    "nlu_authorship/runtime.py": "1e92e05f0187d4b1e012f5e472cc769e02bef2ea51ae5bb552ede502e6827510",
+    "nlu_authorship/stylometric.py": "c6a617a5ecc20be440d5ef3d1031d8966ac3783713b55050ebd5b2a60501504e",
+    "nlu_authorship/training.py": "9ae5052b80481b79809c835b1b846a02b6b843bbf2a6bea9d2225d793c783a04",
+    "pyproject.toml": "f6d1460702eb43124a2bb66642bc35bea865abc140f84a08d1c9424a345e18a2",
+    "requirements-inference.txt": "9cbc532b47d8066e6d350214e1cc4241f875801a5b3d01f8dd80dc70ed082aab",
+    "requirements-runtime.txt": "231318cd62c1bd3b9cc235c3e6e0c99d3fc1d7e645b1e2756424f95854ec42d4",
+    "requirements-training.txt": "3e21eb28d5f8c8a32e250b20c18d011fd5de1b4f933b6f4acd39c23ed678dc91",
+    "requirements.txt": "6d10e37e342472b5ba0a5d32bece2dc95fb7e17476a3d66c9d5851a673355560",
+    "run.ps1": "ef1ded686d2692d5412d1a68c9614393dadb1eb778ea48107e0e37120fa2f31b",
+    "scripts/__init__.py": "e533c40041a9ee3e4d15b00041f32d5b0d9f123341fd9d0c04f5ca5a953631a8",
+    "scripts/bootstrap_results.py": "d890d10de2651a667f5410c1cc731c031e2e6ac78bb1eee736d7bdbdb7949736",
+    "scripts/bootstrap_windows.ps1": "9cd59f034d413d4d7fc64213764dda402498d56980481b7bc0cdcf394f27ec0c",
+    "scripts/download_artifacts.py": "2317b7fadd8e9a130459c9b97231cce86a66c77f0a72043a936e1a8d69634fc7",
+    "scripts/launch_nlu.py": "36b7619e9f6517e59040244ed2546ddbcd9084cd45ff42c26467f010c354d449",
+    "scripts/package_kaggle.py": "5c8978503649c432add3ec847936a37d86c9af772264d2075122ece9636bdba5",
+    "scripts/plot_results.py": "0b272f425ce06ac658e13eab6e246d74fd1c4640326fa44d8d96a691a193fd9d",
+    "scripts/run_kaggle_experiment.py": "3f42c8c600de2fc69b3980ed6b20607eed8f996ca16c50dc25451733b5e0ebb7",
+    "scripts/run_parallel_transformers.py": "8f49d9be4ba2ff6dbf1e3f621099dcf09349c5c31091885c82976fa126d35603",
+    "scripts/run_single_transformer.py": "22fea82952f142f4b1aec2bf9f38b4e580ff021975de0cdedf322b8cff1f04f1",
+    "scripts/setup_kaggle_runtime.py": "470562fc49502864e48bd1061d0e63d3f7812326c22c0c3a75041b9f4301004f",
+    "scripts/setup_runtime.py": "bfc9d7217f651b7fc9627160dc94f1cd0bfec76771d04ebeed7db25b6554923d"
+  },
+  "classification_scope": "Every final pair, independently of abstention.",
+  "interval_method": "Empirical 2.5th/97.5th percentiles across 1,000 paired whole-component bootstrap draws; linear interpolation.",
+  "model_inference_performed": false,
+  "parameters_refitted": false,
+  "configuration_reselected": false,
+  "training_seed_count": 1,
+  "training_seed_uncertainty_estimated": false,
+  "author_or_domain_generalization_uncertainty_estimated": false,
+  "interpretation": "Conditional on this provided corpus and its observed document components for one trained seed. This is not an unseen-author, unseen-domain or repeated-training confidence interval. Group exchangeability remains an assumption; historical data exposure and near-duplicate dependence are not removed by bootstrap."
+}

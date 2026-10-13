@@ -1,0 +1,21 @@
+{
+  "source_snapshot": {
+    "nlu_authorship/data.py": "384cfb0b8311c53cd0a2d70a22c8abb134fd5981e917e94718c4533a78671b57",
+    "nlu_authorship/metrics.py": "0d156ab4c3172e02a77431c1b23ccb892ed354b44a4f37085e92a7b5eae42045",
+    "nlu_authorship/models.py": "a3783baca35b27c72c403e2e69599842028cc5206ae39cf1fe255672116eae83",
+    "nlu_authorship/normalization.py": "a9426338a4c4335884e552085b7278c53bc94043b44756ed768cd8c89cdd6d39",
+    "nlu_authorship/stylometric.py": "c6a617a5ecc20be440d5ef3d1031d8966ac3783713b55050ebd5b2a60501504e",
+    "pyproject.toml": "f6d1460702eb43124a2bb66642bc35bea865abc140f84a08d1c9424a345e18a2",
+    "requirements-inference.txt": "9cbc532b47d8066e6d350214e1cc4241f875801a5b3d01f8dd80dc70ed082aab",
+    "requirements-runtime.txt": "231318cd62c1bd3b9cc235c3e6e0c99d3fc1d7e645b1e2756424f95854ec42d4",
+    "requirements-training.txt": "3e21eb28d5f8c8a32e250b20c18d011fd5de1b4f933b6f4acd39c23ed678dc91",
+    "requirements.txt": "6d10e37e342472b5ba0a5d32bece2dc95fb7e17476a3d66c9d5851a673355560"
+  },
+  "manifest_file_sha256": "bdaef137cf8f3ec48698352af1130dbbc9cb9d0e7569eb208dfa52c91ddcfdb3",
+  "train_count": 21972,
+  "selection_count": 3139,
+  "train_records_sha256": "45b2092c1532624e9edcc554e3f988c4c07ef9ba47ab5e3851a5512a655e6313",
+  "selection_records_sha256": "e296100d3c31931215f4448b46a3c0de46e30300ca86a19a12be9fead12bda3e",
+  "calibration_evaluated": false,
+  "locked_holdout_evaluated": false
+}

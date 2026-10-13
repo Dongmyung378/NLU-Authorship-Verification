@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "status": "passed",
+  "scope": "Measured RoBERTa-Large train-only T4 timing and memory; no retained model or task performance",
+  "kernel": "dongmyungpark/nlu-large-t4-throughput-20261012",
+  "kernel_version": 1,
+  "dataset_version": 3,
+  "source_archive_sha256": "57a02d1463e900cb1e651177423324fc3264bc3c87932bb64421468ecf06bf68",
+  "source_files": 38,
+  "input_kind": "expanded",
+  "selected_microbatch": 2,
+  "maximum_matched_epochs": 6,
+  "effective_batch": 32,
+  "common_selection_patience": 3,
+  "paired_parent_wall_hours_cap": 9,
+  "assigned_worker_sum_hours_cap": 18,
+  "minimum_timing_speedup": 1.05,
+  "microbatch8_speedup_vs2": 1.0243909179854025,
+  "larger_candidate_adopted": false,
+  "decision": "Microbatch 8 did not meet the predeclared 1.05 speedup gate; microbatch 32 was slower. Retain microbatch 2 and six matched maximum epochs.",
+  "profile_elapsed_seconds": 316.29205052,
+  "probe_weights_discarded": true,
+  "selection_inference_performed": false,
+  "calibration_evaluated": false,
+  "locked_holdout_evaluated": false,
+  "historical_task_weights_used": false,
+  "measured_report": {
+    "path": "throughput-profile.json",
+    "bytes": 7632,
+    "sha256": "ec7c339c72744ccd3d46746da820746108c071c73241540bc0cc80a30cc12d7e"
+  },
+  "raw_private_receipts": {
+    "throughput-completion.json": {
+      "bytes": 7632,
+      "sha256": "ec7c339c72744ccd3d46746da820746108c071c73241540bc0cc80a30cc12d7e"
+    },
+    "input-verification.json": {
+      "bytes": 318,
+      "sha256": "931c74a4f986fa9bc28ac224c8800cd3c15900d7c119efa61d695b2fd6201664"
+    }
+  }
+}

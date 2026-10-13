@@ -1,0 +1,276 @@
+{
+  "schema_version": 1,
+  "status": "staged",
+  "validated_utc": "2026-10-12T18:34:44.296317+00:00",
+  "source_package_archive_sha256": "05b0b65e3b781ae6d3cd3f1c55d4da19b673a6994d091f45ea4121a47dc761d0",
+  "cpu_model_package_archive_sha256": "84f7dd6f837ce2604fb3281cd2f6dd90f59fb24d812d157b39e9fc0d1b144bfb",
+  "source_package_receipt_sha256": "fd1ecccc7c2617d4d39b0bd5de199f7f538ddee559561d0e5beaa2b9b3335d72",
+  "helper_sha256": "b0e2cecbc0baebea254f026858ceb275fd57dd3ec16a5243ccba2dde51efc513",
+  "source_sha256": {
+    "configs/experiment-plan.json": "7e614b6320b922a036939bc262ef1fc2b4a1108b353e8ca430ece784ca39ea0d",
+    "launch-nlu.bat": "384a75d9ab39b95d88cff3b199759a0eeb502b7f85b8b42edc8a46d89d21bc76",
+    "launch-nlu.sh": "c8f0d655b53ccd841c583384d7e30194ed3880052a3e27f059e4b4174ac9938d",
+    "nlu_authorship/__init__.py": "2bad8cb8c8ca252223faa29a713c97d1f88f4e5e9599fe0e63ca7435f207eeb8",
+    "nlu_authorship/__main__.py": "bd045ddd5242d002f692dac452be9afba38deef5cde541a5fc074bfef5987b91",
+    "nlu_authorship/calibration.py": "f0bc838911c29aeaa71335aa6cf5f15d34f77cb571909587e95abdec22eb37e7",
+    "nlu_authorship/cli.py": "f97e70f4f98be8708adf1bff6efdc3877fb7e55679ca273abf26451d10441a9d",
+    "nlu_authorship/data.py": "384cfb0b8311c53cd0a2d70a22c8abb134fd5981e917e94718c4533a78671b57",
+    "nlu_authorship/evaluation.py": "189032d14ed26ee9c520745bcdeab8e759a28a17819c7ced4ec603442a4230b0",
+    "nlu_authorship/losses.py": "54efd41a4cf3ac972d7564854b0d0ffb237026107d00943f08002bd9251c454e",
+    "nlu_authorship/metrics.py": "0d156ab4c3172e02a77431c1b23ccb892ed354b44a4f37085e92a7b5eae42045",
+    "nlu_authorship/models.py": "a3783baca35b27c72c403e2e69599842028cc5206ae39cf1fe255672116eae83",
+    "nlu_authorship/normalization.py": "a9426338a4c4335884e552085b7278c53bc94043b44756ed768cd8c89cdd6d39",
+    "nlu_authorship/release.py": "db6306a74988c22c79dbe2daa3e9aeb0f997f0f6144ad8aae1fa4ff75074f4a0",
+    "nlu_authorship/runtime.py": "1e92e05f0187d4b1e012f5e472cc769e02bef2ea51ae5bb552ede502e6827510",
+    "nlu_authorship/stylometric.py": "c6a617a5ecc20be440d5ef3d1031d8966ac3783713b55050ebd5b2a60501504e",
+    "nlu_authorship/training.py": "9ae5052b80481b79809c835b1b846a02b6b843bbf2a6bea9d2225d793c783a04",
+    "pyproject.toml": "f6d1460702eb43124a2bb66642bc35bea865abc140f84a08d1c9424a345e18a2",
+    "requirements-inference.txt": "9cbc532b47d8066e6d350214e1cc4241f875801a5b3d01f8dd80dc70ed082aab",
+    "requirements-runtime.txt": "231318cd62c1bd3b9cc235c3e6e0c99d3fc1d7e645b1e2756424f95854ec42d4",
+    "requirements-training.txt": "3e21eb28d5f8c8a32e250b20c18d011fd5de1b4f933b6f4acd39c23ed678dc91",
+    "requirements.txt": "6d10e37e342472b5ba0a5d32bece2dc95fb7e17476a3d66c9d5851a673355560",
+    "run.ps1": "ef1ded686d2692d5412d1a68c9614393dadb1eb778ea48107e0e37120fa2f31b",
+    "scripts/__init__.py": "e533c40041a9ee3e4d15b00041f32d5b0d9f123341fd9d0c04f5ca5a953631a8",
+    "scripts/bootstrap_results.py": "d890d10de2651a667f5410c1cc731c031e2e6ac78bb1eee736d7bdbdb7949736",
+    "scripts/bootstrap_windows.ps1": "9cd59f034d413d4d7fc64213764dda402498d56980481b7bc0cdcf394f27ec0c",
+    "scripts/download_artifacts.py": "2317b7fadd8e9a130459c9b97231cce86a66c77f0a72043a936e1a8d69634fc7",
+    "scripts/launch_nlu.py": "36b7619e9f6517e59040244ed2546ddbcd9084cd45ff42c26467f010c354d449",
+    "scripts/package_kaggle.py": "5c8978503649c432add3ec847936a37d86c9af772264d2075122ece9636bdba5",
+    "scripts/plot_results.py": "0b272f425ce06ac658e13eab6e246d74fd1c4640326fa44d8d96a691a193fd9d",
+    "scripts/run_kaggle_experiment.py": "3f42c8c600de2fc69b3980ed6b20607eed8f996ca16c50dc25451733b5e0ebb7",
+    "scripts/run_parallel_transformers.py": "8f49d9be4ba2ff6dbf1e3f621099dcf09349c5c31091885c82976fa126d35603",
+    "scripts/run_single_transformer.py": "22fea82952f142f4b1aec2bf9f38b4e580ff021975de0cdedf322b8cff1f04f1",
+    "scripts/setup_kaggle_runtime.py": "470562fc49502864e48bd1061d0e63d3f7812326c22c0c3a75041b9f4301004f",
+    "scripts/setup_runtime.py": "bfc9d7217f651b7fc9627160dc94f1cd0bfec76771d04ebeed7db25b6554923d"
+  },
+  "frozen_source_count": 35,
+  "manifest_file_sha256": "bdaef137cf8f3ec48698352af1130dbbc9cb9d0e7569eb208dfa52c91ddcfdb3",
+  "manifest_sha256": "4c110a05134a75bc16fb6b82b098bb5559f59c18d40ccba94f09d2cf91452cae",
+  "freeze_sha256": "e8fc94ee17d7ea575ecf8002e3d104d1ec70600b68cc59239f1189b0b955f924",
+  "freeze_file_sha256": "222f550a39d9e419c730a269439060106a90da826b7595fd6a4adef1b144835f",
+  "training_guards": {
+    "actual_matched_epochs": 6,
+    "declared_microbatch": 2,
+    "observed_matched_microbatch": 2,
+    "effective_batch": 32,
+    "predeclared_common_oom_fallback_used": false,
+    "parameter_count_per_transformer": 355361794,
+    "schedule_and_initial_weights_verified": true,
+    "shared_stop_rule_verified": true,
+    "saved_safetensors_headers_verified": true
+  },
+  "selection_guards": {
+    "selection_pair_count": 3139,
+    "selection_only_decision_recomputed_from_saved_logits": true,
+    "no_model_calls": true,
+    "no_refit": true,
+    "no_decision_changed": true
+  },
+  "prediction_guards": {
+    "ce": {
+      "evaluated_count": 4708,
+      "predictions_sha256": "836a4084afc79a90faba8526f63a22eb6ca59600bbe490a38c93847e5276cac7",
+      "metrics_file_sha256": "ba792a16acc90bfd20e0e746de5fbb9f9865b6c77abfcbb7943f039262acb376",
+      "model_content_sha256": "a5f0c30f03f44bfc52acd8436a58594aac556bdf0fc28f1b285d345ad9970a5d",
+      "all_rows_id_label_group_aligned": true,
+      "saved_score_metrics_recomputed": true,
+      "frozen_threshold_and_abstention_verified": true
+    },
+    "custom_asl": {
+      "evaluated_count": 4708,
+      "predictions_sha256": "aca3ae2f0434aba99242df1a2401c07f12d5b272e663e449ef12a8366aa5e178",
+      "metrics_file_sha256": "cefe7c05065f6c2951951fba594c7f22976db940cf06e7f9a228dc77536b6445",
+      "model_content_sha256": "10ffa6bd384121062ab9acea49ecc5702bbd7bd15733dd2d4b7002e32f5b478e",
+      "all_rows_id_label_group_aligned": true,
+      "saved_score_metrics_recomputed": true,
+      "frozen_threshold_and_abstention_verified": true
+    },
+    "stylometric": {
+      "evaluated_count": 4708,
+      "predictions_sha256": "c688f079a49c376ad00b18294a9cea883e1b7acd0f5f293e1d43b7b23e57c7fa",
+      "metrics_file_sha256": "3368f5565bef1a5fc44c8be44bcd48ee428202b06b490e15c23db04a81b71399",
+      "model_content_sha256": "eb7e99a46cce03890409ff5bf0c646b3fc6574b17bc47fe1599b34d079b11aa1",
+      "all_rows_id_label_group_aligned": true,
+      "saved_score_metrics_recomputed": true,
+      "frozen_threshold_and_abstention_verified": true
+    }
+  },
+  "canonical_cpu_model_files": {
+    "artifact-inventory.json": {
+      "bytes": 985,
+      "sha256": "70668b83ff60501dfe31eac134c4c3a607e88148801f80db9c1d786b7e73781a"
+    },
+    "ensemble_config.json": {
+      "bytes": 2714,
+      "sha256": "dea8f62f0f7a4bc15163d58cc02275a9dd48b8e0ab810a5e7fc2ccc9a3ee6b8d"
+    },
+    "lgb_model.pkl": {
+      "bytes": 4589436,
+      "sha256": "c3b7a016ec14305e0dea661177619dbfef32882582e7255d2d33075b8352e49d"
+    },
+    "tfidf_char.pkl": {
+      "bytes": 179162,
+      "sha256": "86b67006c3ac011903f9b740739627eb62705c5c4eafe136bfe3f4344ba2063a"
+    },
+    "tfidf_fw.pkl": {
+      "bytes": 4443,
+      "sha256": "1660621c44eed894dd4c8dd953866da2d933d98aaac600027b71e366c562d94a"
+    },
+    "tfidf_word.pkl": {
+      "bytes": 205558,
+      "sha256": "41f6cf4935853ddf10673695a5d2b981875f6ec9434a22e74b55d966bb80d5ea"
+    },
+    "xgb_model.json": {
+      "bytes": 1083775,
+      "sha256": "94dcce8b6dbfb4726813bb648ffa91a8d3f2bcc0ea6aaa39a653df09ff54d24c"
+    }
+  },
+  "canonical_cpu_model_total_bytes": 6066073,
+  "files": {
+    "reports/release-summary.json": {
+      "kind": "exact_raw_scientific_report",
+      "source_relative_path": "release/release-summary.json",
+      "bytes": 271117,
+      "sha256": "985e961ccfea41fa03fccd6b6cb436d777c9b20fcafd1c8b8134ce0b2729479c"
+    },
+    "reports/evaluation-freeze.json": {
+      "kind": "exact_raw_scientific_report",
+      "source_relative_path": "release/evaluation-freeze.json",
+      "bytes": 156101,
+      "sha256": "222f550a39d9e419c730a269439060106a90da826b7595fd6a4adef1b144835f"
+    },
+    "reports/selection.json": {
+      "kind": "exact_raw_scientific_report",
+      "source_relative_path": "release/selection.json",
+      "bytes": 95768,
+      "sha256": "b9a1b2089216fbcaa6a8ac438a53e60dc5fdb6a553a165f48043e92535dcfb68"
+    },
+    "reports/before-final-evaluation.json": {
+      "kind": "exact_raw_scientific_report",
+      "source_relative_path": "release/before-final-evaluation.json",
+      "bytes": 178,
+      "sha256": "3801759e2d24b3dab9489f76435c340c8b09273941268d9c123512bf272603b9"
+    },
+    "reports/calibration/ce.json": {
+      "kind": "exact_raw_scientific_report",
+      "source_relative_path": "release/calibration/ce.json",
+      "bytes": 8910,
+      "sha256": "9b91e0646956e651ee7f30df1a006d62a42916183e5bde7019177c16a73397ab"
+    },
+    "reports/selection-logits/ce.jsonl": {
+      "kind": "exact_raw_scientific_report",
+      "source_relative_path": "release/selection-ce.jsonl",
+      "bytes": 460341,
+      "sha256": "eec317b92076395c664d57d64666b1f9a96caaca1e96c9eb8fedf1a6a3ad079b"
+    },
+    "reports/locked-holdout/ce/metrics.json": {
+      "kind": "exact_raw_scientific_report",
+      "source_relative_path": "release/locked-holdout/ce/metrics.json",
+      "bytes": 40616,
+      "sha256": "ba792a16acc90bfd20e0e746de5fbb9f9865b6c77abfcbb7943f039262acb376"
+    },
+    "reports/locked-holdout/ce/confusion.json": {
+      "kind": "exact_raw_scientific_report",
+      "source_relative_path": "release/locked-holdout/ce/confusion.json",
+      "bytes": 249,
+      "sha256": "ba86d7c00cb216ca15d277178aa2e884a0056ed5ae7596b2cf5e22a893ef8acb"
+    },
+    "reports/locked-holdout/ce/predictions.jsonl": {
+      "kind": "exact_raw_scientific_report",
+      "source_relative_path": "release/locked-holdout/ce/predictions.jsonl",
+      "bytes": 2823403,
+      "sha256": "836a4084afc79a90faba8526f63a22eb6ca59600bbe490a38c93847e5276cac7"
+    },
+    "reports/calibration/custom_asl.json": {
+      "kind": "exact_raw_scientific_report",
+      "source_relative_path": "release/calibration/custom_asl.json",
+      "bytes": 8853,
+      "sha256": "318298a18805abecec0e4051e1000e364adce837072098d545495431fca496ca"
+    },
+    "reports/selection-logits/custom_asl.jsonl": {
+      "kind": "exact_raw_scientific_report",
+      "source_relative_path": "release/selection-custom_asl.jsonl",
+      "bytes": 464525,
+      "sha256": "839673e230dc356f2f3f08ecf091296546530678defe3669511c248f014d24a1"
+    },
+    "reports/locked-holdout/custom_asl/metrics.json": {
+      "kind": "exact_raw_scientific_report",
+      "source_relative_path": "release/locked-holdout/custom_asl/metrics.json",
+      "bytes": 40547,
+      "sha256": "cefe7c05065f6c2951951fba594c7f22976db940cf06e7f9a228dc77536b6445"
+    },
+    "reports/locked-holdout/custom_asl/confusion.json": {
+      "kind": "exact_raw_scientific_report",
+      "source_relative_path": "release/locked-holdout/custom_asl/confusion.json",
+      "bytes": 249,
+      "sha256": "2de2d9d20b4d228cb44541bfb010f252ad6920f83a3b66ab495d36450b787050"
+    },
+    "reports/locked-holdout/custom_asl/predictions.jsonl": {
+      "kind": "exact_raw_scientific_report",
+      "source_relative_path": "release/locked-holdout/custom_asl/predictions.jsonl",
+      "bytes": 2815701,
+      "sha256": "aca3ae2f0434aba99242df1a2401c07f12d5b272e663e449ef12a8366aa5e178"
+    },
+    "reports/calibration/stylometric.json": {
+      "kind": "exact_raw_scientific_report",
+      "source_relative_path": "release/calibration/stylometric.json",
+      "bytes": 8895,
+      "sha256": "7cc056275e733f2edb5e03774ed0c7137800e5c8f1b7485abc015b3caddfd338"
+    },
+    "reports/selection-logits/stylometric.jsonl": {
+      "kind": "exact_raw_scientific_report",
+      "source_relative_path": "release/selection-stylometric.jsonl",
+      "bytes": 467623,
+      "sha256": "89b8effcd26096d5225e022be9062f9d21b5af010d1db129bdf99b47cc0b12dd"
+    },
+    "reports/locked-holdout/stylometric/metrics.json": {
+      "kind": "exact_raw_scientific_report",
+      "source_relative_path": "release/locked-holdout/stylometric/metrics.json",
+      "bytes": 40516,
+      "sha256": "3368f5565bef1a5fc44c8be44bcd48ee428202b06b490e15c23db04a81b71399"
+    },
+    "reports/locked-holdout/stylometric/confusion.json": {
+      "kind": "exact_raw_scientific_report",
+      "source_relative_path": "release/locked-holdout/stylometric/confusion.json",
+      "bytes": 249,
+      "sha256": "63cb47488e3928bb4e510c68cefdc680b1ec4e826d060721b904dd197e8821e6"
+    },
+    "reports/locked-holdout/stylometric/predictions.jsonl": {
+      "kind": "exact_raw_scientific_report",
+      "source_relative_path": "release/locked-holdout/stylometric/predictions.jsonl",
+      "bytes": 2783389,
+      "sha256": "c688f079a49c376ad00b18294a9cea883e1b7acd0f5f293e1d43b7b23e57c7fa"
+    },
+    "reports/training-report.json": {
+      "kind": "explicitly_curated_metadata",
+      "bytes": 27027,
+      "sha256": "675f17d434650417ec5b6f828fd25046f0ad78eb17e533f2c8b5e7b5be4cde15"
+    },
+    "reports/training/gpu-profiles.json": {
+      "kind": "explicitly_curated_metadata",
+      "bytes": 1858,
+      "sha256": "cbf61eda6c22e6b24dda42683375f9b9a9491416b876cef261dcea06cf2ca0d2"
+    },
+    "reports/training/runtime.json": {
+      "kind": "explicitly_curated_metadata",
+      "bytes": 1648,
+      "sha256": "95137e08139f3f54316a6c81723784a0c1087ecb91aa1eb87fc09fdb1579c7ba"
+    },
+    "reports/experiment-completion.json": {
+      "kind": "explicitly_curated_metadata",
+      "bytes": 708,
+      "sha256": "f2674188e44b32f3934c7fe08089fd24aa3255b6a1a93d4bd3f1cd285cbeddc3"
+    }
+  },
+  "report_file_count_excluding_this_inventory": 23,
+  "total_report_bytes_excluding_this_inventory": 10518471,
+  "split_manifest_duplicated": false,
+  "raw_private_evidence_modified": false,
+  "model_weights_or_logs_copied": false,
+  "remote_operations_performed": false,
+  "model_inference_performed": false,
+  "parameters_refitted": false,
+  "decisions_changed": false,
+  "independent_cpu_reproduction_included": false,
+  "scope": "Consistency of actual frozen training/release evidence. Independent saved-model CPU replay and public download verification are separate release requirements."
+}

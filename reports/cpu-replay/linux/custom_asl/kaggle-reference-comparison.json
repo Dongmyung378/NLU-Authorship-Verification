@@ -1,0 +1,37 @@
+{
+  "status": "failed",
+  "count": 4708,
+  "reference_type": "kaggle_gpu",
+  "evaluated_platform": "Linux CPU",
+  "reference_platform": "Kaggle GPU",
+  "record_ids_match_manifest_exactly": true,
+  "exact_row_mismatch_counts": {
+    "id": 0,
+    "label": 0,
+    "group_id": 0,
+    "split": 0,
+    "prediction": 0,
+    "accepted": 0,
+    "inference_method": 0,
+    "minimum_cleaned_words": 0,
+    "length_bin": 0
+  },
+  "row_mismatch_examples": [],
+  "metric_or_binding_differences": [],
+  "probability_absolute_tolerance": 1e-05,
+  "maximum_absolute_probability_difference": {
+    "raw_probability_ab": 0.0001838594991900866,
+    "raw_probability_ba": 6.631934422851593e-06,
+    "raw_probability_symmetric": 8.661425582440208e-05,
+    "raw_probability_selected": 8.661425582440208e-05,
+    "calibrated_probability": 0.0001096225355059488,
+    "calibrated_probability_swapped_selected_policy": 0.0001096225355059488,
+    "confidence": 0.0001096225355059488
+  },
+  "evaluated_predictions_sha256": "c96a592ee1ed8fd1ce4d2fd09fa310de4e9a335c3e817e7656f120d5038c14b8",
+  "reference_predictions_sha256": "aca3ae2f0434aba99242df1a2401c07f12d5b272e663e449ef12a8366aa5e178",
+  "prediction_files_byte_identical": false,
+  "numeric_metric_absolute_tolerance": 1e-06,
+  "strict_discrete_decisions_required": true,
+  "near_frozen_threshold_gpu_cpu_disagreement_is_reported_not_retuned": true
+}

@@ -1,0 +1,2920 @@
+{
+  "schema_version": 1,
+  "selection_split": "selection",
+  "metric": "macro_f1",
+  "decision_threshold": 0.49792052236874207,
+  "minimum_improvement": 0.002,
+  "outcomes": {
+    "ce": {
+      "ab": {
+        "count": 3139,
+        "correct": 2487,
+        "accuracy": 0.7922905383880217,
+        "macro_f1": 0.7917828499619912,
+        "class_f1": {
+          "0": 0.8020643594414086,
+          "1": 0.7815013404825737
+        },
+        "same_author_f1": 0.7815013404825737,
+        "confusion": [
+          [
+            1321,
+            256
+          ],
+          [
+            396,
+            1166
+          ]
+        ],
+        "class_support": {
+          "0": 1577,
+          "1": 1562
+        },
+        "class_recall": {
+          "0": 0.8376664552948636,
+          "1": 0.7464788732394366
+        },
+        "roc_auc": 0.8912220077831374,
+        "log_loss": 0.42838982437891654,
+        "brier_score": 0.13871049472605354,
+        "ece10": 0.056361923045185405,
+        "ece10_policy": "Ten fixed equal-width bins of positive-class probability; weighted absolute mean probability minus positive-label frequency; empty bins contribute zero.",
+        "ece10_bins": [
+          {
+            "bin": 0,
+            "lower": 0.0,
+            "upper": 0.1,
+            "upper_inclusive": false,
+            "count": 888,
+            "mean_positive_probability": 0.022380008417842635,
+            "positive_fraction": 0.08108108108108109
+          },
+          {
+            "bin": 1,
+            "lower": 0.1,
+            "upper": 0.2,
+            "upper_inclusive": false,
+            "count": 223,
+            "mean_positive_probability": 0.14959107688700293,
+            "positive_fraction": 0.2600896860986547
+          },
+          {
+            "bin": 2,
+            "lower": 0.2,
+            "upper": 0.3,
+            "upper_inclusive": false,
+            "count": 176,
+            "mean_positive_probability": 0.25025038131401467,
+            "positive_fraction": 0.35795454545454547
+          },
+          {
+            "bin": 3,
+            "lower": 0.3,
+            "upper": 0.4,
+            "upper_inclusive": false,
+            "count": 221,
+            "mean_positive_probability": 0.3513898938812372,
+            "positive_fraction": 0.39819004524886875
+          },
+          {
+            "bin": 4,
+            "lower": 0.4,
+            "upper": 0.5,
+            "upper_inclusive": false,
+            "count": 209,
+            "mean_positive_probability": 0.44829055312540533,
+            "positive_fraction": 0.5502392344497608
+          },
+          {
+            "bin": 5,
+            "lower": 0.5,
+            "upper": 0.6,
+            "upper_inclusive": false,
+            "count": 210,
+            "mean_positive_probability": 0.548395517196481,
+            "positive_fraction": 0.5952380952380952
+          },
+          {
+            "bin": 6,
+            "lower": 0.6,
+            "upper": 0.7,
+            "upper_inclusive": false,
+            "count": 170,
+            "mean_positive_probability": 0.648941978441131,
+            "positive_fraction": 0.6058823529411764
+          },
+          {
+            "bin": 7,
+            "lower": 0.7,
+            "upper": 0.8,
+            "upper_inclusive": false,
+            "count": 137,
+            "mean_positive_probability": 0.7511140301022352,
+            "positive_fraction": 0.6788321167883211
+          },
+          {
+            "bin": 8,
+            "lower": 0.8,
+            "upper": 0.9,
+            "upper_inclusive": false,
+            "count": 140,
+            "mean_positive_probability": 0.8500149584399977,
+            "positive_fraction": 0.8
+          },
+          {
+            "bin": 9,
+            "lower": 0.9,
+            "upper": 1.0,
+            "upper_inclusive": true,
+            "count": 765,
+            "mean_positive_probability": 0.9784111101863732,
+            "positive_fraction": 0.9581699346405229
+          }
+        ],
+        "threshold": 0.5,
+        "decision_rule": "positive when probability >= threshold",
+        "macro_f1_policy": "Mean F1 of both binary classes; undefined class F1=0",
+        "roc_auc_policy": "Average ranks for tied scores; null if one class is absent"
+      },
+      "ba": {
+        "count": 3139,
+        "correct": 2505,
+        "accuracy": 0.7980248486779229,
+        "macro_f1": 0.7974376982236716,
+        "class_f1": {
+          "0": 0.8083434099153567,
+          "1": 0.7865319865319865
+        },
+        "same_author_f1": 0.7865319865319865,
+        "confusion": [
+          [
+            1337,
+            240
+          ],
+          [
+            394,
+            1168
+          ]
+        ],
+        "class_support": {
+          "0": 1577,
+          "1": 1562
+        },
+        "class_recall": {
+          "0": 0.8478123018389346,
+          "1": 0.7477592829705506
+        },
+        "roc_auc": 0.8896825931666554,
+        "log_loss": 0.43418154640513096,
+        "brier_score": 0.13977475271139592,
+        "ece10": 0.058691402094524406,
+        "ece10_policy": "Ten fixed equal-width bins of positive-class probability; weighted absolute mean probability minus positive-label frequency; empty bins contribute zero.",
+        "ece10_bins": [
+          {
+            "bin": 0,
+            "lower": 0.0,
+            "upper": 0.1,
+            "upper_inclusive": false,
+            "count": 887,
+            "mean_positive_probability": 0.02342341352676867,
+            "positive_fraction": 0.08906426155580609
+          },
+          {
+            "bin": 1,
+            "lower": 0.1,
+            "upper": 0.2,
+            "upper_inclusive": false,
+            "count": 219,
+            "mean_positive_probability": 0.14391484908412214,
+            "positive_fraction": 0.2420091324200913
+          },
+          {
+            "bin": 2,
+            "lower": 0.2,
+            "upper": 0.3,
+            "upper_inclusive": false,
+            "count": 191,
+            "mean_positive_probability": 0.24960411166862662,
+            "positive_fraction": 0.33507853403141363
+          },
+          {
+            "bin": 3,
+            "lower": 0.3,
+            "upper": 0.4,
+            "upper_inclusive": false,
+            "count": 225,
+            "mean_positive_probability": 0.35035690506522377,
+            "positive_fraction": 0.4088888888888889
+          },
+          {
+            "bin": 4,
+            "lower": 0.4,
+            "upper": 0.5,
+            "upper_inclusive": false,
+            "count": 209,
+            "mean_positive_probability": 0.45457826558115716,
+            "positive_fraction": 0.507177033492823
+          },
+          {
+            "bin": 5,
+            "lower": 0.5,
+            "upper": 0.6,
+            "upper_inclusive": false,
+            "count": 205,
+            "mean_positive_probability": 0.5500018627516569,
+            "positive_fraction": 0.6585365853658537
+          },
+          {
+            "bin": 6,
+            "lower": 0.6,
+            "upper": 0.7,
+            "upper_inclusive": false,
+            "count": 147,
+            "mean_positive_probability": 0.6459009984355433,
+            "positive_fraction": 0.6258503401360545
+          },
+          {
+            "bin": 7,
+            "lower": 0.7,
+            "upper": 0.8,
+            "upper_inclusive": false,
+            "count": 156,
+            "mean_positive_probability": 0.7486588613534934,
+            "positive_fraction": 0.6794871794871795
+          },
+          {
+            "bin": 8,
+            "lower": 0.8,
+            "upper": 0.9,
+            "upper_inclusive": false,
+            "count": 144,
+            "mean_positive_probability": 0.8513503012777013,
+            "positive_fraction": 0.7569444444444444
+          },
+          {
+            "bin": 9,
+            "lower": 0.9,
+            "upper": 1.0,
+            "upper_inclusive": true,
+            "count": 756,
+            "mean_positive_probability": 0.9794384745187228,
+            "positive_fraction": 0.9603174603174603
+          }
+        ],
+        "threshold": 0.5,
+        "decision_rule": "positive when probability >= threshold",
+        "macro_f1_policy": "Mean F1 of both binary classes; undefined class F1=0",
+        "roc_auc_policy": "Average ranks for tied scores; null if one class is absent"
+      },
+      "symmetric": {
+        "count": 3139,
+        "correct": 2513,
+        "accuracy": 0.8005734310289901,
+        "macro_f1": 0.8002147701337342,
+        "class_f1": {
+          "0": 0.808679706601467,
+          "1": 0.7917498336660014
+        },
+        "same_author_f1": 0.7917498336660014,
+        "confusion": [
+          [
+            1323,
+            254
+          ],
+          [
+            372,
+            1190
+          ]
+        ],
+        "class_support": {
+          "0": 1577,
+          "1": 1562
+        },
+        "class_recall": {
+          "0": 0.8389346861128726,
+          "1": 0.7618437900128041
+        },
+        "roc_auc": 0.8951951752017843,
+        "log_loss": 0.4177807999328479,
+        "brier_score": 0.13538817607856155,
+        "ece10": 0.050656999365444745,
+        "ece10_policy": "Ten fixed equal-width bins of positive-class probability; weighted absolute mean probability minus positive-label frequency; empty bins contribute zero.",
+        "ece10_bins": [
+          {
+            "bin": 0,
+            "lower": 0.0,
+            "upper": 0.1,
+            "upper_inclusive": false,
+            "count": 901,
+            "mean_positive_probability": 0.024836181148941757,
+            "positive_fraction": 0.08213096559378469
+          },
+          {
+            "bin": 1,
+            "lower": 0.1,
+            "upper": 0.2,
+            "upper_inclusive": false,
+            "count": 212,
+            "mean_positive_probability": 0.14621838832703313,
+            "positive_fraction": 0.24056603773584906
+          },
+          {
+            "bin": 2,
+            "lower": 0.2,
+            "upper": 0.3,
+            "upper_inclusive": false,
+            "count": 169,
+            "mean_positive_probability": 0.25060531992099305,
+            "positive_fraction": 0.3431952662721893
+          },
+          {
+            "bin": 3,
+            "lower": 0.3,
+            "upper": 0.4,
+            "upper_inclusive": false,
+            "count": 226,
+            "mean_positive_probability": 0.35105578793292996,
+            "positive_fraction": 0.4026548672566372
+          },
+          {
+            "bin": 4,
+            "lower": 0.4,
+            "upper": 0.5,
+            "upper_inclusive": false,
+            "count": 187,
+            "mean_positive_probability": 0.4505548708720183,
+            "positive_fraction": 0.5240641711229946
+          },
+          {
+            "bin": 5,
+            "lower": 0.5,
+            "upper": 0.6,
+            "upper_inclusive": false,
+            "count": 242,
+            "mean_positive_probability": 0.5490775592858919,
+            "positive_fraction": 0.6074380165289256
+          },
+          {
+            "bin": 6,
+            "lower": 0.6,
+            "upper": 0.7,
+            "upper_inclusive": false,
+            "count": 173,
+            "mean_positive_probability": 0.6454226880136352,
+            "positive_fraction": 0.5780346820809249
+          },
+          {
+            "bin": 7,
+            "lower": 0.7,
+            "upper": 0.8,
+            "upper_inclusive": false,
+            "count": 132,
+            "mean_positive_probability": 0.7492835811275592,
+            "positive_fraction": 0.7727272727272727
+          },
+          {
+            "bin": 8,
+            "lower": 0.8,
+            "upper": 0.9,
+            "upper_inclusive": false,
+            "count": 148,
+            "mean_positive_probability": 0.8448871389585484,
+            "positive_fraction": 0.8108108108108109
+          },
+          {
+            "bin": 9,
+            "lower": 0.9,
+            "upper": 1.0,
+            "upper_inclusive": true,
+            "count": 749,
+            "mean_positive_probability": 0.9791902096195135,
+            "positive_fraction": 0.9626168224299065
+          }
+        ],
+        "threshold": 0.5,
+        "decision_rule": "positive when probability >= threshold",
+        "macro_f1_policy": "Mean F1 of both binary classes; undefined class F1=0",
+        "roc_auc_policy": "Average ranks for tied scores; null if one class is absent"
+      },
+      "symmetric_macro_f1_gain": 0.00843192017174299,
+      "raw_order_diagnostics": {
+        "count": 3139,
+        "mean_absolute_probability_gap": 0.07384282775008703,
+        "p95_absolute_probability_gap": 0.29390475363093566,
+        "max_absolute_probability_gap": 0.9180273692359741,
+        "prediction_mismatch_count": 324,
+        "prediction_mismatch_fraction": 0.10321758521822236,
+        "temperature": 1.0,
+        "threshold": 0.5
+      },
+      "raw_orientation_max_logit_difference": 3.390105128288269,
+      "symmetric_max_probability_gap": 0.0,
+      "symmetric_improvement_gate_passed": true,
+      "symmetric_invariance_no_harm_gate_passed": true,
+      "selected_method": "symmetric",
+      "selected_macro_f1": 0.8002147701337342
+    },
+    "custom_asl": {
+      "ab": {
+        "count": 3139,
+        "correct": 2490,
+        "accuracy": 0.7932462567696719,
+        "macro_f1": 0.7932432351514644,
+        "class_f1": {
+          "0": 0.7924528301886793,
+          "1": 0.7940336401142495
+        },
+        "same_author_f1": 0.7940336401142495,
+        "confusion": [
+          [
+            1239,
+            338
+          ],
+          [
+            311,
+            1251
+          ]
+        ],
+        "class_support": {
+          "0": 1577,
+          "1": 1562
+        },
+        "class_recall": {
+          "0": 0.7856689917564997,
+          "1": 0.8008962868117798
+        },
+        "roc_auc": 0.8901681258357779,
+        "log_loss": 0.4219353873866385,
+        "brier_score": 0.1383772363331332,
+        "ece10": 0.05291882455347894,
+        "ece10_policy": "Ten fixed equal-width bins of positive-class probability; weighted absolute mean probability minus positive-label frequency; empty bins contribute zero.",
+        "ece10_bins": [
+          {
+            "bin": 0,
+            "lower": 0.0,
+            "upper": 0.1,
+            "upper_inclusive": false,
+            "count": 200,
+            "mean_positive_probability": 0.06387554349174909,
+            "positive_fraction": 0.0
+          },
+          {
+            "bin": 1,
+            "lower": 0.1,
+            "upper": 0.2,
+            "upper_inclusive": false,
+            "count": 354,
+            "mean_positive_probability": 0.14966761878457266,
+            "positive_fraction": 0.04519774011299435
+          },
+          {
+            "bin": 2,
+            "lower": 0.2,
+            "upper": 0.3,
+            "upper_inclusive": false,
+            "count": 264,
+            "mean_positive_probability": 0.2509553318260225,
+            "positive_fraction": 0.13636363636363635
+          },
+          {
+            "bin": 3,
+            "lower": 0.3,
+            "upper": 0.4,
+            "upper_inclusive": false,
+            "count": 298,
+            "mean_positive_probability": 0.35106072951914996,
+            "positive_fraction": 0.2785234899328859
+          },
+          {
+            "bin": 4,
+            "lower": 0.4,
+            "upper": 0.5,
+            "upper_inclusive": false,
+            "count": 434,
+            "mean_positive_probability": 0.4530044530212196,
+            "positive_fraction": 0.4055299539170507
+          },
+          {
+            "bin": 5,
+            "lower": 0.5,
+            "upper": 0.6,
+            "upper_inclusive": false,
+            "count": 414,
+            "mean_positive_probability": 0.5470080227612127,
+            "positive_fraction": 0.5748792270531401
+          },
+          {
+            "bin": 6,
+            "lower": 0.6,
+            "upper": 0.7,
+            "upper_inclusive": false,
+            "count": 251,
+            "mean_positive_probability": 0.6496181872010085,
+            "positive_fraction": 0.6135458167330677
+          },
+          {
+            "bin": 7,
+            "lower": 0.7,
+            "upper": 0.8,
+            "upper_inclusive": false,
+            "count": 169,
+            "mean_positive_probability": 0.7472679211416177,
+            "positive_fraction": 0.7988165680473372
+          },
+          {
+            "bin": 8,
+            "lower": 0.8,
+            "upper": 0.9,
+            "upper_inclusive": false,
+            "count": 181,
+            "mean_positive_probability": 0.8570308693414648,
+            "positive_fraction": 0.8839779005524862
+          },
+          {
+            "bin": 9,
+            "lower": 0.9,
+            "upper": 1.0,
+            "upper_inclusive": true,
+            "count": 574,
+            "mean_positive_probability": 0.9656785202530952,
+            "positive_fraction": 0.9825783972125436
+          }
+        ],
+        "threshold": 0.5,
+        "decision_rule": "positive when probability >= threshold",
+        "macro_f1_policy": "Mean F1 of both binary classes; undefined class F1=0",
+        "roc_auc_policy": "Average ranks for tied scores; null if one class is absent"
+      },
+      "ba": {
+        "count": 3139,
+        "correct": 2497,
+        "accuracy": 0.7954762663268556,
+        "macro_f1": 0.7954745850096009,
+        "class_f1": {
+          "0": 0.794888178913738,
+          "1": 0.7960609911054638
+        },
+        "same_author_f1": 0.7960609911054638,
+        "confusion": [
+          [
+            1244,
+            333
+          ],
+          [
+            309,
+            1253
+          ]
+        ],
+        "class_support": {
+          "0": 1577,
+          "1": 1562
+        },
+        "class_recall": {
+          "0": 0.7888395688015218,
+          "1": 0.8021766965428937
+        },
+        "roc_auc": 0.8886831103644987,
+        "log_loss": 0.42518878088488365,
+        "brier_score": 0.13948262081636462,
+        "ece10": 0.051091331338035936,
+        "ece10_policy": "Ten fixed equal-width bins of positive-class probability; weighted absolute mean probability minus positive-label frequency; empty bins contribute zero.",
+        "ece10_bins": [
+          {
+            "bin": 0,
+            "lower": 0.0,
+            "upper": 0.1,
+            "upper_inclusive": false,
+            "count": 206,
+            "mean_positive_probability": 0.0633561384536561,
+            "positive_fraction": 0.0
+          },
+          {
+            "bin": 1,
+            "lower": 0.1,
+            "upper": 0.2,
+            "upper_inclusive": false,
+            "count": 332,
+            "mean_positive_probability": 0.15020668596005415,
+            "positive_fraction": 0.04216867469879518
+          },
+          {
+            "bin": 2,
+            "lower": 0.2,
+            "upper": 0.3,
+            "upper_inclusive": false,
+            "count": 286,
+            "mean_positive_probability": 0.2504270677543493,
+            "positive_fraction": 0.17132867132867133
+          },
+          {
+            "bin": 3,
+            "lower": 0.3,
+            "upper": 0.4,
+            "upper_inclusive": false,
+            "count": 291,
+            "mean_positive_probability": 0.35102324524620176,
+            "positive_fraction": 0.2268041237113402
+          },
+          {
+            "bin": 4,
+            "lower": 0.4,
+            "upper": 0.5,
+            "upper_inclusive": false,
+            "count": 438,
+            "mean_positive_probability": 0.45254156803022827,
+            "positive_fraction": 0.410958904109589
+          },
+          {
+            "bin": 5,
+            "lower": 0.5,
+            "upper": 0.6,
+            "upper_inclusive": false,
+            "count": 427,
+            "mean_positive_probability": 0.5471467449891543,
+            "positive_fraction": 0.5737704918032787
+          },
+          {
+            "bin": 6,
+            "lower": 0.6,
+            "upper": 0.7,
+            "upper_inclusive": false,
+            "count": 256,
+            "mean_positive_probability": 0.6463572167274431,
+            "positive_fraction": 0.66015625
+          },
+          {
+            "bin": 7,
+            "lower": 0.7,
+            "upper": 0.8,
+            "upper_inclusive": false,
+            "count": 146,
+            "mean_positive_probability": 0.7468609866921156,
+            "positive_fraction": 0.7808219178082192
+          },
+          {
+            "bin": 8,
+            "lower": 0.8,
+            "upper": 0.9,
+            "upper_inclusive": false,
+            "count": 192,
+            "mean_positive_probability": 0.8553662898549282,
+            "positive_fraction": 0.8697916666666666
+          },
+          {
+            "bin": 9,
+            "lower": 0.9,
+            "upper": 1.0,
+            "upper_inclusive": true,
+            "count": 565,
+            "mean_positive_probability": 0.9666482627078504,
+            "positive_fraction": 0.9876106194690265
+          }
+        ],
+        "threshold": 0.5,
+        "decision_rule": "positive when probability >= threshold",
+        "macro_f1_policy": "Mean F1 of both binary classes; undefined class F1=0",
+        "roc_auc_policy": "Average ranks for tied scores; null if one class is absent"
+      },
+      "symmetric": {
+        "count": 3139,
+        "correct": 2518,
+        "accuracy": 0.8021662949984071,
+        "macro_f1": 0.8021611549299634,
+        "class_f1": {
+          "0": 0.8011527377521613,
+          "1": 0.8031695721077654
+        },
+        "same_author_f1": 0.8031695721077654,
+        "confusion": [
+          [
+            1251,
+            326
+          ],
+          [
+            295,
+            1267
+          ]
+        ],
+        "class_support": {
+          "0": 1577,
+          "1": 1562
+        },
+        "class_recall": {
+          "0": 0.7932783766645529,
+          "1": 0.8111395646606914
+        },
+        "roc_auc": 0.8950011245196434,
+        "log_loss": 0.4183890321966965,
+        "brier_score": 0.136578956684067,
+        "ece10": 0.05879426883254549,
+        "ece10_policy": "Ten fixed equal-width bins of positive-class probability; weighted absolute mean probability minus positive-label frequency; empty bins contribute zero.",
+        "ece10_bins": [
+          {
+            "bin": 0,
+            "lower": 0.0,
+            "upper": 0.1,
+            "upper_inclusive": false,
+            "count": 191,
+            "mean_positive_probability": 0.06454207935270845,
+            "positive_fraction": 0.0
+          },
+          {
+            "bin": 1,
+            "lower": 0.1,
+            "upper": 0.2,
+            "upper_inclusive": false,
+            "count": 345,
+            "mean_positive_probability": 0.1494854807058059,
+            "positive_fraction": 0.03768115942028986
+          },
+          {
+            "bin": 2,
+            "lower": 0.2,
+            "upper": 0.3,
+            "upper_inclusive": false,
+            "count": 290,
+            "mean_positive_probability": 0.2501062832717971,
+            "positive_fraction": 0.1413793103448276
+          },
+          {
+            "bin": 3,
+            "lower": 0.3,
+            "upper": 0.4,
+            "upper_inclusive": false,
+            "count": 276,
+            "mean_positive_probability": 0.3519551943173952,
+            "positive_fraction": 0.2391304347826087
+          },
+          {
+            "bin": 4,
+            "lower": 0.4,
+            "upper": 0.5,
+            "upper_inclusive": false,
+            "count": 444,
+            "mean_positive_probability": 0.4525730800134708,
+            "positive_fraction": 0.39414414414414417
+          },
+          {
+            "bin": 5,
+            "lower": 0.5,
+            "upper": 0.6,
+            "upper_inclusive": false,
+            "count": 415,
+            "mean_positive_probability": 0.5456644116394048,
+            "positive_fraction": 0.5759036144578313
+          },
+          {
+            "bin": 6,
+            "lower": 0.6,
+            "upper": 0.7,
+            "upper_inclusive": false,
+            "count": 276,
+            "mean_positive_probability": 0.6449208186569354,
+            "positive_fraction": 0.6702898550724637
+          },
+          {
+            "bin": 7,
+            "lower": 0.7,
+            "upper": 0.8,
+            "upper_inclusive": false,
+            "count": 150,
+            "mean_positive_probability": 0.7461166961944475,
+            "positive_fraction": 0.7733333333333333
+          },
+          {
+            "bin": 8,
+            "lower": 0.8,
+            "upper": 0.9,
+            "upper_inclusive": false,
+            "count": 191,
+            "mean_positive_probability": 0.856606167914353,
+            "positive_fraction": 0.9057591623036649
+          },
+          {
+            "bin": 9,
+            "lower": 0.9,
+            "upper": 1.0,
+            "upper_inclusive": true,
+            "count": 561,
+            "mean_positive_probability": 0.9660954762218139,
+            "positive_fraction": 0.9875222816399287
+          }
+        ],
+        "threshold": 0.5,
+        "decision_rule": "positive when probability >= threshold",
+        "macro_f1_policy": "Mean F1 of both binary classes; undefined class F1=0",
+        "roc_auc_policy": "Average ranks for tied scores; null if one class is absent"
+      },
+      "symmetric_macro_f1_gain": 0.008917919778498984,
+      "raw_order_diagnostics": {
+        "count": 3139,
+        "mean_absolute_probability_gap": 0.05956698211460749,
+        "p95_absolute_probability_gap": 0.19146974736037528,
+        "max_absolute_probability_gap": 0.5899005965574644,
+        "prediction_mismatch_count": 333,
+        "prediction_mismatch_fraction": 0.10608474036317299,
+        "temperature": 1.0,
+        "threshold": 0.5
+      },
+      "raw_orientation_max_logit_difference": 1.8532694578170776,
+      "symmetric_max_probability_gap": 0.0,
+      "symmetric_improvement_gate_passed": true,
+      "symmetric_invariance_no_harm_gate_passed": true,
+      "selected_method": "symmetric",
+      "selected_macro_f1": 0.8021611549299634
+    },
+    "stylometric": {
+      "ab": {
+        "count": 3139,
+        "correct": 2333,
+        "accuracy": 0.7432303281299777,
+        "macro_f1": 0.7423546553545927,
+        "class_f1": {
+          "0": 0.75737507525587,
+          "1": 0.7273342354533153
+        },
+        "same_author_f1": 0.7273342354533153,
+        "confusion": [
+          [
+            1258,
+            319
+          ],
+          [
+            487,
+            1075
+          ]
+        ],
+        "class_support": {
+          "0": 1577,
+          "1": 1562
+        },
+        "class_recall": {
+          "0": 0.797717184527584,
+          "1": 0.6882202304737516
+        },
+        "roc_auc": 0.8328967869591446,
+        "log_loss": 0.4929476848319021,
+        "brier_score": 0.16656778622721763,
+        "ece10": 0.032378919665529825,
+        "ece10_policy": "Ten fixed equal-width bins of positive-class probability; weighted absolute mean probability minus positive-label frequency; empty bins contribute zero.",
+        "ece10_bins": [
+          {
+            "bin": 0,
+            "lower": 0.0,
+            "upper": 0.1,
+            "upper_inclusive": false,
+            "count": 206,
+            "mean_positive_probability": 0.05399383882244146,
+            "positive_fraction": 0.009708737864077669
+          },
+          {
+            "bin": 1,
+            "lower": 0.1,
+            "upper": 0.2,
+            "upper_inclusive": false,
+            "count": 236,
+            "mean_positive_probability": 0.15202915375175646,
+            "positive_fraction": 0.08898305084745763
+          },
+          {
+            "bin": 2,
+            "lower": 0.2,
+            "upper": 0.3,
+            "upper_inclusive": false,
+            "count": 318,
+            "mean_positive_probability": 0.2519141039342373,
+            "positive_fraction": 0.22012578616352202
+          },
+          {
+            "bin": 3,
+            "lower": 0.3,
+            "upper": 0.4,
+            "upper_inclusive": false,
+            "count": 491,
+            "mean_positive_probability": 0.3515518279196051,
+            "positive_fraction": 0.3564154786150713
+          },
+          {
+            "bin": 4,
+            "lower": 0.4,
+            "upper": 0.5,
+            "upper_inclusive": false,
+            "count": 494,
+            "mean_positive_probability": 0.44971539864876564,
+            "positive_fraction": 0.4433198380566802
+          },
+          {
+            "bin": 5,
+            "lower": 0.5,
+            "upper": 0.6,
+            "upper_inclusive": false,
+            "count": 410,
+            "mean_positive_probability": 0.5469354200030841,
+            "positive_fraction": 0.6
+          },
+          {
+            "bin": 6,
+            "lower": 0.6,
+            "upper": 0.7,
+            "upper_inclusive": false,
+            "count": 298,
+            "mean_positive_probability": 0.6451181290296276,
+            "positive_fraction": 0.6442953020134228
+          },
+          {
+            "bin": 7,
+            "lower": 0.7,
+            "upper": 0.8,
+            "upper_inclusive": false,
+            "count": 217,
+            "mean_positive_probability": 0.7456195941917673,
+            "positive_fraction": 0.8064516129032258
+          },
+          {
+            "bin": 8,
+            "lower": 0.8,
+            "upper": 0.9,
+            "upper_inclusive": false,
+            "count": 150,
+            "mean_positive_probability": 0.8484367189558104,
+            "positive_fraction": 0.96
+          },
+          {
+            "bin": 9,
+            "lower": 0.9,
+            "upper": 1.0,
+            "upper_inclusive": true,
+            "count": 319,
+            "mean_positive_probability": 0.9653825930858005,
+            "positive_fraction": 0.9968652037617555
+          }
+        ],
+        "threshold": 0.5,
+        "decision_rule": "positive when probability >= threshold",
+        "macro_f1_policy": "Mean F1 of both binary classes; undefined class F1=0",
+        "roc_auc_policy": "Average ranks for tied scores; null if one class is absent"
+      },
+      "ba": {
+        "count": 3139,
+        "correct": 2333,
+        "accuracy": 0.7432303281299777,
+        "macro_f1": 0.7423546553545927,
+        "class_f1": {
+          "0": 0.75737507525587,
+          "1": 0.7273342354533153
+        },
+        "same_author_f1": 0.7273342354533153,
+        "confusion": [
+          [
+            1258,
+            319
+          ],
+          [
+            487,
+            1075
+          ]
+        ],
+        "class_support": {
+          "0": 1577,
+          "1": 1562
+        },
+        "class_recall": {
+          "0": 0.797717184527584,
+          "1": 0.6882202304737516
+        },
+        "roc_auc": 0.8328967869591446,
+        "log_loss": 0.4929476848319021,
+        "brier_score": 0.16656778622721763,
+        "ece10": 0.032378919665529825,
+        "ece10_policy": "Ten fixed equal-width bins of positive-class probability; weighted absolute mean probability minus positive-label frequency; empty bins contribute zero.",
+        "ece10_bins": [
+          {
+            "bin": 0,
+            "lower": 0.0,
+            "upper": 0.1,
+            "upper_inclusive": false,
+            "count": 206,
+            "mean_positive_probability": 0.05399383882244146,
+            "positive_fraction": 0.009708737864077669
+          },
+          {
+            "bin": 1,
+            "lower": 0.1,
+            "upper": 0.2,
+            "upper_inclusive": false,
+            "count": 236,
+            "mean_positive_probability": 0.15202915375175646,
+            "positive_fraction": 0.08898305084745763
+          },
+          {
+            "bin": 2,
+            "lower": 0.2,
+            "upper": 0.3,
+            "upper_inclusive": false,
+            "count": 318,
+            "mean_positive_probability": 0.2519141039342373,
+            "positive_fraction": 0.22012578616352202
+          },
+          {
+            "bin": 3,
+            "lower": 0.3,
+            "upper": 0.4,
+            "upper_inclusive": false,
+            "count": 491,
+            "mean_positive_probability": 0.3515518279196051,
+            "positive_fraction": 0.3564154786150713
+          },
+          {
+            "bin": 4,
+            "lower": 0.4,
+            "upper": 0.5,
+            "upper_inclusive": false,
+            "count": 494,
+            "mean_positive_probability": 0.44971539864876564,
+            "positive_fraction": 0.4433198380566802
+          },
+          {
+            "bin": 5,
+            "lower": 0.5,
+            "upper": 0.6,
+            "upper_inclusive": false,
+            "count": 410,
+            "mean_positive_probability": 0.5469354200030841,
+            "positive_fraction": 0.6
+          },
+          {
+            "bin": 6,
+            "lower": 0.6,
+            "upper": 0.7,
+            "upper_inclusive": false,
+            "count": 298,
+            "mean_positive_probability": 0.6451181290296276,
+            "positive_fraction": 0.6442953020134228
+          },
+          {
+            "bin": 7,
+            "lower": 0.7,
+            "upper": 0.8,
+            "upper_inclusive": false,
+            "count": 217,
+            "mean_positive_probability": 0.7456195941917673,
+            "positive_fraction": 0.8064516129032258
+          },
+          {
+            "bin": 8,
+            "lower": 0.8,
+            "upper": 0.9,
+            "upper_inclusive": false,
+            "count": 150,
+            "mean_positive_probability": 0.8484367189558104,
+            "positive_fraction": 0.96
+          },
+          {
+            "bin": 9,
+            "lower": 0.9,
+            "upper": 1.0,
+            "upper_inclusive": true,
+            "count": 319,
+            "mean_positive_probability": 0.9653825930858005,
+            "positive_fraction": 0.9968652037617555
+          }
+        ],
+        "threshold": 0.5,
+        "decision_rule": "positive when probability >= threshold",
+        "macro_f1_policy": "Mean F1 of both binary classes; undefined class F1=0",
+        "roc_auc_policy": "Average ranks for tied scores; null if one class is absent"
+      },
+      "symmetric": {
+        "count": 3139,
+        "correct": 2333,
+        "accuracy": 0.7432303281299777,
+        "macro_f1": 0.7423546553545927,
+        "class_f1": {
+          "0": 0.75737507525587,
+          "1": 0.7273342354533153
+        },
+        "same_author_f1": 0.7273342354533153,
+        "confusion": [
+          [
+            1258,
+            319
+          ],
+          [
+            487,
+            1075
+          ]
+        ],
+        "class_support": {
+          "0": 1577,
+          "1": 1562
+        },
+        "class_recall": {
+          "0": 0.797717184527584,
+          "1": 0.6882202304737516
+        },
+        "roc_auc": 0.8328967869591446,
+        "log_loss": 0.4929476848319021,
+        "brier_score": 0.16656778622721763,
+        "ece10": 0.032378919665529825,
+        "ece10_policy": "Ten fixed equal-width bins of positive-class probability; weighted absolute mean probability minus positive-label frequency; empty bins contribute zero.",
+        "ece10_bins": [
+          {
+            "bin": 0,
+            "lower": 0.0,
+            "upper": 0.1,
+            "upper_inclusive": false,
+            "count": 206,
+            "mean_positive_probability": 0.05399383882244146,
+            "positive_fraction": 0.009708737864077669
+          },
+          {
+            "bin": 1,
+            "lower": 0.1,
+            "upper": 0.2,
+            "upper_inclusive": false,
+            "count": 236,
+            "mean_positive_probability": 0.15202915375175646,
+            "positive_fraction": 0.08898305084745763
+          },
+          {
+            "bin": 2,
+            "lower": 0.2,
+            "upper": 0.3,
+            "upper_inclusive": false,
+            "count": 318,
+            "mean_positive_probability": 0.2519141039342373,
+            "positive_fraction": 0.22012578616352202
+          },
+          {
+            "bin": 3,
+            "lower": 0.3,
+            "upper": 0.4,
+            "upper_inclusive": false,
+            "count": 491,
+            "mean_positive_probability": 0.3515518279196051,
+            "positive_fraction": 0.3564154786150713
+          },
+          {
+            "bin": 4,
+            "lower": 0.4,
+            "upper": 0.5,
+            "upper_inclusive": false,
+            "count": 494,
+            "mean_positive_probability": 0.44971539864876564,
+            "positive_fraction": 0.4433198380566802
+          },
+          {
+            "bin": 5,
+            "lower": 0.5,
+            "upper": 0.6,
+            "upper_inclusive": false,
+            "count": 410,
+            "mean_positive_probability": 0.5469354200030841,
+            "positive_fraction": 0.6
+          },
+          {
+            "bin": 6,
+            "lower": 0.6,
+            "upper": 0.7,
+            "upper_inclusive": false,
+            "count": 298,
+            "mean_positive_probability": 0.6451181290296276,
+            "positive_fraction": 0.6442953020134228
+          },
+          {
+            "bin": 7,
+            "lower": 0.7,
+            "upper": 0.8,
+            "upper_inclusive": false,
+            "count": 217,
+            "mean_positive_probability": 0.7456195941917673,
+            "positive_fraction": 0.8064516129032258
+          },
+          {
+            "bin": 8,
+            "lower": 0.8,
+            "upper": 0.9,
+            "upper_inclusive": false,
+            "count": 150,
+            "mean_positive_probability": 0.8484367189558104,
+            "positive_fraction": 0.96
+          },
+          {
+            "bin": 9,
+            "lower": 0.9,
+            "upper": 1.0,
+            "upper_inclusive": true,
+            "count": 319,
+            "mean_positive_probability": 0.9653825930858005,
+            "positive_fraction": 0.9968652037617555
+          }
+        ],
+        "threshold": 0.5,
+        "decision_rule": "positive when probability >= threshold",
+        "macro_f1_policy": "Mean F1 of both binary classes; undefined class F1=0",
+        "roc_auc_policy": "Average ranks for tied scores; null if one class is absent"
+      },
+      "symmetric_macro_f1_gain": 0.0,
+      "raw_order_diagnostics": {
+        "count": 3139,
+        "mean_absolute_probability_gap": 0.0,
+        "p95_absolute_probability_gap": 0.0,
+        "max_absolute_probability_gap": 0.0,
+        "prediction_mismatch_count": 0,
+        "prediction_mismatch_fraction": 0.0,
+        "temperature": 1.0,
+        "threshold": 0.5
+      },
+      "raw_orientation_max_logit_difference": 0.0,
+      "symmetric_max_probability_gap": 0.0,
+      "symmetric_improvement_gate_passed": false,
+      "symmetric_invariance_no_harm_gate_passed": false,
+      "selected_method": "ab",
+      "selected_macro_f1": 0.7423546553545927
+    }
+  },
+  "alternative_macro_f1_gain": -0.00205373500390571,
+  "selected_model": "ce",
+  "alternative_macro_f1_gain_raw_ab": 0.0014603851894732234,
+  "loss_comparison_scope": "Raw AB loss analysis remains in raw_selection at the common0.5 threshold; the final choice compares separately calibrated pipelines on selection and does not isolate a loss-only effect.",
+  "symmetric_policy": "Choose symmetric if macro F1 gains>=0.002, or exact input-order invariance improves with macro F1 loss<=0.002; logit/probability/order diagnostics disclosed.",
+  "selected_method": "symmetric",
+  "final_outcomes_used": false,
+  "raw_selection": {
+    "schema_version": 1,
+    "selection_split": "selection",
+    "metric": "macro_f1",
+    "decision_threshold": 0.5,
+    "minimum_improvement": 0.002,
+    "outcomes": {
+      "ce": {
+        "ab": {
+          "count": 3139,
+          "correct": 2487,
+          "accuracy": 0.7922905383880217,
+          "macro_f1": 0.7917828499619912,
+          "class_f1": {
+            "0": 0.8020643594414086,
+            "1": 0.7815013404825737
+          },
+          "same_author_f1": 0.7815013404825737,
+          "confusion": [
+            [
+              1321,
+              256
+            ],
+            [
+              396,
+              1166
+            ]
+          ],
+          "class_support": {
+            "0": 1577,
+            "1": 1562
+          },
+          "class_recall": {
+            "0": 0.8376664552948636,
+            "1": 0.7464788732394366
+          },
+          "roc_auc": 0.8912220077831374,
+          "log_loss": 0.42838982437891654,
+          "brier_score": 0.13871049472605354,
+          "ece10": 0.056361923045185405,
+          "ece10_policy": "Ten fixed equal-width bins of positive-class probability; weighted absolute mean probability minus positive-label frequency; empty bins contribute zero.",
+          "ece10_bins": [
+            {
+              "bin": 0,
+              "lower": 0.0,
+              "upper": 0.1,
+              "upper_inclusive": false,
+              "count": 888,
+              "mean_positive_probability": 0.022380008417842635,
+              "positive_fraction": 0.08108108108108109
+            },
+            {
+              "bin": 1,
+              "lower": 0.1,
+              "upper": 0.2,
+              "upper_inclusive": false,
+              "count": 223,
+              "mean_positive_probability": 0.14959107688700293,
+              "positive_fraction": 0.2600896860986547
+            },
+            {
+              "bin": 2,
+              "lower": 0.2,
+              "upper": 0.3,
+              "upper_inclusive": false,
+              "count": 176,
+              "mean_positive_probability": 0.25025038131401467,
+              "positive_fraction": 0.35795454545454547
+            },
+            {
+              "bin": 3,
+              "lower": 0.3,
+              "upper": 0.4,
+              "upper_inclusive": false,
+              "count": 221,
+              "mean_positive_probability": 0.3513898938812372,
+              "positive_fraction": 0.39819004524886875
+            },
+            {
+              "bin": 4,
+              "lower": 0.4,
+              "upper": 0.5,
+              "upper_inclusive": false,
+              "count": 209,
+              "mean_positive_probability": 0.44829055312540533,
+              "positive_fraction": 0.5502392344497608
+            },
+            {
+              "bin": 5,
+              "lower": 0.5,
+              "upper": 0.6,
+              "upper_inclusive": false,
+              "count": 210,
+              "mean_positive_probability": 0.548395517196481,
+              "positive_fraction": 0.5952380952380952
+            },
+            {
+              "bin": 6,
+              "lower": 0.6,
+              "upper": 0.7,
+              "upper_inclusive": false,
+              "count": 170,
+              "mean_positive_probability": 0.648941978441131,
+              "positive_fraction": 0.6058823529411764
+            },
+            {
+              "bin": 7,
+              "lower": 0.7,
+              "upper": 0.8,
+              "upper_inclusive": false,
+              "count": 137,
+              "mean_positive_probability": 0.7511140301022352,
+              "positive_fraction": 0.6788321167883211
+            },
+            {
+              "bin": 8,
+              "lower": 0.8,
+              "upper": 0.9,
+              "upper_inclusive": false,
+              "count": 140,
+              "mean_positive_probability": 0.8500149584399977,
+              "positive_fraction": 0.8
+            },
+            {
+              "bin": 9,
+              "lower": 0.9,
+              "upper": 1.0,
+              "upper_inclusive": true,
+              "count": 765,
+              "mean_positive_probability": 0.9784111101863732,
+              "positive_fraction": 0.9581699346405229
+            }
+          ],
+          "threshold": 0.5,
+          "decision_rule": "positive when probability >= threshold",
+          "macro_f1_policy": "Mean F1 of both binary classes; undefined class F1=0",
+          "roc_auc_policy": "Average ranks for tied scores; null if one class is absent"
+        },
+        "ba": {
+          "count": 3139,
+          "correct": 2505,
+          "accuracy": 0.7980248486779229,
+          "macro_f1": 0.7974376982236716,
+          "class_f1": {
+            "0": 0.8083434099153567,
+            "1": 0.7865319865319865
+          },
+          "same_author_f1": 0.7865319865319865,
+          "confusion": [
+            [
+              1337,
+              240
+            ],
+            [
+              394,
+              1168
+            ]
+          ],
+          "class_support": {
+            "0": 1577,
+            "1": 1562
+          },
+          "class_recall": {
+            "0": 0.8478123018389346,
+            "1": 0.7477592829705506
+          },
+          "roc_auc": 0.8896825931666554,
+          "log_loss": 0.43418154640513096,
+          "brier_score": 0.13977475271139592,
+          "ece10": 0.058691402094524406,
+          "ece10_policy": "Ten fixed equal-width bins of positive-class probability; weighted absolute mean probability minus positive-label frequency; empty bins contribute zero.",
+          "ece10_bins": [
+            {
+              "bin": 0,
+              "lower": 0.0,
+              "upper": 0.1,
+              "upper_inclusive": false,
+              "count": 887,
+              "mean_positive_probability": 0.02342341352676867,
+              "positive_fraction": 0.08906426155580609
+            },
+            {
+              "bin": 1,
+              "lower": 0.1,
+              "upper": 0.2,
+              "upper_inclusive": false,
+              "count": 219,
+              "mean_positive_probability": 0.14391484908412214,
+              "positive_fraction": 0.2420091324200913
+            },
+            {
+              "bin": 2,
+              "lower": 0.2,
+              "upper": 0.3,
+              "upper_inclusive": false,
+              "count": 191,
+              "mean_positive_probability": 0.24960411166862662,
+              "positive_fraction": 0.33507853403141363
+            },
+            {
+              "bin": 3,
+              "lower": 0.3,
+              "upper": 0.4,
+              "upper_inclusive": false,
+              "count": 225,
+              "mean_positive_probability": 0.35035690506522377,
+              "positive_fraction": 0.4088888888888889
+            },
+            {
+              "bin": 4,
+              "lower": 0.4,
+              "upper": 0.5,
+              "upper_inclusive": false,
+              "count": 209,
+              "mean_positive_probability": 0.45457826558115716,
+              "positive_fraction": 0.507177033492823
+            },
+            {
+              "bin": 5,
+              "lower": 0.5,
+              "upper": 0.6,
+              "upper_inclusive": false,
+              "count": 205,
+              "mean_positive_probability": 0.5500018627516569,
+              "positive_fraction": 0.6585365853658537
+            },
+            {
+              "bin": 6,
+              "lower": 0.6,
+              "upper": 0.7,
+              "upper_inclusive": false,
+              "count": 147,
+              "mean_positive_probability": 0.6459009984355433,
+              "positive_fraction": 0.6258503401360545
+            },
+            {
+              "bin": 7,
+              "lower": 0.7,
+              "upper": 0.8,
+              "upper_inclusive": false,
+              "count": 156,
+              "mean_positive_probability": 0.7486588613534934,
+              "positive_fraction": 0.6794871794871795
+            },
+            {
+              "bin": 8,
+              "lower": 0.8,
+              "upper": 0.9,
+              "upper_inclusive": false,
+              "count": 144,
+              "mean_positive_probability": 0.8513503012777013,
+              "positive_fraction": 0.7569444444444444
+            },
+            {
+              "bin": 9,
+              "lower": 0.9,
+              "upper": 1.0,
+              "upper_inclusive": true,
+              "count": 756,
+              "mean_positive_probability": 0.9794384745187228,
+              "positive_fraction": 0.9603174603174603
+            }
+          ],
+          "threshold": 0.5,
+          "decision_rule": "positive when probability >= threshold",
+          "macro_f1_policy": "Mean F1 of both binary classes; undefined class F1=0",
+          "roc_auc_policy": "Average ranks for tied scores; null if one class is absent"
+        },
+        "symmetric": {
+          "count": 3139,
+          "correct": 2513,
+          "accuracy": 0.8005734310289901,
+          "macro_f1": 0.8002147701337342,
+          "class_f1": {
+            "0": 0.808679706601467,
+            "1": 0.7917498336660014
+          },
+          "same_author_f1": 0.7917498336660014,
+          "confusion": [
+            [
+              1323,
+              254
+            ],
+            [
+              372,
+              1190
+            ]
+          ],
+          "class_support": {
+            "0": 1577,
+            "1": 1562
+          },
+          "class_recall": {
+            "0": 0.8389346861128726,
+            "1": 0.7618437900128041
+          },
+          "roc_auc": 0.8951951752017843,
+          "log_loss": 0.4177807999328479,
+          "brier_score": 0.13538817607856155,
+          "ece10": 0.050656999365444745,
+          "ece10_policy": "Ten fixed equal-width bins of positive-class probability; weighted absolute mean probability minus positive-label frequency; empty bins contribute zero.",
+          "ece10_bins": [
+            {
+              "bin": 0,
+              "lower": 0.0,
+              "upper": 0.1,
+              "upper_inclusive": false,
+              "count": 901,
+              "mean_positive_probability": 0.024836181148941757,
+              "positive_fraction": 0.08213096559378469
+            },
+            {
+              "bin": 1,
+              "lower": 0.1,
+              "upper": 0.2,
+              "upper_inclusive": false,
+              "count": 212,
+              "mean_positive_probability": 0.14621838832703313,
+              "positive_fraction": 0.24056603773584906
+            },
+            {
+              "bin": 2,
+              "lower": 0.2,
+              "upper": 0.3,
+              "upper_inclusive": false,
+              "count": 169,
+              "mean_positive_probability": 0.25060531992099305,
+              "positive_fraction": 0.3431952662721893
+            },
+            {
+              "bin": 3,
+              "lower": 0.3,
+              "upper": 0.4,
+              "upper_inclusive": false,
+              "count": 226,
+              "mean_positive_probability": 0.35105578793292996,
+              "positive_fraction": 0.4026548672566372
+            },
+            {
+              "bin": 4,
+              "lower": 0.4,
+              "upper": 0.5,
+              "upper_inclusive": false,
+              "count": 187,
+              "mean_positive_probability": 0.4505548708720183,
+              "positive_fraction": 0.5240641711229946
+            },
+            {
+              "bin": 5,
+              "lower": 0.5,
+              "upper": 0.6,
+              "upper_inclusive": false,
+              "count": 242,
+              "mean_positive_probability": 0.5490775592858919,
+              "positive_fraction": 0.6074380165289256
+            },
+            {
+              "bin": 6,
+              "lower": 0.6,
+              "upper": 0.7,
+              "upper_inclusive": false,
+              "count": 173,
+              "mean_positive_probability": 0.6454226880136352,
+              "positive_fraction": 0.5780346820809249
+            },
+            {
+              "bin": 7,
+              "lower": 0.7,
+              "upper": 0.8,
+              "upper_inclusive": false,
+              "count": 132,
+              "mean_positive_probability": 0.7492835811275592,
+              "positive_fraction": 0.7727272727272727
+            },
+            {
+              "bin": 8,
+              "lower": 0.8,
+              "upper": 0.9,
+              "upper_inclusive": false,
+              "count": 148,
+              "mean_positive_probability": 0.8448871389585484,
+              "positive_fraction": 0.8108108108108109
+            },
+            {
+              "bin": 9,
+              "lower": 0.9,
+              "upper": 1.0,
+              "upper_inclusive": true,
+              "count": 749,
+              "mean_positive_probability": 0.9791902096195135,
+              "positive_fraction": 0.9626168224299065
+            }
+          ],
+          "threshold": 0.5,
+          "decision_rule": "positive when probability >= threshold",
+          "macro_f1_policy": "Mean F1 of both binary classes; undefined class F1=0",
+          "roc_auc_policy": "Average ranks for tied scores; null if one class is absent"
+        },
+        "symmetric_macro_f1_gain": 0.00843192017174299,
+        "raw_order_diagnostics": {
+          "count": 3139,
+          "mean_absolute_probability_gap": 0.07384282775008703,
+          "p95_absolute_probability_gap": 0.29390475363093566,
+          "max_absolute_probability_gap": 0.9180273692359741,
+          "prediction_mismatch_count": 324,
+          "prediction_mismatch_fraction": 0.10321758521822236,
+          "temperature": 1.0,
+          "threshold": 0.5
+        },
+        "raw_orientation_max_logit_difference": 3.390105128288269,
+        "symmetric_max_probability_gap": 0.0,
+        "symmetric_improvement_gate_passed": true,
+        "symmetric_invariance_no_harm_gate_passed": true,
+        "selected_method": "symmetric",
+        "selected_macro_f1": 0.8002147701337342
+      },
+      "custom_asl": {
+        "ab": {
+          "count": 3139,
+          "correct": 2490,
+          "accuracy": 0.7932462567696719,
+          "macro_f1": 0.7932432351514644,
+          "class_f1": {
+            "0": 0.7924528301886793,
+            "1": 0.7940336401142495
+          },
+          "same_author_f1": 0.7940336401142495,
+          "confusion": [
+            [
+              1239,
+              338
+            ],
+            [
+              311,
+              1251
+            ]
+          ],
+          "class_support": {
+            "0": 1577,
+            "1": 1562
+          },
+          "class_recall": {
+            "0": 0.7856689917564997,
+            "1": 0.8008962868117798
+          },
+          "roc_auc": 0.8901681258357779,
+          "log_loss": 0.4219353873866385,
+          "brier_score": 0.1383772363331332,
+          "ece10": 0.05291882455347894,
+          "ece10_policy": "Ten fixed equal-width bins of positive-class probability; weighted absolute mean probability minus positive-label frequency; empty bins contribute zero.",
+          "ece10_bins": [
+            {
+              "bin": 0,
+              "lower": 0.0,
+              "upper": 0.1,
+              "upper_inclusive": false,
+              "count": 200,
+              "mean_positive_probability": 0.06387554349174909,
+              "positive_fraction": 0.0
+            },
+            {
+              "bin": 1,
+              "lower": 0.1,
+              "upper": 0.2,
+              "upper_inclusive": false,
+              "count": 354,
+              "mean_positive_probability": 0.14966761878457266,
+              "positive_fraction": 0.04519774011299435
+            },
+            {
+              "bin": 2,
+              "lower": 0.2,
+              "upper": 0.3,
+              "upper_inclusive": false,
+              "count": 264,
+              "mean_positive_probability": 0.2509553318260225,
+              "positive_fraction": 0.13636363636363635
+            },
+            {
+              "bin": 3,
+              "lower": 0.3,
+              "upper": 0.4,
+              "upper_inclusive": false,
+              "count": 298,
+              "mean_positive_probability": 0.35106072951914996,
+              "positive_fraction": 0.2785234899328859
+            },
+            {
+              "bin": 4,
+              "lower": 0.4,
+              "upper": 0.5,
+              "upper_inclusive": false,
+              "count": 434,
+              "mean_positive_probability": 0.4530044530212196,
+              "positive_fraction": 0.4055299539170507
+            },
+            {
+              "bin": 5,
+              "lower": 0.5,
+              "upper": 0.6,
+              "upper_inclusive": false,
+              "count": 414,
+              "mean_positive_probability": 0.5470080227612127,
+              "positive_fraction": 0.5748792270531401
+            },
+            {
+              "bin": 6,
+              "lower": 0.6,
+              "upper": 0.7,
+              "upper_inclusive": false,
+              "count": 251,
+              "mean_positive_probability": 0.6496181872010085,
+              "positive_fraction": 0.6135458167330677
+            },
+            {
+              "bin": 7,
+              "lower": 0.7,
+              "upper": 0.8,
+              "upper_inclusive": false,
+              "count": 169,
+              "mean_positive_probability": 0.7472679211416177,
+              "positive_fraction": 0.7988165680473372
+            },
+            {
+              "bin": 8,
+              "lower": 0.8,
+              "upper": 0.9,
+              "upper_inclusive": false,
+              "count": 181,
+              "mean_positive_probability": 0.8570308693414648,
+              "positive_fraction": 0.8839779005524862
+            },
+            {
+              "bin": 9,
+              "lower": 0.9,
+              "upper": 1.0,
+              "upper_inclusive": true,
+              "count": 574,
+              "mean_positive_probability": 0.9656785202530952,
+              "positive_fraction": 0.9825783972125436
+            }
+          ],
+          "threshold": 0.5,
+          "decision_rule": "positive when probability >= threshold",
+          "macro_f1_policy": "Mean F1 of both binary classes; undefined class F1=0",
+          "roc_auc_policy": "Average ranks for tied scores; null if one class is absent"
+        },
+        "ba": {
+          "count": 3139,
+          "correct": 2497,
+          "accuracy": 0.7954762663268556,
+          "macro_f1": 0.7954745850096009,
+          "class_f1": {
+            "0": 0.794888178913738,
+            "1": 0.7960609911054638
+          },
+          "same_author_f1": 0.7960609911054638,
+          "confusion": [
+            [
+              1244,
+              333
+            ],
+            [
+              309,
+              1253
+            ]
+          ],
+          "class_support": {
+            "0": 1577,
+            "1": 1562
+          },
+          "class_recall": {
+            "0": 0.7888395688015218,
+            "1": 0.8021766965428937
+          },
+          "roc_auc": 0.8886831103644987,
+          "log_loss": 0.42518878088488365,
+          "brier_score": 0.13948262081636462,
+          "ece10": 0.051091331338035936,
+          "ece10_policy": "Ten fixed equal-width bins of positive-class probability; weighted absolute mean probability minus positive-label frequency; empty bins contribute zero.",
+          "ece10_bins": [
+            {
+              "bin": 0,
+              "lower": 0.0,
+              "upper": 0.1,
+              "upper_inclusive": false,
+              "count": 206,
+              "mean_positive_probability": 0.0633561384536561,
+              "positive_fraction": 0.0
+            },
+            {
+              "bin": 1,
+              "lower": 0.1,
+              "upper": 0.2,
+              "upper_inclusive": false,
+              "count": 332,
+              "mean_positive_probability": 0.15020668596005415,
+              "positive_fraction": 0.04216867469879518
+            },
+            {
+              "bin": 2,
+              "lower": 0.2,
+              "upper": 0.3,
+              "upper_inclusive": false,
+              "count": 286,
+              "mean_positive_probability": 0.2504270677543493,
+              "positive_fraction": 0.17132867132867133
+            },
+            {
+              "bin": 3,
+              "lower": 0.3,
+              "upper": 0.4,
+              "upper_inclusive": false,
+              "count": 291,
+              "mean_positive_probability": 0.35102324524620176,
+              "positive_fraction": 0.2268041237113402
+            },
+            {
+              "bin": 4,
+              "lower": 0.4,
+              "upper": 0.5,
+              "upper_inclusive": false,
+              "count": 438,
+              "mean_positive_probability": 0.45254156803022827,
+              "positive_fraction": 0.410958904109589
+            },
+            {
+              "bin": 5,
+              "lower": 0.5,
+              "upper": 0.6,
+              "upper_inclusive": false,
+              "count": 427,
+              "mean_positive_probability": 0.5471467449891543,
+              "positive_fraction": 0.5737704918032787
+            },
+            {
+              "bin": 6,
+              "lower": 0.6,
+              "upper": 0.7,
+              "upper_inclusive": false,
+              "count": 256,
+              "mean_positive_probability": 0.6463572167274431,
+              "positive_fraction": 0.66015625
+            },
+            {
+              "bin": 7,
+              "lower": 0.7,
+              "upper": 0.8,
+              "upper_inclusive": false,
+              "count": 146,
+              "mean_positive_probability": 0.7468609866921156,
+              "positive_fraction": 0.7808219178082192
+            },
+            {
+              "bin": 8,
+              "lower": 0.8,
+              "upper": 0.9,
+              "upper_inclusive": false,
+              "count": 192,
+              "mean_positive_probability": 0.8553662898549282,
+              "positive_fraction": 0.8697916666666666
+            },
+            {
+              "bin": 9,
+              "lower": 0.9,
+              "upper": 1.0,
+              "upper_inclusive": true,
+              "count": 565,
+              "mean_positive_probability": 0.9666482627078504,
+              "positive_fraction": 0.9876106194690265
+            }
+          ],
+          "threshold": 0.5,
+          "decision_rule": "positive when probability >= threshold",
+          "macro_f1_policy": "Mean F1 of both binary classes; undefined class F1=0",
+          "roc_auc_policy": "Average ranks for tied scores; null if one class is absent"
+        },
+        "symmetric": {
+          "count": 3139,
+          "correct": 2518,
+          "accuracy": 0.8021662949984071,
+          "macro_f1": 0.8021611549299634,
+          "class_f1": {
+            "0": 0.8011527377521613,
+            "1": 0.8031695721077654
+          },
+          "same_author_f1": 0.8031695721077654,
+          "confusion": [
+            [
+              1251,
+              326
+            ],
+            [
+              295,
+              1267
+            ]
+          ],
+          "class_support": {
+            "0": 1577,
+            "1": 1562
+          },
+          "class_recall": {
+            "0": 0.7932783766645529,
+            "1": 0.8111395646606914
+          },
+          "roc_auc": 0.8950011245196434,
+          "log_loss": 0.4183890321966965,
+          "brier_score": 0.136578956684067,
+          "ece10": 0.05879426883254549,
+          "ece10_policy": "Ten fixed equal-width bins of positive-class probability; weighted absolute mean probability minus positive-label frequency; empty bins contribute zero.",
+          "ece10_bins": [
+            {
+              "bin": 0,
+              "lower": 0.0,
+              "upper": 0.1,
+              "upper_inclusive": false,
+              "count": 191,
+              "mean_positive_probability": 0.06454207935270845,
+              "positive_fraction": 0.0
+            },
+            {
+              "bin": 1,
+              "lower": 0.1,
+              "upper": 0.2,
+              "upper_inclusive": false,
+              "count": 345,
+              "mean_positive_probability": 0.1494854807058059,
+              "positive_fraction": 0.03768115942028986
+            },
+            {
+              "bin": 2,
+              "lower": 0.2,
+              "upper": 0.3,
+              "upper_inclusive": false,
+              "count": 290,
+              "mean_positive_probability": 0.2501062832717971,
+              "positive_fraction": 0.1413793103448276
+            },
+            {
+              "bin": 3,
+              "lower": 0.3,
+              "upper": 0.4,
+              "upper_inclusive": false,
+              "count": 276,
+              "mean_positive_probability": 0.3519551943173952,
+              "positive_fraction": 0.2391304347826087
+            },
+            {
+              "bin": 4,
+              "lower": 0.4,
+              "upper": 0.5,
+              "upper_inclusive": false,
+              "count": 444,
+              "mean_positive_probability": 0.4525730800134708,
+              "positive_fraction": 0.39414414414414417
+            },
+            {
+              "bin": 5,
+              "lower": 0.5,
+              "upper": 0.6,
+              "upper_inclusive": false,
+              "count": 415,
+              "mean_positive_probability": 0.5456644116394048,
+              "positive_fraction": 0.5759036144578313
+            },
+            {
+              "bin": 6,
+              "lower": 0.6,
+              "upper": 0.7,
+              "upper_inclusive": false,
+              "count": 276,
+              "mean_positive_probability": 0.6449208186569354,
+              "positive_fraction": 0.6702898550724637
+            },
+            {
+              "bin": 7,
+              "lower": 0.7,
+              "upper": 0.8,
+              "upper_inclusive": false,
+              "count": 150,
+              "mean_positive_probability": 0.7461166961944475,
+              "positive_fraction": 0.7733333333333333
+            },
+            {
+              "bin": 8,
+              "lower": 0.8,
+              "upper": 0.9,
+              "upper_inclusive": false,
+              "count": 191,
+              "mean_positive_probability": 0.856606167914353,
+              "positive_fraction": 0.9057591623036649
+            },
+            {
+              "bin": 9,
+              "lower": 0.9,
+              "upper": 1.0,
+              "upper_inclusive": true,
+              "count": 561,
+              "mean_positive_probability": 0.9660954762218139,
+              "positive_fraction": 0.9875222816399287
+            }
+          ],
+          "threshold": 0.5,
+          "decision_rule": "positive when probability >= threshold",
+          "macro_f1_policy": "Mean F1 of both binary classes; undefined class F1=0",
+          "roc_auc_policy": "Average ranks for tied scores; null if one class is absent"
+        },
+        "symmetric_macro_f1_gain": 0.008917919778498984,
+        "raw_order_diagnostics": {
+          "count": 3139,
+          "mean_absolute_probability_gap": 0.05956698211460749,
+          "p95_absolute_probability_gap": 0.19146974736037528,
+          "max_absolute_probability_gap": 0.5899005965574644,
+          "prediction_mismatch_count": 333,
+          "prediction_mismatch_fraction": 0.10608474036317299,
+          "temperature": 1.0,
+          "threshold": 0.5
+        },
+        "raw_orientation_max_logit_difference": 1.8532694578170776,
+        "symmetric_max_probability_gap": 0.0,
+        "symmetric_improvement_gate_passed": true,
+        "symmetric_invariance_no_harm_gate_passed": true,
+        "selected_method": "symmetric",
+        "selected_macro_f1": 0.8021611549299634
+      },
+      "stylometric": {
+        "ab": {
+          "count": 3139,
+          "correct": 2333,
+          "accuracy": 0.7432303281299777,
+          "macro_f1": 0.7423546553545927,
+          "class_f1": {
+            "0": 0.75737507525587,
+            "1": 0.7273342354533153
+          },
+          "same_author_f1": 0.7273342354533153,
+          "confusion": [
+            [
+              1258,
+              319
+            ],
+            [
+              487,
+              1075
+            ]
+          ],
+          "class_support": {
+            "0": 1577,
+            "1": 1562
+          },
+          "class_recall": {
+            "0": 0.797717184527584,
+            "1": 0.6882202304737516
+          },
+          "roc_auc": 0.8328967869591446,
+          "log_loss": 0.4929476848319021,
+          "brier_score": 0.16656778622721763,
+          "ece10": 0.032378919665529825,
+          "ece10_policy": "Ten fixed equal-width bins of positive-class probability; weighted absolute mean probability minus positive-label frequency; empty bins contribute zero.",
+          "ece10_bins": [
+            {
+              "bin": 0,
+              "lower": 0.0,
+              "upper": 0.1,
+              "upper_inclusive": false,
+              "count": 206,
+              "mean_positive_probability": 0.05399383882244146,
+              "positive_fraction": 0.009708737864077669
+            },
+            {
+              "bin": 1,
+              "lower": 0.1,
+              "upper": 0.2,
+              "upper_inclusive": false,
+              "count": 236,
+              "mean_positive_probability": 0.15202915375175646,
+              "positive_fraction": 0.08898305084745763
+            },
+            {
+              "bin": 2,
+              "lower": 0.2,
+              "upper": 0.3,
+              "upper_inclusive": false,
+              "count": 318,
+              "mean_positive_probability": 0.2519141039342373,
+              "positive_fraction": 0.22012578616352202
+            },
+            {
+              "bin": 3,
+              "lower": 0.3,
+              "upper": 0.4,
+              "upper_inclusive": false,
+              "count": 491,
+              "mean_positive_probability": 0.3515518279196051,
+              "positive_fraction": 0.3564154786150713
+            },
+            {
+              "bin": 4,
+              "lower": 0.4,
+              "upper": 0.5,
+              "upper_inclusive": false,
+              "count": 494,
+              "mean_positive_probability": 0.44971539864876564,
+              "positive_fraction": 0.4433198380566802
+            },
+            {
+              "bin": 5,
+              "lower": 0.5,
+              "upper": 0.6,
+              "upper_inclusive": false,
+              "count": 410,
+              "mean_positive_probability": 0.5469354200030841,
+              "positive_fraction": 0.6
+            },
+            {
+              "bin": 6,
+              "lower": 0.6,
+              "upper": 0.7,
+              "upper_inclusive": false,
+              "count": 298,
+              "mean_positive_probability": 0.6451181290296276,
+              "positive_fraction": 0.6442953020134228
+            },
+            {
+              "bin": 7,
+              "lower": 0.7,
+              "upper": 0.8,
+              "upper_inclusive": false,
+              "count": 217,
+              "mean_positive_probability": 0.7456195941917673,
+              "positive_fraction": 0.8064516129032258
+            },
+            {
+              "bin": 8,
+              "lower": 0.8,
+              "upper": 0.9,
+              "upper_inclusive": false,
+              "count": 150,
+              "mean_positive_probability": 0.8484367189558104,
+              "positive_fraction": 0.96
+            },
+            {
+              "bin": 9,
+              "lower": 0.9,
+              "upper": 1.0,
+              "upper_inclusive": true,
+              "count": 319,
+              "mean_positive_probability": 0.9653825930858005,
+              "positive_fraction": 0.9968652037617555
+            }
+          ],
+          "threshold": 0.5,
+          "decision_rule": "positive when probability >= threshold",
+          "macro_f1_policy": "Mean F1 of both binary classes; undefined class F1=0",
+          "roc_auc_policy": "Average ranks for tied scores; null if one class is absent"
+        },
+        "ba": {
+          "count": 3139,
+          "correct": 2333,
+          "accuracy": 0.7432303281299777,
+          "macro_f1": 0.7423546553545927,
+          "class_f1": {
+            "0": 0.75737507525587,
+            "1": 0.7273342354533153
+          },
+          "same_author_f1": 0.7273342354533153,
+          "confusion": [
+            [
+              1258,
+              319
+            ],
+            [
+              487,
+              1075
+            ]
+          ],
+          "class_support": {
+            "0": 1577,
+            "1": 1562
+          },
+          "class_recall": {
+            "0": 0.797717184527584,
+            "1": 0.6882202304737516
+          },
+          "roc_auc": 0.8328967869591446,
+          "log_loss": 0.4929476848319021,
+          "brier_score": 0.16656778622721763,
+          "ece10": 0.032378919665529825,
+          "ece10_policy": "Ten fixed equal-width bins of positive-class probability; weighted absolute mean probability minus positive-label frequency; empty bins contribute zero.",
+          "ece10_bins": [
+            {
+              "bin": 0,
+              "lower": 0.0,
+              "upper": 0.1,
+              "upper_inclusive": false,
+              "count": 206,
+              "mean_positive_probability": 0.05399383882244146,
+              "positive_fraction": 0.009708737864077669
+            },
+            {
+              "bin": 1,
+              "lower": 0.1,
+              "upper": 0.2,
+              "upper_inclusive": false,
+              "count": 236,
+              "mean_positive_probability": 0.15202915375175646,
+              "positive_fraction": 0.08898305084745763
+            },
+            {
+              "bin": 2,
+              "lower": 0.2,
+              "upper": 0.3,
+              "upper_inclusive": false,
+              "count": 318,
+              "mean_positive_probability": 0.2519141039342373,
+              "positive_fraction": 0.22012578616352202
+            },
+            {
+              "bin": 3,
+              "lower": 0.3,
+              "upper": 0.4,
+              "upper_inclusive": false,
+              "count": 491,
+              "mean_positive_probability": 0.3515518279196051,
+              "positive_fraction": 0.3564154786150713
+            },
+            {
+              "bin": 4,
+              "lower": 0.4,
+              "upper": 0.5,
+              "upper_inclusive": false,
+              "count": 494,
+              "mean_positive_probability": 0.44971539864876564,
+              "positive_fraction": 0.4433198380566802
+            },
+            {
+              "bin": 5,
+              "lower": 0.5,
+              "upper": 0.6,
+              "upper_inclusive": false,
+              "count": 410,
+              "mean_positive_probability": 0.5469354200030841,
+              "positive_fraction": 0.6
+            },
+            {
+              "bin": 6,
+              "lower": 0.6,
+              "upper": 0.7,
+              "upper_inclusive": false,
+              "count": 298,
+              "mean_positive_probability": 0.6451181290296276,
+              "positive_fraction": 0.6442953020134228
+            },
+            {
+              "bin": 7,
+              "lower": 0.7,
+              "upper": 0.8,
+              "upper_inclusive": false,
+              "count": 217,
+              "mean_positive_probability": 0.7456195941917673,
+              "positive_fraction": 0.8064516129032258
+            },
+            {
+              "bin": 8,
+              "lower": 0.8,
+              "upper": 0.9,
+              "upper_inclusive": false,
+              "count": 150,
+              "mean_positive_probability": 0.8484367189558104,
+              "positive_fraction": 0.96
+            },
+            {
+              "bin": 9,
+              "lower": 0.9,
+              "upper": 1.0,
+              "upper_inclusive": true,
+              "count": 319,
+              "mean_positive_probability": 0.9653825930858005,
+              "positive_fraction": 0.9968652037617555
+            }
+          ],
+          "threshold": 0.5,
+          "decision_rule": "positive when probability >= threshold",
+          "macro_f1_policy": "Mean F1 of both binary classes; undefined class F1=0",
+          "roc_auc_policy": "Average ranks for tied scores; null if one class is absent"
+        },
+        "symmetric": {
+          "count": 3139,
+          "correct": 2333,
+          "accuracy": 0.7432303281299777,
+          "macro_f1": 0.7423546553545927,
+          "class_f1": {
+            "0": 0.75737507525587,
+            "1": 0.7273342354533153
+          },
+          "same_author_f1": 0.7273342354533153,
+          "confusion": [
+            [
+              1258,
+              319
+            ],
+            [
+              487,
+              1075
+            ]
+          ],
+          "class_support": {
+            "0": 1577,
+            "1": 1562
+          },
+          "class_recall": {
+            "0": 0.797717184527584,
+            "1": 0.6882202304737516
+          },
+          "roc_auc": 0.8328967869591446,
+          "log_loss": 0.4929476848319021,
+          "brier_score": 0.16656778622721763,
+          "ece10": 0.032378919665529825,
+          "ece10_policy": "Ten fixed equal-width bins of positive-class probability; weighted absolute mean probability minus positive-label frequency; empty bins contribute zero.",
+          "ece10_bins": [
+            {
+              "bin": 0,
+              "lower": 0.0,
+              "upper": 0.1,
+              "upper_inclusive": false,
+              "count": 206,
+              "mean_positive_probability": 0.05399383882244146,
+              "positive_fraction": 0.009708737864077669
+            },
+            {
+              "bin": 1,
+              "lower": 0.1,
+              "upper": 0.2,
+              "upper_inclusive": false,
+              "count": 236,
+              "mean_positive_probability": 0.15202915375175646,
+              "positive_fraction": 0.08898305084745763
+            },
+            {
+              "bin": 2,
+              "lower": 0.2,
+              "upper": 0.3,
+              "upper_inclusive": false,
+              "count": 318,
+              "mean_positive_probability": 0.2519141039342373,
+              "positive_fraction": 0.22012578616352202
+            },
+            {
+              "bin": 3,
+              "lower": 0.3,
+              "upper": 0.4,
+              "upper_inclusive": false,
+              "count": 491,
+              "mean_positive_probability": 0.3515518279196051,
+              "positive_fraction": 0.3564154786150713
+            },
+            {
+              "bin": 4,
+              "lower": 0.4,
+              "upper": 0.5,
+              "upper_inclusive": false,
+              "count": 494,
+              "mean_positive_probability": 0.44971539864876564,
+              "positive_fraction": 0.4433198380566802
+            },
+            {
+              "bin": 5,
+              "lower": 0.5,
+              "upper": 0.6,
+              "upper_inclusive": false,
+              "count": 410,
+              "mean_positive_probability": 0.5469354200030841,
+              "positive_fraction": 0.6
+            },
+            {
+              "bin": 6,
+              "lower": 0.6,
+              "upper": 0.7,
+              "upper_inclusive": false,
+              "count": 298,
+              "mean_positive_probability": 0.6451181290296276,
+              "positive_fraction": 0.6442953020134228
+            },
+            {
+              "bin": 7,
+              "lower": 0.7,
+              "upper": 0.8,
+              "upper_inclusive": false,
+              "count": 217,
+              "mean_positive_probability": 0.7456195941917673,
+              "positive_fraction": 0.8064516129032258
+            },
+            {
+              "bin": 8,
+              "lower": 0.8,
+              "upper": 0.9,
+              "upper_inclusive": false,
+              "count": 150,
+              "mean_positive_probability": 0.8484367189558104,
+              "positive_fraction": 0.96
+            },
+            {
+              "bin": 9,
+              "lower": 0.9,
+              "upper": 1.0,
+              "upper_inclusive": true,
+              "count": 319,
+              "mean_positive_probability": 0.9653825930858005,
+              "positive_fraction": 0.9968652037617555
+            }
+          ],
+          "threshold": 0.5,
+          "decision_rule": "positive when probability >= threshold",
+          "macro_f1_policy": "Mean F1 of both binary classes; undefined class F1=0",
+          "roc_auc_policy": "Average ranks for tied scores; null if one class is absent"
+        },
+        "symmetric_macro_f1_gain": 0.0,
+        "raw_order_diagnostics": {
+          "count": 3139,
+          "mean_absolute_probability_gap": 0.0,
+          "p95_absolute_probability_gap": 0.0,
+          "max_absolute_probability_gap": 0.0,
+          "prediction_mismatch_count": 0,
+          "prediction_mismatch_fraction": 0.0,
+          "temperature": 1.0,
+          "threshold": 0.5
+        },
+        "raw_orientation_max_logit_difference": 0.0,
+        "symmetric_max_probability_gap": 0.0,
+        "symmetric_improvement_gate_passed": false,
+        "symmetric_invariance_no_harm_gate_passed": false,
+        "selected_method": "ab",
+        "selected_macro_f1": 0.7423546553545927
+      }
+    },
+    "alternative_macro_f1_gain": 0.001946384796229217,
+    "selected_model": "ce",
+    "alternative_macro_f1_gain_raw_ab": 0.0014603851894732234,
+    "loss_comparison_scope": "Raw AB CE versus custom ASL uses the same orientation and0.5 threshold; alternative_macro_f1_gain separately compares validation-selected inference policies.",
+    "symmetric_policy": "Choose symmetric if macro F1 gains>=0.002, or exact input-order invariance improves with macro F1 loss<=0.002; logit/probability/order diagnostics disclosed.",
+    "selected_method": "symmetric",
+    "final_outcomes_used": false
+  },
+  "raw_selected_model": "ce",
+  "raw_selected_method": "symmetric",
+  "raw_decision_threshold": 0.5,
+  "raw_policy_alternative_macro_f1_gain": 0.001946384796229217,
+  "calibrated_pipeline_selection": {
+    "schema_version": 1,
+    "decision_data": "selection",
+    "count": 3139,
+    "metric": "macro_f1",
+    "minimum_improvement": 0.002,
+    "baseline_model": "ce",
+    "alternative_model": "custom_asl",
+    "alternative_macro_f1_gain": -0.00205373500390571,
+    "alternative_adoption_gate_passed": false,
+    "outcomes": {
+      "ce": {
+        "metrics": {
+          "count": 3139,
+          "correct": 2516,
+          "accuracy": 0.8015291494106404,
+          "macro_f1": 0.8011985844780749,
+          "class_f1": {
+            "0": 0.8093051729415366,
+            "1": 0.7930919960146131
+          },
+          "same_author_f1": 0.7930919960146131,
+          "confusion": [
+            [
+              1322,
+              255
+            ],
+            [
+              368,
+              1194
+            ]
+          ],
+          "class_support": {
+            "0": 1577,
+            "1": 1562
+          },
+          "class_recall": {
+            "0": 0.8383005707038681,
+            "1": 0.764404609475032
+          },
+          "roc_auc": 0.8951951752017843,
+          "log_loss": 0.4040682490992472,
+          "brier_score": 0.1328187186025802,
+          "ece10": 0.025562496397084983,
+          "ece10_policy": "Ten fixed equal-width bins of positive-class probability; weighted absolute mean probability minus positive-label frequency; empty bins contribute zero.",
+          "ece10_bins": [
+            {
+              "bin": 0,
+              "lower": 0.0,
+              "upper": 0.1,
+              "upper_inclusive": false,
+              "count": 650,
+              "mean_positive_probability": 0.04517469453647309,
+              "positive_fraction": 0.043076923076923075
+            },
+            {
+              "bin": 1,
+              "lower": 0.1,
+              "upper": 0.2,
+              "upper_inclusive": false,
+              "count": 263,
+              "mean_positive_probability": 0.148506208769411,
+              "positive_fraction": 0.18250950570342206
+            },
+            {
+              "bin": 2,
+              "lower": 0.2,
+              "upper": 0.3,
+              "upper_inclusive": false,
+              "count": 220,
+              "mean_positive_probability": 0.24763252523298962,
+              "positive_fraction": 0.2545454545454545
+            },
+            {
+              "bin": 3,
+              "lower": 0.3,
+              "upper": 0.4,
+              "upper_inclusive": false,
+              "count": 257,
+              "mean_positive_probability": 0.35436969478204183,
+              "positive_fraction": 0.36186770428015563
+            },
+            {
+              "bin": 4,
+              "lower": 0.4,
+              "upper": 0.5,
+              "upper_inclusive": false,
+              "count": 305,
+              "mean_positive_probability": 0.4486870110026535,
+              "positive_fraction": 0.4819672131147541
+            },
+            {
+              "bin": 5,
+              "lower": 0.5,
+              "upper": 0.6,
+              "upper_inclusive": false,
+              "count": 341,
+              "mean_positive_probability": 0.5462058962763845,
+              "positive_fraction": 0.6158357771260997
+            },
+            {
+              "bin": 6,
+              "lower": 0.6,
+              "upper": 0.7,
+              "upper_inclusive": false,
+              "count": 188,
+              "mean_positive_probability": 0.6460806875972135,
+              "positive_fraction": 0.6595744680851063
+            },
+            {
+              "bin": 7,
+              "lower": 0.7,
+              "upper": 0.8,
+              "upper_inclusive": false,
+              "count": 160,
+              "mean_positive_probability": 0.7442205024371569,
+              "positive_fraction": 0.8125
+            },
+            {
+              "bin": 8,
+              "lower": 0.8,
+              "upper": 0.9,
+              "upper_inclusive": false,
+              "count": 190,
+              "mean_positive_probability": 0.8577262774507457,
+              "positive_fraction": 0.8842105263157894
+            },
+            {
+              "bin": 9,
+              "lower": 0.9,
+              "upper": 1.0,
+              "upper_inclusive": true,
+              "count": 565,
+              "mean_positive_probability": 0.962657316604851,
+              "positive_fraction": 0.9876106194690265
+            }
+          ],
+          "threshold": 0.49792052236874207,
+          "decision_rule": "positive when probability >= threshold",
+          "macro_f1_policy": "Mean F1 of both binary classes; undefined class F1=0",
+          "roc_auc_policy": "Average ranks for tied scores; null if one class is absent"
+        },
+        "inference_method": "symmetric",
+        "temperature": 1.541727851858354,
+        "threshold": 0.49792052236874207,
+        "calibration_parameters_sha256": "be975356578accd852b2895134cfee968807435a1e4200eb2dedda12f6195823",
+        "parameters_fitted_on": "calibration"
+      },
+      "custom_asl": {
+        "metrics": {
+          "count": 3139,
+          "correct": 2509,
+          "accuracy": 0.7992991398534565,
+          "macro_f1": 0.7991448494741692,
+          "class_f1": {
+            "0": 0.8047117172969622,
+            "1": 0.7935779816513762
+          },
+          "same_author_f1": 0.7935779816513762,
+          "confusion": [
+            [
+              1298,
+              279
+            ],
+            [
+              351,
+              1211
+            ]
+          ],
+          "class_support": {
+            "0": 1577,
+            "1": 1562
+          },
+          "class_recall": {
+            "0": 0.8230818008877616,
+            "1": 0.7752880921895007
+          },
+          "roc_auc": 0.8950011245196434,
+          "log_loss": 0.4023604826657656,
+          "brier_score": 0.13293657334381392,
+          "ece10": 0.03207971994742737,
+          "ece10_policy": "Ten fixed equal-width bins of positive-class probability; weighted absolute mean probability minus positive-label frequency; empty bins contribute zero.",
+          "ece10_bins": [
+            {
+              "bin": 0,
+              "lower": 0.0,
+              "upper": 0.1,
+              "upper_inclusive": false,
+              "count": 443,
+              "mean_positive_probability": 0.05096533576131069,
+              "positive_fraction": 0.013544018058690745
+            },
+            {
+              "bin": 1,
+              "lower": 0.1,
+              "upper": 0.2,
+              "upper_inclusive": false,
+              "count": 291,
+              "mean_positive_probability": 0.14504459656860103,
+              "positive_fraction": 0.12027491408934708
+            },
+            {
+              "bin": 2,
+              "lower": 0.2,
+              "upper": 0.3,
+              "upper_inclusive": false,
+              "count": 232,
+              "mean_positive_probability": 0.24696368602553662,
+              "positive_fraction": 0.1724137931034483
+            },
+            {
+              "bin": 3,
+              "lower": 0.3,
+              "upper": 0.4,
+              "upper_inclusive": false,
+              "count": 241,
+              "mean_positive_probability": 0.35408361181598746,
+              "positive_fraction": 0.31950207468879666
+            },
+            {
+              "bin": 4,
+              "lower": 0.4,
+              "upper": 0.5,
+              "upper_inclusive": false,
+              "count": 339,
+              "mean_positive_probability": 0.45008372621262344,
+              "positive_fraction": 0.40412979351032446
+            },
+            {
+              "bin": 5,
+              "lower": 0.5,
+              "upper": 0.6,
+              "upper_inclusive": false,
+              "count": 327,
+              "mean_positive_probability": 0.549205915772511,
+              "positive_fraction": 0.5840978593272171
+            },
+            {
+              "bin": 6,
+              "lower": 0.6,
+              "upper": 0.7,
+              "upper_inclusive": false,
+              "count": 242,
+              "mean_positive_probability": 0.6491743920924229,
+              "positive_fraction": 0.5991735537190083
+            },
+            {
+              "bin": 7,
+              "lower": 0.7,
+              "upper": 0.8,
+              "upper_inclusive": false,
+              "count": 174,
+              "mean_positive_probability": 0.7479122229035488,
+              "positive_fraction": 0.7471264367816092
+            },
+            {
+              "bin": 8,
+              "lower": 0.8,
+              "upper": 0.9,
+              "upper_inclusive": false,
+              "count": 139,
+              "mean_positive_probability": 0.8513279584012623,
+              "positive_fraction": 0.7913669064748201
+            },
+            {
+              "bin": 9,
+              "lower": 0.9,
+              "upper": 1.0,
+              "upper_inclusive": true,
+              "count": 711,
+              "mean_positive_probability": 0.9771073549196145,
+              "positive_fraction": 0.9718706047819972
+            }
+          ],
+          "threshold": 0.5311870651747653,
+          "decision_rule": "positive when probability >= threshold",
+          "macro_f1_policy": "Mean F1 of both binary classes; undefined class F1=0",
+          "roc_auc_policy": "Average ranks for tied scores; null if one class is absent"
+        },
+        "inference_method": "symmetric",
+        "temperature": 0.7151833152475953,
+        "threshold": 0.5311870651747653,
+        "calibration_parameters_sha256": "abab558c1f020f2fb82bc55381b3040edbe12d6c2d150c0ee0ae593f2d70672e",
+        "parameters_fitted_on": "calibration"
+      },
+      "stylometric": {
+        "metrics": {
+          "count": 3139,
+          "correct": 2308,
+          "accuracy": 0.7352660082828927,
+          "macro_f1": 0.7352650410497616,
+          "class_f1": {
+            "0": 0.7347590169166933,
+            "1": 0.7357710651828299
+          },
+          "same_author_f1": 0.7357710651828299,
+          "confusion": [
+            [
+              1151,
+              426
+            ],
+            [
+              405,
+              1157
+            ]
+          ],
+          "class_support": {
+            "0": 1577,
+            "1": 1562
+          },
+          "class_recall": {
+            "0": 0.729866835764109,
+            "1": 0.7407170294494239
+          },
+          "roc_auc": 0.8328967869591446,
+          "log_loss": 0.487418796118768,
+          "brier_score": 0.1656149759577123,
+          "ece10": 0.02413997083508636,
+          "ece10_policy": "Ten fixed equal-width bins of positive-class probability; weighted absolute mean probability minus positive-label frequency; empty bins contribute zero.",
+          "ece10_bins": [
+            {
+              "bin": 0,
+              "lower": 0.0,
+              "upper": 0.1,
+              "upper_inclusive": false,
+              "count": 293,
+              "mean_positive_probability": 0.047660982809026274,
+              "positive_fraction": 0.03754266211604096
+            },
+            {
+              "bin": 1,
+              "lower": 0.1,
+              "upper": 0.2,
+              "upper_inclusive": false,
+              "count": 261,
+              "mean_positive_probability": 0.15225711964842742,
+              "positive_fraction": 0.1111111111111111
+            },
+            {
+              "bin": 2,
+              "lower": 0.2,
+              "upper": 0.3,
+              "upper_inclusive": false,
+              "count": 340,
+              "mean_positive_probability": 0.2531017905399259,
+              "positive_fraction": 0.2823529411764706
+            },
+            {
+              "bin": 3,
+              "lower": 0.3,
+              "upper": 0.4,
+              "upper_inclusive": false,
+              "count": 428,
+              "mean_positive_probability": 0.348120964246481,
+              "positive_fraction": 0.37850467289719625
+            },
+            {
+              "bin": 4,
+              "lower": 0.4,
+              "upper": 0.5,
+              "upper_inclusive": false,
+              "count": 423,
+              "mean_positive_probability": 0.44833081573998773,
+              "positive_fraction": 0.44680851063829785
+            },
+            {
+              "bin": 5,
+              "lower": 0.5,
+              "upper": 0.6,
+              "upper_inclusive": false,
+              "count": 362,
+              "mean_positive_probability": 0.5490687104520954,
+              "positive_fraction": 0.5911602209944752
+            },
+            {
+              "bin": 6,
+              "lower": 0.6,
+              "upper": 0.7,
+              "upper_inclusive": false,
+              "count": 273,
+              "mean_positive_probability": 0.6484432146120188,
+              "positive_fraction": 0.6410256410256411
+            },
+            {
+              "bin": 7,
+              "lower": 0.7,
+              "upper": 0.8,
+              "upper_inclusive": false,
+              "count": 222,
+              "mean_positive_probability": 0.7503874277222573,
+              "positive_fraction": 0.7432432432432432
+            },
+            {
+              "bin": 8,
+              "lower": 0.8,
+              "upper": 0.9,
+              "upper_inclusive": false,
+              "count": 162,
+              "mean_positive_probability": 0.8483663509276742,
+              "positive_fraction": 0.9135802469135802
+            },
+            {
+              "bin": 9,
+              "lower": 0.9,
+              "upper": 1.0,
+              "upper_inclusive": true,
+              "count": 375,
+              "mean_positive_probability": 0.9704926555369996,
+              "positive_fraction": 0.9946666666666667
+            }
+          ],
+          "threshold": 0.4535055649635463,
+          "decision_rule": "positive when probability >= threshold",
+          "macro_f1_policy": "Mean F1 of both binary classes; undefined class F1=0",
+          "roc_auc_policy": "Average ranks for tied scores; null if one class is absent"
+        },
+        "inference_method": "ab",
+        "temperature": 0.8348651138474007,
+        "threshold": 0.4535055649635463,
+        "calibration_parameters_sha256": "15dedf9554ad18299efd52786a393b49c91302ebb8d3b01313368a97afd657fd",
+        "parameters_fitted_on": "calibration"
+      }
+    },
+    "selected_model": "ce",
+    "selection_uses_fixed_calibration_parameters": true,
+    "calibration_parameters_refitted_on_selection": false,
+    "final_outcomes_used": false,
+    "scope": "Complete pipelines compared on selection using independently calibration-fitted parameters and previously fixed orientations; gains cannot be attributed solely to the loss."
+  },
+  "selection_decision_basis": "calibration_fixed_pipeline_macro_f1_on_selection"
+}

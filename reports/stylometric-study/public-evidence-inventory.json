@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "scope": "selection-only CPU study",
+  "files": {
+    "predeclared-plan.json": {
+      "kind": "byte_exact_original_evidence",
+      "source_relative_path": "model-study/predeclared-plan.json",
+      "sha256": "a6807d9a81ee23d7275e73180a09ebb68481ece40c1b6c757f87160cac516f5b",
+      "bytes": 1829
+    },
+    "input-binding.json": {
+      "kind": "byte_exact_original_evidence",
+      "source_relative_path": "model-study/input-binding.json",
+      "sha256": "bb96eceefb9838bdae58191d7c10c725a1f55832208ebca39a3b1a53f212913f",
+      "bytes": 1434
+    },
+    "cpu-environment.json": {
+      "kind": "byte_exact_original_evidence",
+      "source_relative_path": "model-study/cpu-environment.json",
+      "sha256": "5f0dc7580f8c80d997128d2c33a18420087f41772921d5b2e533ac6c858340c0",
+      "bytes": 418
+    },
+    "train-only-tfidf-proof.json": {
+      "kind": "byte_exact_original_evidence",
+      "source_relative_path": "model-study/train-only-tfidf-proof.json",
+      "sha256": "95900b2fd53c60880dd0efbc7497a74be1f52adf2998ce838ebe8a8b0b20211c",
+      "bytes": 1304
+    },
+    "completion.json": {
+      "kind": "byte_exact_original_evidence",
+      "source_relative_path": "model-study/completion.json",
+      "sha256": "837068d2f95da6eff779fd16721eb293db8a9f409d2479114e503cdb552193c3",
+      "bytes": 261280
+    },
+    "artifact-inventory.json": {
+      "kind": "byte_exact_original_evidence",
+      "source_relative_path": "model/artifact-inventory.json",
+      "sha256": "70668b83ff60501dfe31eac134c4c3a607e88148801f80db9c1d786b7e73781a",
+      "bytes": 985
+    },
+    "selected-configuration.json": {
+      "kind": "byte_exact_original_evidence",
+      "source_relative_path": "model/ensemble_config.json",
+      "sha256": "dea8f62f0f7a4bc15163d58cc02275a9dd48b8e0ab810a5e7fc2ccc9a3ee6b8d",
+      "bytes": 2714
+    },
+    "feature-ablation.json": {
+      "kind": "derived_whitelisted_public_summary",
+      "source_relative_paths": [
+        "model-study/completion.json",
+        "model-study/input-binding.json",
+        "model-study/train-only-tfidf-proof.json",
+        "model/ensemble_config.json",
+        "model/artifact-inventory.json",
+        "status.json"
+      ],
+      "sha256": "888d056ca3a75a7f7a594c79507d1b997642058321dfdfaddcf60f833dbf896f",
+      "bytes": 15511
+    },
+    "summary.json": {
+      "kind": "derived_whitelisted_public_summary",
+      "source_relative_paths": [
+        "model-study/completion.json",
+        "model-study/input-binding.json",
+        "model-study/train-only-tfidf-proof.json",
+        "model/ensemble_config.json",
+        "model/artifact-inventory.json",
+        "status.json"
+      ],
+      "sha256": "49ef6a8b9dbba97584af513fe35a4bb5b6a161f29e103628d0a283270b8ae628",
+      "bytes": 4871
+    }
+  },
+  "model_binaries_included": false,
+  "private_absolute_paths_included": false,
+  "raw_external_proofs_modified": false
+}

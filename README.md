@@ -1,134 +1,120 @@
 # Authorship Verification
 
-**A joint NLP project by Dongmyung Park and Juho Kim**
+**A joint NLP project by Dongmyung Park and Juho Kim, developed in February to May 2026.**
 
-[한국어](./README.ko.md) · [Reproduction guide](./docs/reproduction.md) · [Poster preview (PNG)](./docs/authorship-verification-poster-preview.png) · [Download poster PDF](./docs/authorship-verification-poster.pdf?raw=1)
+[한국어](./README.ko.md) | [Reproduction](./docs/reproduction.md) | [Architecture](./docs/architecture.md) | [Evaluation](./docs/evaluation.md) | [Training](./docs/training.md)
 
-This portfolio project compares a stylometric ensemble and a fine-tuned RoBERTa-Large model on the supplied English same-author/different-author text-pair dataset. The reported metrics describe the supplied development split. The repository includes the data, training and inference notebooks, saved predictions, model documentation, and a terminal demo for exploring model outputs on other text; performance on new authors or domains has not been established.
+This project compares the original two model families for English passage-pair authorship verification: a stylometric XGBoost-LightGBM ensemble and RoBERTa-Large. The new pipeline adds document-disjoint data splits, matched CE versus custom binary asymmetric focal training, independent calibration, immutable evaluation and hash-verified CPU replay. It predicts different-author (`0`) or same-author (`1`) labels; it does not establish a person's identity on arbitrary new text.
 
-## Results on the supplied development split
+## Current release status
 
-| Model | Method | Dev Macro F1 | Dev accuracy | Practical trade-off |
-|---|---|---:|---:|---|
-| [Stylometric ensemble](./model-cards/stylometric-ensemble.md) | Word, character, and function-word TF-IDF; 24 style features; XGBoost + LightGBM | 0.7702 | 0.77 | CPU inference; artifacts under 60 MB |
-| [RoBERTa-Large + ASL](./model-cards/roberta-asymmetric-loss.md) | Paired-text transformer with Asymmetric Loss | **0.8348** | **0.83** | Higher score on the supplied dev split; about 1.32 GB of weights |
+Fresh RoBERTa-Large CE and custom focal training, the bounded train-only stylometric study and the frozen Kaggle evaluation have completed. Both Large models completed six matched epochs and retained epoch-five checkpoints. English and Korean [measured results](./docs/results.md) report the classification, calibration, order, length and abstention outcomes.
 
-These are scores on the same **5,993-pair labeled development split** (2,937 different-author and 3,056 same-author pairs). A direct comparison of the supplied CSVs found **630 development pairs (10.5%) that exactly duplicate training pairs**. The development split was also used to select decision thresholds and, for RoBERTa, the best checkpoint. These figures describe the recorded development runs; they do not establish performance on independent new authors or domains. The repository's 5,985-pair test split is unlabeled, so no test-set accuracy or F1 is claimed.
+| Frozen pipeline, all 4,708 pairs | Macro F1 | Accuracy | Correct |
+|---|---:|---:|---:|
+| Stylometric XGBoost-LightGBM ensemble | 0.741498 | 74.1504% | 3,491 |
+| RoBERTa-Large CE, deployed | 0.808383 | 80.8624% | 3,807 |
+| RoBERTa-Large custom focal, retained comparator | 0.815170 | 81.5208% | 3,838 |
 
-## What we built
+CE was selected before holdout using the fixed calibrated pipelines on selection data. The later focal holdout advantage does not change that choice. Historical development F1 0.8348 uses different evaluation conditions and is not a before/after comparator. Calibration reduced ECE/NLL for all three models, but F1 did not improve uniformly and the 90% accepted-accuracy abstention goal was unmet.
 
-The **stylometric pipeline** removes identifying metadata, then represents each passage with word and character n-grams, function-word usage, and 24 style measurements such as sentence length, punctuation, and lexical diversity. Pairwise features feed XGBoost and LightGBM; their outputs are blended with tuned weights and a `0.43` decision threshold. It is the smaller option for local CPU use.
+The [joint freeze](./reports/evaluation-freeze.json) and ordered predictions were validated against source/data/model inventories. Implementation checks passed 109/109 on Windows 11 and 109/109 on Ubuntu 24.04 WSL2 with the same 35 executable/config files. All three saved models completed every one of the 4,708 pairs in both environments. All six runs matched binary predictions, abstention decisions, F1 and accuracy exactly. Stylometric replay passed the fixed comparison tolerances in both environments. Both Large models failed the predeclared GPU-reference probability tolerance of `1e-5`; maximum calibrated differences were `1.79e-5` and `8.81e-6` for CE on Windows and Linux, and `1.80e-4` and `1.10e-4` for custom focal. Linux CE passed the calibrated-probability check but failed the raw-probability check. The strict failures are preserved without changing the tolerance, reference or calibration. Matched CPU resource measurements have completed and are linked from the [CPU summary](./reports/cpu-reproduction.json) and [measured results](./docs/results.md); public model publication and full anonymous download verification have completed separately. The local environments share one physical host and are not independent external review.
 
-The **RoBERTa pipeline** cleans email headers, addresses, and URLs, encodes both passages together up to 512 tokens, and fine-tunes `roberta-large` with Asymmetric Loss (`gamma_neg=2`, `gamma_pos=1`). Its development-set threshold is `0.51`. This approach captures contextual signals at a higher compute and storage cost.
+Actual paired training took 6.3959 wall hours, with 12.7758 summed assigned-worker hours. The full wrapper through frozen evaluation took 7.5475 wall hours. The nine-hour paired and ten-hour complete-kernel limits were respected. Earlier timing probes discarded all updated weights; no further GPU quality experiment was launched after the bounded comparison. Local assigned-device scope and account quota readings are distinct, and no official T4x2 billing multiplier is asserted.
 
-Both pipelines have training notebooks, inference notebooks, and model cards. [`verify_author.py`](./verify_author.py) provides one consistent command-line interface for single-pair predictions.
+## Run the CPU interface
 
-## Try a prediction
-
-### 1. Set up Python
-
-Python 3.12 is recommended. Create a virtual environment with the Python 3.12 launcher available on your system, then install the terminal-inference dependencies. For example, in Windows PowerShell:
+The frozen model files are available in [public Kaggle dataset version 1](https://www.kaggle.com/datasets/dongmyungpark/nlu-authorship-frozen-large-20261012). All 21 files, totaling 2,856,189,574 bytes, were downloaded anonymously through the unchanged public CLI and matched their frozen byte counts and SHA256 hashes. The separate [download verification](./reports/model-download-verification.json) establishes artifact delivery, not another saved-model inference run. From the repository root in Windows PowerShell:
 
 ```powershell
-python -m venv .venv
-.\.venv\Scripts\python.exe -m pip install -r requirements-inference.txt
+.\launch-nlu.bat doctor
+.\launch-nlu.bat verify-data
+.\launch-nlu.bat download
+.\launch-nlu.bat download --verify-only
+.\launch-nlu.bat predict
 ```
 
-If `python` is unavailable, use your installed Python launcher to create `.venv`. Once the environment exists, the commands above and below call its interpreter directly. On macOS or Linux, use `.venv/bin/python` in place of `.\.venv\Scripts\python.exe`. For the notebooks and retraining, install the full [`requirements.txt`](./requirements.txt); see the [reproduction guide](./docs/reproduction.md) for setup and CUDA details.
+Linux uses `sh ./launch-nlu.sh` with the same commands. Launchers create an isolated project-local Python 3.12 environment, install pinned CPU packages and hide local GPUs. Docker and API keys are unnecessary. Initial setup and model download require Internet; saved-model inference uses local weights and tokenizer files.
 
-For **RoBERTa on an NVIDIA GPU in Windows**, install the CUDA 12.4 PyTorch build after the requirements above (and after `requirements.txt` if you also need the notebooks):
+The default model is the CPU stylometric ensemble. Optional Large inference uses the pipeline chosen on selection data with independently calibration-fitted parameters:
 
 ```powershell
-.\.venv\Scripts\python.exe -m pip install --force-reinstall --no-deps torch==2.5.1+cu124 --index-url https://download.pytorch.org/whl/cu124
-.\.venv\Scripts\python.exe -c "import torch; print(torch.__version__, torch.version.cuda, torch.cuda.is_available()); print(torch.cuda.get_device_name(0) if torch.cuda.is_available() else 'No CUDA device')"
+.\launch-nlu.bat download --model transformer
+.\launch-nlu.bat predict --model transformer --text-file-1 passage-a.txt --text-file-2 passage-b.txt
 ```
 
-The check should print `True` for CUDA availability and your GPU name. Choose a wheel compatible with your platform and NVIDIA driver from the [official PyTorch version list](https://pytorch.org/get-started/previous-versions/) if CUDA 12.4 is unsuitable. In **Git Bash on Windows**, use `./.venv/Scripts/python.exe` in these and the demo commands.
+The verified release descriptor, [reports/artifact-download.json](./reports/artifact-download.json), pins anonymous version-1 raw URLs, byte counts and SHA256 for every checkpoint, tokenizer, transform and configuration file. Flat remote files map directly to the original `models/ce/`, `models/custom_asl/` and `models/stylometric/` runtime paths using `kind=file`. Full anonymous HTTP 200/hash verification and the CLI verify-only check completed successfully. The historical Drive files below cannot substitute for this new release's inventories and freeze.
 
-### 2. Download one or both models
+If model-only ZIPs are supplied separately, extract their `models/<model-name>/` contents into `artifacts/runtime` in this matching source checkout. The runtime verifies installed bytes against the joint freeze before prediction or evaluation; the automatic-download descriptor is unnecessary for a manual installation. The public automatic route above is the verified release distribution.
 
-Trained artifacts are hosted outside GitHub because of their size. The exact download links are:
+`doctor` verifies dependencies, environment isolation and a small CPU tensor operation. `verify-data` checks source CSV hashes and document isolation. Neither command measures real model accuracy. Prediction output distinguishes the class, calibrated same-author score and an optional `uncertain` decision after abstention. See the [CPU runtime guide](./docs/runtime.md) for input limits and all options.
 
-| Model | Download | Put the files directly in either folder |
-|---|---|---|
-| Stylometric ensemble | [Google Drive: XGBoost, LightGBM, and vectorizers](https://drive.google.com/drive/folders/1mF0bMpzfs3XODpQA2Hd7H_JvXLk5AGgp?usp=sharing) | `models/stylometric-ensemble/` or `models/Models_ML/` |
-| RoBERTa-Large + ASL | [Google Drive: fine-tuned checkpoint and tokenizer](https://drive.google.com/drive/folders/1Ty9-EpOLAgzvTWPuqrHBTbehmZZuDs3V?usp=sharing) | `models/roberta-asymmetric-loss/` or `models/Models_ASL/` |
+## Replay the frozen final evaluation
 
-The downloaded Google Drive folder names `Models_ML` and `Models_ASL` work as-is for the terminal demo. Place them inside `models/`, with the model files immediately inside each folder; avoid an extra nested folder. The canonical folders are used by the notebooks unless `AV_MODEL_DIR` is set. The `models/` directory is ignored by Git, so downloaded weights stay local.
+Once the release artifacts are available, use a fresh output directory:
 
-The terminal demo checks for these files:
+```powershell
+.\launch-nlu.bat evaluate --model stylometric --model-name stylometric --model-dir artifacts/runtime/models/stylometric --output .local/replay-stylometric --batch-size 4 --threads 4
+```
+
+For both Large checkpoints:
+
+```powershell
+.\launch-nlu.bat download --model ce
+.\launch-nlu.bat download --model custom_asl
+.\launch-nlu.bat evaluate --model transformer --model-name ce --model-dir artifacts/runtime/models/ce --output .local/replay-ce --batch-size 4 --threads 4
+.\launch-nlu.bat evaluate --model transformer --model-name custom_asl --model-dir artifacts/runtime/models/custom_asl --output .local/replay-custom-asl --batch-size 4 --threads 4
+```
+
+These full-replay examples explicitly use batch size 4 and four CPU threads. The setting was chosen from a small historical-model timing probe for practical CPU execution, before new-model quality outputs; it does not select a model or alter calibration. CLI defaults remain batch size 8 and one thread. Actual final-model CPU costs are reported in the [measured results](./docs/results.md); the separate benchmark uses batch size 1 and one thread.
+
+The default evaluation covers all 4,708 locked-holdout pairs. It verifies source, data, model and calibration bindings, then saves metrics, confusion and ordered predictions without refitting. Both Large FP32 checkpoints are retained even when only one is selected for deployment. A small prediction or unit-test pass does not replace full saved-model replay. Clean operating systems on the same physical computer are reported as separate environments on the same host, not independent external hosts.
+
+## Controlled experiment
+
+The supplied 27,643 train and 5,993 development pairs are audited together. Cleanup excludes 86 empty-document rows and removes 2,162 consistent duplicate pairs, retaining 31,388 pairs. Connected components of shared document identity remain wholly inside one split:
+
+| Role | Pairs | Use |
+|---|---:|---|
+| Train | 21,972 | Task fitting and train-only TF-IDF |
+| Selection | 3,139 | Checkpoints, feature/weight choices and deployment policy |
+| Calibration | 1,569 | Temperature, threshold and abstention fitting |
+| Locked holdout | 4,708 | Final evaluation after the joint freeze |
+
+Two independently assigned T4 workers train fresh pinned RoBERTa-Large with matched initialization, seed, records and epoch schedules. CE is compared with the original custom two-class softmax focal objective: `-(1-p_y)^gamma_y * log(p_y)`, with `gamma_0=2` and `gamma_1=1`, calculated in FP32. This is not the published multi-label sigmoid ASL with clipping.
+
+A separate CPU study fits every TF-IDF transform on train only and compares four bounded XGBoost-LightGBM recipes within 120 minutes. Final ensemble weights keep both components active. A new recipe/weight must gain at least 0.002 selection macro F1 over the reference to be adopted.
+
+Raw AB loss comparison stays at threshold 0.5. Each input-order policy is chosen on selection; all three models are calibrated independently. Deployment then compares the fixed calibrated Large pipelines on stored selection logits, adopting custom ASL only with at least 0.002 macro F1 gain over calibrated CE. Raw and deployed winners are reported separately. The joint freeze precedes every heldout inference, and heldout outcomes never tune decisions.
+
+The plan also declares 1,000 paired whole-document-group bootstrap draws with seed 378. Conditional 95% percentile intervals describe the frozen corpus and one trained seed, not repeated-training variation or new-author/domain generalization. Details are in the [evaluation protocol](./docs/evaluation.md).
+
+## Historical development work
+
+The original February to May 2026 notebooks, poster, saved predictions and model cards remain available with joint credit. These results use the original development split and are separate from the new frozen evaluation:
+
+| Historical model | Reported development macro F1 | Historical artifact download |
+|---|---:|---|
+| [Stylometric ensemble](./model-cards/stylometric-ensemble.md) | 0.7702 | [Original ensemble and vectorizers on Drive](https://drive.google.com/drive/folders/1mF0bMpzfs3XODpQA2Hd7H_JvXLk5AGgp?usp=sharing) |
+| [RoBERTa-Large custom asymmetric focal](./model-cards/roberta-asymmetric-loss.md) | 0.8348 | [Original checkpoint and tokenizer on Drive](https://drive.google.com/drive/folders/1Ty9-EpOLAgzvTWPuqrHBTbehmZZuDs3V?usp=sharing) |
+
+The 5,993 development pairs include 630 exact training-pair duplicates. In total, 2,738 development pairs contain at least one document already present in train, including those duplicate pairs: 1,658 reuse one and 1,080 reuse both. The original stylometric notebook fits TF-IDF on combined train and development text, so development passages affect vocabulary and IDF. Development also selects checkpoints, ensemble weights and thresholds. The historical scores and new holdout results therefore cannot establish a controlled before-and-after gain. The new split separates document components and fits TF-IDF on train only.
+
+[Original notebooks](./notebooks/) and [poster preview](./docs/authorship-verification-poster-preview.png) ([PDF](./docs/authorship-verification-poster.pdf?raw=1)) document the joint work. Claims about reduced cross-domain overfitting are not verified by an independent domain-separated evaluation. The 5,985-pair `test.csv` and 20-pair `live.csv` are unlabeled inference inputs and provide no measured accuracy.
+
+## Repository layout
 
 ```text
-models/Models_ML/                 # or models/stylometric-ensemble/
-├── ensemble_config.json
-├── lgb_model.pkl
-├── tfidf_char.pkl
-├── tfidf_fw.pkl
-├── tfidf_word.pkl
-└── xgb_model.json
-
-models/Models_ASL/                # or models/roberta-asymmetric-loss/
-├── best_threshold.json
-├── config.json
-├── model.safetensors
-├── tokenizer.json
-└── tokenizer_config.json
+nlu_authorship/             Data, models, training, calibration and frozen evaluation
+configs/                   Predeclared experiment plan
+reports/                   Split manifest, frozen measurements and reproduction evidence
+scripts/                   Isolated setup, downloads, Kaggle packaging and reporting
+launch-nlu.bat / .sh        Public CPU entrypoints
+docs/                      English guides with Korean partners and historical poster
+model-cards/               Clearly labeled original development artifacts
+notebooks/                 Original joint training and demo notebooks
+results/                   Historical unlabeled predictions
+artifacts/                 Downloaded runtime models, excluded from Git
 ```
 
-Keep any additional tokenizer files supplied with the RoBERTa download in that same folder. You only need the artifacts for the model you choose to run.
-
-### 3. Run the terminal demo
-
-From the repository root, enter two English passages when prompted. The default is the stylometric ensemble:
-
-```powershell
-.\.venv\Scripts\python.exe verify_author.py
-```
-
-Select RoBERTa on the GPU, or provide both passages on the command line:
-
-```powershell
-.\.venv\Scripts\python.exe verify_author.py --model roberta --device cuda
-.\.venv\Scripts\python.exe verify_author.py --text-1 "I walked by the river this morning and watched the boats pass." --text-2 "The rain started quietly in the evening, so I closed the windows."
-```
-
-In **Windows Git Bash**, the GPU command is:
-
-```bash
-./.venv/Scripts/python.exe verify_author.py --model roberta --device cuda
-```
-
-The script prints **Same author** or **Different authors**, `Same-author probability`, and the decision threshold. Despite that output label, the number is an uncalibrated model score, not a measured probability that the authors match; a high score on a new passage does not establish accuracy. Use `--model-dir PATH` if the selected artifacts are elsewhere. For RoBERTa, `--device auto` (the default) uses CUDA when available. If it detects an NVIDIA GPU but PyTorch cannot use CUDA, it stops with setup guidance instead of silently running on CPU. `--device cuda` requires CUDA; use `--device cpu` only when you intentionally want slower CPU inference. The stylometric ensemble runs on CPU.
-
-Scores and thresholds are displayed as percentages.
-
-## Project layout
-
-```text
-data/                       Labeled train/dev pairs and unlabeled test/live pairs
-notebooks/                  Training and demo notebooks for each pipeline
-model-cards/                Architecture, hyperparameters, evaluation, limitations
-models/                     Downloaded artifacts (Git-ignored)
-results/                    Saved predictions for the unlabeled test split
-docs/                       Reproduction guide and project poster
-verify_author.py            Interactive and argument-based terminal demo
-requirements-inference.txt  Dependencies for the terminal demo
-requirements.txt            Full notebook and training dependencies
-```
-
-The labeled [`train.csv`](./data/train.csv) split has 27,643 pairs. [`dev.csv`](./data/dev.csv) has 5,993 labeled pairs; [`test.csv`](./data/test.csv) and [`live.csv`](./data/live.csv) have 5,985 and 20 unlabeled pairs, respectively. Each pair has `text_1` and `text_2`; `label=1` means same author and `label=0` means different authors. The notebooks remain available in the repository; [`.gitattributes`](./.gitattributes) excludes `.ipynb` files from GitHub's language statistics.
-
-## Explore the work
-
-- [Reproduction guide](./docs/reproduction.md): local setup, artifact placement, inference, and retraining.
-- [Stylometric model card](./model-cards/stylometric-ensemble.md) and [RoBERTa model card](./model-cards/roberta-asymmetric-loss.md): methods, hyperparameters, compute, results, and risks.
-- [Training and demo notebooks](./notebooks/): end-to-end experiments and batch inference.
-- [Original course poster preview](./docs/authorship-verification-poster-preview.png) ([download PDF](./docs/authorship-verification-poster.pdf?raw=1)): historical presentation. The download link bypasses GitHub's PDF preview. The poster's claim about reducing domain-shift overfitting has not been verified on an independent cross-domain evaluation. Use the current model cards for the evaluated scope and the download links above for artifacts.
-
-## Limitations
-
-The methods target English text and may be unreliable for very short passages, other languages, code switching, or unfamiliar genres. RoBERTa truncates combined inputs beyond 512 tokens, while the stylometric model cannot represent terms outside its fitted TF-IDF vocabulary. The reported numbers come from a development split containing exact training-pair duplicates and used for model selection; an independent, author- and domain-separated labeled evaluation is needed to measure generalization. The uncalibrated score reflects patterns learned from the supplied training data, not proof of a person's identity; it should not be the sole basis for attribution, sanctions, or deanonymization.
-
-## Authors
-
-Dongmyung Park and Juho Kim developed this project together.
+Author IDs and domain labels are absent. The documented scope is document separation in this supplied corpus; historical corpus exposure and unmeasured semantic near duplicates remain limitations. Long transformer inputs are truncated to 512 combined tokens, and short or unfamiliar passages may be unreliable.

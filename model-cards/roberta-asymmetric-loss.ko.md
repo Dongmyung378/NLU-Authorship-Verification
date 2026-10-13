@@ -1,10 +1,12 @@
 # Asymmetric Loss를 적용한 RoBERTa-Large
 
-[English](./roberta-asymmetric-loss.md) · [프로젝트 개요](../README.ko.md)
+[English](./roberta-asymmetric-loss.md) | [프로젝트 개요](../README.ko.md)
+
+이 카드는 최초 RoBERTa-Large 개발 모델을 설명합니다. 성능 수치는 당시 개발 데이터의 결과이며, 문서를 분리하고 고정한 사전학습 가중치에서 새로 시작하는 RoBERTa-Large 실험과 조건을 통제한 비교 결과가 아닙니다.
 
 ## 모델 요약
 
-제공된 영어 텍스트 쌍 데이터에서 동일 저자와 다른 저자 라벨을 분류하도록 학습한 지도학습 이진 분류 모델입니다. <code>roberta-large</code>에 시퀀스 분류 헤드를 추가하고 Asymmetric Loss로 파인튜닝해, 문체 차이가 미묘한 다른 저자 쌍을 더 집중적으로 학습합니다. 보고된 성능은 제공된 개발 데이터에 한정됩니다.
+제공된 영어 텍스트 쌍 데이터에서 동일 저자와 다른 저자 라벨을 분류하도록 학습한 지도학습 이진 분류 모델입니다. <code>roberta-large</code>에 시퀀스 분류 헤드를 추가하고 직접 구현한 이진 비대칭 focal loss로 파인튜닝했습니다. 보고된 성능은 제공된 개발 데이터에 한정됩니다.
 
 - **개발자:** Dongmyung Park, Juho Kim
 - **언어:** 영어
@@ -16,11 +18,11 @@
 
 토큰화 전에 이메일 헤더, 이메일 주소, URL, 불필요한 공백을 제거합니다. 두 글을 RoBERTa의 표준 텍스트 쌍 형식으로 인코딩하고 <code>longest_first</code> 방식으로 전체 길이를 최대 512토큰까지 제한합니다.
 
-기본 교차 엔트로피 대신 <code>gamma_neg=2</code>, <code>gamma_pos=1</code>인 Asymmetric Loss를 사용합니다. 쉬운 예시의 영향을 낮추면서 다른 저자 클래스에 더 강한 초점 패널티를 적용합니다. 개발 데이터의 임계값 탐색을 통해 추론 임계값 <code>0.51</code>을 선택했습니다.
+기본 교차 엔트로피 대신 두 클래스의 softmax 확률에 `-(1-p_y)^gamma_y * log(max(p_y, 1e-8))`를 적용하고 예시별 손실을 평균합니다. <code>gamma_neg=2</code>, <code>gamma_pos=1</code>을 사용해 쉬운 예시의 기여를 낮추며, 클래스 0에 더 큰 지수를 적용합니다. `1e-8` 하한은 로그 계산을 위한 수치 안정성 처리입니다. 발표된 ASL의 음성 클래스 확률 이동 방식이나 라벨별 독립 sigmoid를 사용하지 않으므로 [발표된 다중 라벨 ASL](https://openaccess.thecvf.com/content/ICCV2021/html/Ridnik_Asymmetric_Loss_for_Multi-Label_Classification_ICCV_2021_paper.html)을 그대로 구현한 손실은 아닙니다. 개발 데이터의 임계값 탐색으로 추론 임계값 <code>0.51</code>을 선택했습니다. 도메인이 바뀌었을 때 일반화 성능을 높인다는 인과 관계는 검증되지 않았습니다.
 
 ## 학습 데이터
 
-제공된 [`train.csv`](../data/train.csv)의 영어 텍스트 쌍 27,643개로 학습했으며 이 과제의 학습을 위한 라벨 있는 쌍은 추가하지 않았습니다. 학습·개발 CSV에는 글과 쌍의 라벨만 있고 저자 ID나 도메인 라벨은 없으므로, 이 파일만으로 저자별·도메인별 분리 평가 여부를 확인할 수 없습니다.
+제공된 [`train.csv`](../data/train.csv)의 영어 텍스트 쌍 27,643개로 학습했으며 이 과제의 학습을 위한 라벨 있는 쌍은 추가하지 않았습니다. 학습과 개발 CSV에는 글과 쌍의 라벨만 있고 저자 ID나 도메인 라벨은 없으므로, 이 파일만으로 저자나 도메인을 구분한 분리 평가 여부를 확인할 수 없습니다.
 
 ## 하이퍼파라미터
 
@@ -30,12 +32,15 @@
 | 학습 배치 크기 | 32 |
 | 평가 배치 크기 | 32 |
 | 최대 시퀀스 길이 | 512 |
-| Epochs | 14; 13번째 epoch에서 조기 종료 |
+| 최대 epoch | 14 |
+| 저장된 최적 체크포인트 | Epoch 10, step 8,640 |
 | 조기 종료 대기 | 평가 epoch 3회 |
 | Warmup ratio | 0.1 |
 | Weight decay | 0.01 |
-| Loss | Asymmetric Loss (<code>gamma_neg=2</code>, <code>gamma_pos=1</code>) |
+| Loss | 직접 구현한 이진 비대칭 focal loss (<code>gamma_neg=2</code>, <code>gamma_pos=1</code>) |
 | 분류 임계값 | 0.51 |
+
+내려받은 체크포인트의 `trainer_state.json`에는 epoch 10.0, global step 8,640, best metric 0.8346138164975799가 기록돼 있습니다. 이전 카드의 epoch 13 종료 주장은 이 체크포인트의 상태 파일로 확인되지 않습니다. 선택된 최적 체크포인트와 학습이 최종 중단된 시점은 서로 다른 정보입니다.
 
 ## 평가
 
@@ -72,7 +77,7 @@
 - 학습 시간: 약 6시간 11분
 - 학습 하드웨어: NVIDIA A100 40GB GPU 1개
 - 모델 파라미터: 약 3억 5,500만 개
-- 모델 가중치: 약 1.32GB
+- 모델 가중치: 1,421,495,360바이트, 약 1.42 GB 또는 1.32 GiB
 - 추론: 시스템 메모리 16GB와 CUDA 지원 GPU 및 CUDA 지원 PyTorch 빌드 권장, CPU에서도 가능하지만 속도가 느림
 - [학습된 모델 파일 다운로드](https://drive.google.com/drive/folders/1Ty9-EpOLAgzvTWPuqrHBTbehmZZuDs3V?usp=sharing). 내려받은 모델 파일은 GitHub에 올리지 않으며 저장소에서 `models/`를 무시합니다.
 
@@ -80,14 +85,14 @@
 
 저장소 최상위 폴더에서 위 링크의 파일을 모두 내려받아 `models/Models_ASL/`(원래 다운로드 폴더 이름) 또는 `models/roberta-asymmetric-loss/` 바로 아래에 놓습니다. 해당 폴더에는 `best_threshold.json`, `config.json`, `model.safetensors`, `tokenizer.json`, `tokenizer_config.json`이 있어야 합니다. 함께 내려받은 추가 토크나이저 파일도 같은 폴더에 보관하고, 선택한 폴더와 이 파일들 사이에 폴더가 한 단계 더 들어가지 않도록 합니다.
 
-[터미널 시연용 의존성](../requirements-inference.txt)을 설치합니다. GPU 추론을 사용하려면 [재현 가이드의 CUDA 지원 PyTorch 설정](../docs/reproduction.ko.md)을 따르고 PyTorch에서 GPU가 감지되는지 확인하세요. 그런 다음 영어 글 두 개를 입력합니다.
+[최초 터미널 시연용 의존성](../requirements-inference.txt)을 설치합니다. 아래 예시는 CPU 사용을 명시하며 영어 글 두 개를 입력받습니다. 최초 GPU 학습과 시연 절차는 아래에 연결한 노트북에 보존합니다. 현재 [재현 가이드](../docs/reproduction.ko.md)는 새로운 고정 CPU 릴리스를 설명하며 이 과거 모델의 CUDA 구성 안내가 아닙니다.
 
 ```bash
 python -m pip install -r requirements-inference.txt
-python verify_author.py --model roberta --device cuda
+python verify_author.py --model roberta --device cpu
 ```
 
-기본값인 `--device auto`는 CUDA를 사용할 수 있으면 GPU를 선택합니다. NVIDIA GPU가 감지되었지만 PyTorch에서 CUDA를 사용할 수 없다면 설정 방법을 안내하며 중단하고, NVIDIA GPU가 감지되지 않으면 CPU를 사용합니다. GPU 사용을 필수로 하려면 `--device cuda`, CPU로 강제하려면 `--device cpu`를 지정하세요. 명령줄에서 바로 입력하려면 `python verify_author.py --model roberta --text-1 "First English passage" --text-2 "Second English passage"`를 실행합니다. 출력에는 `Same-author probability`, 모델 파일의 분류 임계값, 판별 결과가 표시됩니다. 표시 명칭과 달리 이 값은 클래스 1의 원시 softmax 점수이며, 두 글의 저자가 같을 확률로 보정된 값은 아닙니다. 임의의 새 저자나 도메인에서의 성능은 검증되지 않았습니다. 다른 위치에 모델을 두었다면 파일이 직접 들어 있는 폴더를 `--model-dir PATH`로 지정합니다. 환경 설정과 노트북 사용법은 [한국어 재현 가이드](../docs/reproduction.ko.md)를 참고하세요.
+기본값인 `--device auto`는 CUDA를 사용할 수 있으면 GPU를 선택합니다. NVIDIA GPU가 감지되었지만 PyTorch에서 CUDA를 사용할 수 없다면 설정 방법을 안내하며 중단하고, NVIDIA GPU가 감지되지 않으면 CPU를 사용합니다. GPU 사용을 필수로 하려면 `--device cuda`, CPU로 강제하려면 `--device cpu`를 지정하세요. 명령줄에서 바로 입력하려면 `python verify_author.py --model roberta --text-1 "First English passage" --text-2 "Second English passage"`를 실행합니다. 출력에는 `Same-author probability`, 모델 파일의 분류 임계값, 판별 결과가 표시됩니다. 표시 명칭과 달리 이 값은 클래스 1의 원시 softmax 점수이며, 두 글의 저자가 같을 확률로 보정된 값은 아닙니다. 임의의 새 저자나 도메인에서의 성능은 검증되지 않았습니다. 다른 위치에 모델을 두었다면 파일이 직접 들어 있는 폴더를 `--model-dir PATH`로 지정합니다. [현재 한국어 재현 가이드](../docs/reproduction.ko.md)는 새 고정 CPU 릴리스를 설명합니다. 해당 릴리스의 모델 파일과 평가 연결은 이 과거 시연과 구분합니다.
 
 ## 한계와 위험
 

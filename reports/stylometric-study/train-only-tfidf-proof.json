@@ -1,0 +1,29 @@
+{
+  "fitting_split": "train",
+  "document_count": 43944,
+  "train_records_sha256": "45b2092c1532624e9edcc554e3f988c4c07ef9ba47ab5e3851a5512a655e6313",
+  "vectors": {
+    "word": {
+      "vocabulary_size": 7000,
+      "maximum_idf_error": 7.228014844429254e-07,
+      "document_frequency_sha256": "772d17e3356824d6f1613380b4baff617fb65c8bb440b0885813c4530631ad67",
+      "idf_sha256": "d89424b2bfd0954d8985bee8f13c5b33b4345cadef0f2fbbfbbd8b48836cc7b7",
+      "formula": "log((1+n_train_documents)/(1+train_document_frequency))+1"
+    },
+    "char": {
+      "vocabulary_size": 7000,
+      "maximum_idf_error": 4.1316177323835745e-07,
+      "document_frequency_sha256": "01dd01cc3af58404189c245f3b1584681eac538de41ab1335d629f83680de3de",
+      "idf_sha256": "37f6fcf8e526d587589d8f575cbc06bf9f02d14ee015b86917c0ab3d922ced44",
+      "formula": "log((1+n_train_documents)/(1+train_document_frequency))+1"
+    },
+    "function": {
+      "vocabulary_size": 219,
+      "maximum_idf_error": 4.1316177323835745e-07,
+      "document_frequency_sha256": "9db1378b7ee0b87c5cd3f145a9517aaab2c86a64759c6ea917a511f98a78524d",
+      "idf_sha256": "4d14cc1e47a6b59e55210938c8438cc13f5f0baf4be4f9189b7bf1087c24de7b",
+      "formula": "log((1+n_train_documents)/(1+train_document_frequency))+1"
+    }
+  },
+  "passed": true
+}

@@ -1,7 +1,10 @@
-"""Predict whether two English passages have the same author.
+"""Historical development-model demo for English passage pairs.
 
 Run without text arguments for an interactive terminal prompt. Model artifacts
-must first be downloaded into the matching directory under ``models/``.
+must first be downloaded from the historical Drive links into the matching
+directory under ``models/``. This script uses the original development models;
+it does not replay the new document-disjoint release or its evaluation freeze.
+For the current CPU interface, use ``launch-nlu.bat`` or ``launch-nlu.sh``.
 """
 
 from __future__ import annotations

@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "status": "passed",
+  "scope": "Actual Large forward/backward/update capability, not retained model performance.",
+  "kernel": "dongmyungpark/nlu-roberta-large-t4-profile-20261012",
+  "kernel_version": 1,
+  "dataset_version": 2,
+  "source_archive_sha256": "bf943f476239b2997fa2193d558a0dc6c343c8cbcab6c36050ede1289cad509c",
+  "profile_declared_epochs_per_method": 3,
+  "profile_projection_execution": "serial pair",
+  "subsequent_training_plan": "Up to six equal epochs per method on two independently assigned T4s; common selection patience three.",
+  "historical_finetuned_weights_used": false,
+  "new_task_weights_retained": false,
+  "input_data_or_source_changed_by_probe": false,
+  "inventory": {
+    "gpu-profile.json": {
+      "bytes": 685,
+      "sha256": "76663db3814eb653f00e5db7cfd28abe2bddfa1ed5181d62ed05992a73f6c5b6"
+    },
+    "profile-completion.json": {
+      "bytes": 5568,
+      "sha256": "a6720c4e01060be7b26c1e292187534f831539ba2371328cb588de3dd3478342"
+    },
+    "kaggle-runtime.json": {
+      "bytes": 1330,
+      "sha256": "f74db01c6582c13249c69d344bea2b284299bc46c7d2e45211a56616eefb4c40"
+    },
+    "input-verification.json": {
+      "bytes": 291,
+      "sha256": "732f2000ff65fb0fe2acb589d0a3fafc563f7d1d4001a70c7a7fcebc42c1a6e1"
+    }
+  }
+}

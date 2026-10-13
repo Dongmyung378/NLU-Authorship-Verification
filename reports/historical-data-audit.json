@@ -1,0 +1,1088 @@
+{
+  "schema_version": 1,
+  "audit_source_sha256": "ddc27383951571107186e75cdf606955db9a83b44b21ee60b8b04ccaaa1cbd71",
+  "source_csvs": {
+    "train": {
+      "filename": "train.csv",
+      "bytes": 32293474,
+      "sha256": "f3967e0d050867c7284729b9a20ad0cdd0dc6d7ee148ba7c6854dc265aeb581a",
+      "rows": 27643
+    },
+    "dev": {
+      "filename": "dev.csv",
+      "bytes": 6989758,
+      "sha256": "44f5b411fec2508ce8f75ad241c778d98f677a6e3423ded034c24c055b78806a",
+      "rows": 5993
+    }
+  },
+  "label_parsing": "Numerical binary labels: 0 and 0.0 are identical; 1 and 1.0 are identical.",
+  "label_counts": {
+    "train": {
+      "0": 13950,
+      "1": 13693
+    },
+    "dev": {
+      "0": 2937,
+      "1": 3056
+    }
+  },
+  "author_or_domain_ids_present": false,
+  "normalization_modes": {
+    "exact": {
+      "normalization": "exact",
+      "ordered_pair_duplicates": {
+        "by_source": {
+          "train": {
+            "rows": 27643,
+            "unique_pairs": 26187,
+            "duplicate_extra_rows": 1456
+          },
+          "dev": {
+            "rows": 5993,
+            "unique_pairs": 5911,
+            "duplicate_extra_rows": 82
+          }
+        },
+        "combined_unique_pairs": 31468,
+        "combined_duplicate_extra_rows": 2168,
+        "duplicate_groups": 2168,
+        "maximum_group_rows": 2,
+        "dev_rows_repeating_train_pair": 630,
+        "dev_unique_pairs_repeating_train_pair": 630,
+        "conflicting_label_pair_groups": 0,
+        "rows_in_conflicting_label_groups": 0,
+        "conflicting_pair_hashes": []
+      },
+      "unordered_pair_duplicates": {
+        "by_source": {
+          "train": {
+            "rows": 27643,
+            "unique_pairs": 26187,
+            "duplicate_extra_rows": 1456
+          },
+          "dev": {
+            "rows": 5993,
+            "unique_pairs": 5911,
+            "duplicate_extra_rows": 82
+          }
+        },
+        "combined_unique_pairs": 31468,
+        "combined_duplicate_extra_rows": 2168,
+        "duplicate_groups": 2168,
+        "maximum_group_rows": 2,
+        "dev_rows_repeating_train_pair": 630,
+        "dev_unique_pairs_repeating_train_pair": 630,
+        "conflicting_label_pair_groups": 0,
+        "rows_in_conflicting_label_groups": 0,
+        "conflicting_pair_hashes": []
+      },
+      "dev_document_reuse": {
+        "neither_document_in_train": 3255,
+        "one_document_in_train": 1658,
+        "both_documents_in_train": 1080
+      },
+      "empty_document_occurrences": 0,
+      "rows_with_at_least_one_empty_document": 0,
+      "self_pairs": {
+        "rows": 3,
+        "different_author_label_rows": 1
+      },
+      "document_components": {
+        "unique_documents": 52965,
+        "connected_components": 21501,
+        "largest_component_rows": 141,
+        "largest_component_row_fraction": 0.004191937210132002,
+        "component_row_count_histogram": {
+          "1": 16477,
+          "2": 2999,
+          "3": 918,
+          "4": 392,
+          "5": 205,
+          "6": 130,
+          "7": 92,
+          "8": 62,
+          "9": 47,
+          "10": 39,
+          "11": 19,
+          "12": 13,
+          "13": 11,
+          "14": 11,
+          "15": 11,
+          "16": 6,
+          "17": 10,
+          "18": 11,
+          "19": 4,
+          "20": 3,
+          "21": 3,
+          "22": 4,
+          "23": 3,
+          "24": 1,
+          "25": 3,
+          "26": 3,
+          "27": 2,
+          "28": 1,
+          "30": 3,
+          "31": 1,
+          "33": 1,
+          "35": 1,
+          "37": 1,
+          "40": 1,
+          "42": 1,
+          "43": 1,
+          "46": 1,
+          "47": 1,
+          "48": 2,
+          "56": 1,
+          "60": 1,
+          "70": 1,
+          "83": 1,
+          "97": 1,
+          "128": 1,
+          "141": 1
+        },
+        "largest_components": [
+          {
+            "rows": 141,
+            "documents": 135,
+            "labels": {
+              "0": 58,
+              "1": 83
+            }
+          },
+          {
+            "rows": 128,
+            "documents": 118,
+            "labels": {
+              "0": 55,
+              "1": 73
+            }
+          },
+          {
+            "rows": 97,
+            "documents": 91,
+            "labels": {
+              "0": 50,
+              "1": 47
+            }
+          },
+          {
+            "rows": 83,
+            "documents": 78,
+            "labels": {
+              "0": 37,
+              "1": 46
+            }
+          },
+          {
+            "rows": 70,
+            "documents": 63,
+            "labels": {
+              "0": 33,
+              "1": 37
+            }
+          },
+          {
+            "rows": 60,
+            "documents": 56,
+            "labels": {
+              "0": 29,
+              "1": 31
+            }
+          },
+          {
+            "rows": 56,
+            "documents": 48,
+            "labels": {
+              "0": 27,
+              "1": 29
+            }
+          },
+          {
+            "rows": 48,
+            "documents": 47,
+            "labels": {
+              "0": 27,
+              "1": 21
+            }
+          },
+          {
+            "rows": 48,
+            "documents": 47,
+            "labels": {
+              "0": 24,
+              "1": 24
+            }
+          },
+          {
+            "rows": 47,
+            "documents": 48,
+            "labels": {
+              "0": 27,
+              "1": 20
+            }
+          }
+        ]
+      }
+    },
+    "nfc_whitespace": {
+      "normalization": "nfc_whitespace",
+      "ordered_pair_duplicates": {
+        "by_source": {
+          "train": {
+            "rows": 27643,
+            "unique_pairs": 26187,
+            "duplicate_extra_rows": 1456
+          },
+          "dev": {
+            "rows": 5993,
+            "unique_pairs": 5911,
+            "duplicate_extra_rows": 82
+          }
+        },
+        "combined_unique_pairs": 31468,
+        "combined_duplicate_extra_rows": 2168,
+        "duplicate_groups": 2168,
+        "maximum_group_rows": 2,
+        "dev_rows_repeating_train_pair": 630,
+        "dev_unique_pairs_repeating_train_pair": 630,
+        "conflicting_label_pair_groups": 0,
+        "rows_in_conflicting_label_groups": 0,
+        "conflicting_pair_hashes": []
+      },
+      "unordered_pair_duplicates": {
+        "by_source": {
+          "train": {
+            "rows": 27643,
+            "unique_pairs": 26187,
+            "duplicate_extra_rows": 1456
+          },
+          "dev": {
+            "rows": 5993,
+            "unique_pairs": 5911,
+            "duplicate_extra_rows": 82
+          }
+        },
+        "combined_unique_pairs": 31468,
+        "combined_duplicate_extra_rows": 2168,
+        "duplicate_groups": 2168,
+        "maximum_group_rows": 2,
+        "dev_rows_repeating_train_pair": 630,
+        "dev_unique_pairs_repeating_train_pair": 630,
+        "conflicting_label_pair_groups": 0,
+        "rows_in_conflicting_label_groups": 0,
+        "conflicting_pair_hashes": []
+      },
+      "dev_document_reuse": {
+        "neither_document_in_train": 3254,
+        "one_document_in_train": 1658,
+        "both_documents_in_train": 1081
+      },
+      "empty_document_occurrences": 0,
+      "rows_with_at_least_one_empty_document": 0,
+      "self_pairs": {
+        "rows": 3,
+        "different_author_label_rows": 1
+      },
+      "document_components": {
+        "unique_documents": 52963,
+        "connected_components": 21499,
+        "largest_component_rows": 141,
+        "largest_component_row_fraction": 0.004191937210132002,
+        "component_row_count_histogram": {
+          "1": 16475,
+          "2": 2998,
+          "3": 918,
+          "4": 393,
+          "5": 205,
+          "6": 130,
+          "7": 92,
+          "8": 62,
+          "9": 47,
+          "10": 39,
+          "11": 19,
+          "12": 13,
+          "13": 11,
+          "14": 11,
+          "15": 11,
+          "16": 6,
+          "17": 10,
+          "18": 11,
+          "19": 4,
+          "20": 3,
+          "21": 3,
+          "22": 4,
+          "23": 3,
+          "24": 1,
+          "25": 3,
+          "26": 3,
+          "27": 2,
+          "28": 1,
+          "30": 3,
+          "31": 1,
+          "33": 1,
+          "35": 1,
+          "37": 1,
+          "40": 1,
+          "42": 1,
+          "43": 1,
+          "46": 1,
+          "47": 1,
+          "48": 2,
+          "56": 1,
+          "60": 1,
+          "70": 1,
+          "83": 1,
+          "97": 1,
+          "128": 1,
+          "141": 1
+        },
+        "largest_components": [
+          {
+            "rows": 141,
+            "documents": 135,
+            "labels": {
+              "0": 58,
+              "1": 83
+            }
+          },
+          {
+            "rows": 128,
+            "documents": 118,
+            "labels": {
+              "0": 55,
+              "1": 73
+            }
+          },
+          {
+            "rows": 97,
+            "documents": 91,
+            "labels": {
+              "0": 50,
+              "1": 47
+            }
+          },
+          {
+            "rows": 83,
+            "documents": 78,
+            "labels": {
+              "0": 37,
+              "1": 46
+            }
+          },
+          {
+            "rows": 70,
+            "documents": 63,
+            "labels": {
+              "0": 33,
+              "1": 37
+            }
+          },
+          {
+            "rows": 60,
+            "documents": 56,
+            "labels": {
+              "0": 29,
+              "1": 31
+            }
+          },
+          {
+            "rows": 56,
+            "documents": 48,
+            "labels": {
+              "0": 27,
+              "1": 29
+            }
+          },
+          {
+            "rows": 48,
+            "documents": 47,
+            "labels": {
+              "0": 27,
+              "1": 21
+            }
+          },
+          {
+            "rows": 48,
+            "documents": 47,
+            "labels": {
+              "0": 24,
+              "1": 24
+            }
+          },
+          {
+            "rows": 47,
+            "documents": 48,
+            "labels": {
+              "0": 27,
+              "1": 20
+            }
+          }
+        ]
+      }
+    },
+    "legacy_stylometric": {
+      "normalization": "legacy_stylometric",
+      "ordered_pair_duplicates": {
+        "by_source": {
+          "train": {
+            "rows": 27643,
+            "unique_pairs": 26187,
+            "duplicate_extra_rows": 1456
+          },
+          "dev": {
+            "rows": 5993,
+            "unique_pairs": 5911,
+            "duplicate_extra_rows": 82
+          }
+        },
+        "combined_unique_pairs": 31468,
+        "combined_duplicate_extra_rows": 2168,
+        "duplicate_groups": 2168,
+        "maximum_group_rows": 2,
+        "dev_rows_repeating_train_pair": 630,
+        "dev_unique_pairs_repeating_train_pair": 630,
+        "conflicting_label_pair_groups": 0,
+        "rows_in_conflicting_label_groups": 0,
+        "conflicting_pair_hashes": []
+      },
+      "unordered_pair_duplicates": {
+        "by_source": {
+          "train": {
+            "rows": 27643,
+            "unique_pairs": 26187,
+            "duplicate_extra_rows": 1456
+          },
+          "dev": {
+            "rows": 5993,
+            "unique_pairs": 5911,
+            "duplicate_extra_rows": 82
+          }
+        },
+        "combined_unique_pairs": 31468,
+        "combined_duplicate_extra_rows": 2168,
+        "duplicate_groups": 2168,
+        "maximum_group_rows": 2,
+        "dev_rows_repeating_train_pair": 630,
+        "dev_unique_pairs_repeating_train_pair": 630,
+        "conflicting_label_pair_groups": 0,
+        "rows_in_conflicting_label_groups": 0,
+        "conflicting_pair_hashes": []
+      },
+      "dev_document_reuse": {
+        "neither_document_in_train": 3241,
+        "one_document_in_train": 1666,
+        "both_documents_in_train": 1086
+      },
+      "empty_document_occurrences": 87,
+      "rows_with_at_least_one_empty_document": 85,
+      "self_pairs": {
+        "rows": 5,
+        "different_author_label_rows": 1
+      },
+      "document_components": {
+        "unique_documents": 52819,
+        "connected_components": 21357,
+        "largest_component_rows": 412,
+        "largest_component_row_fraction": 0.012248781067903437,
+        "component_row_count_histogram": {
+          "1": 16389,
+          "2": 2974,
+          "3": 908,
+          "4": 380,
+          "5": 204,
+          "6": 128,
+          "7": 89,
+          "8": 62,
+          "9": 49,
+          "10": 37,
+          "11": 22,
+          "12": 11,
+          "13": 11,
+          "14": 12,
+          "15": 10,
+          "16": 5,
+          "17": 10,
+          "18": 10,
+          "19": 4,
+          "20": 3,
+          "21": 4,
+          "22": 5,
+          "23": 3,
+          "24": 2,
+          "25": 2,
+          "26": 2,
+          "27": 3,
+          "30": 3,
+          "31": 1,
+          "33": 1,
+          "35": 1,
+          "36": 1,
+          "40": 1,
+          "43": 1,
+          "45": 1,
+          "47": 1,
+          "48": 1,
+          "56": 1,
+          "60": 1,
+          "70": 1,
+          "83": 1,
+          "313": 1,
+          "412": 1
+        },
+        "largest_components": [
+          {
+            "rows": 412,
+            "documents": 384,
+            "labels": {
+              "0": 186,
+              "1": 226
+            }
+          },
+          {
+            "rows": 313,
+            "documents": 295,
+            "labels": {
+              "0": 137,
+              "1": 176
+            }
+          },
+          {
+            "rows": 83,
+            "documents": 78,
+            "labels": {
+              "0": 37,
+              "1": 46
+            }
+          },
+          {
+            "rows": 70,
+            "documents": 63,
+            "labels": {
+              "0": 33,
+              "1": 37
+            }
+          },
+          {
+            "rows": 60,
+            "documents": 56,
+            "labels": {
+              "0": 29,
+              "1": 31
+            }
+          },
+          {
+            "rows": 56,
+            "documents": 48,
+            "labels": {
+              "0": 27,
+              "1": 29
+            }
+          },
+          {
+            "rows": 48,
+            "documents": 47,
+            "labels": {
+              "0": 27,
+              "1": 21
+            }
+          },
+          {
+            "rows": 47,
+            "documents": 48,
+            "labels": {
+              "0": 27,
+              "1": 20
+            }
+          },
+          {
+            "rows": 45,
+            "documents": 44,
+            "labels": {
+              "0": 22,
+              "1": 23
+            }
+          },
+          {
+            "rows": 43,
+            "documents": 41,
+            "labels": {
+              "0": 22,
+              "1": 21
+            }
+          }
+        ]
+      }
+    },
+    "legacy_roberta": {
+      "normalization": "legacy_roberta",
+      "ordered_pair_duplicates": {
+        "by_source": {
+          "train": {
+            "rows": 27643,
+            "unique_pairs": 26187,
+            "duplicate_extra_rows": 1456
+          },
+          "dev": {
+            "rows": 5993,
+            "unique_pairs": 5911,
+            "duplicate_extra_rows": 82
+          }
+        },
+        "combined_unique_pairs": 31468,
+        "combined_duplicate_extra_rows": 2168,
+        "duplicate_groups": 2168,
+        "maximum_group_rows": 2,
+        "dev_rows_repeating_train_pair": 630,
+        "dev_unique_pairs_repeating_train_pair": 630,
+        "conflicting_label_pair_groups": 0,
+        "rows_in_conflicting_label_groups": 0,
+        "conflicting_pair_hashes": []
+      },
+      "unordered_pair_duplicates": {
+        "by_source": {
+          "train": {
+            "rows": 27643,
+            "unique_pairs": 26187,
+            "duplicate_extra_rows": 1456
+          },
+          "dev": {
+            "rows": 5993,
+            "unique_pairs": 5911,
+            "duplicate_extra_rows": 82
+          }
+        },
+        "combined_unique_pairs": 31468,
+        "combined_duplicate_extra_rows": 2168,
+        "duplicate_groups": 2168,
+        "maximum_group_rows": 2,
+        "dev_rows_repeating_train_pair": 630,
+        "dev_unique_pairs_repeating_train_pair": 630,
+        "conflicting_label_pair_groups": 0,
+        "rows_in_conflicting_label_groups": 0,
+        "conflicting_pair_hashes": []
+      },
+      "dev_document_reuse": {
+        "neither_document_in_train": 3252,
+        "one_document_in_train": 1658,
+        "both_documents_in_train": 1083
+      },
+      "empty_document_occurrences": 80,
+      "rows_with_at_least_one_empty_document": 80,
+      "self_pairs": {
+        "rows": 3,
+        "different_author_label_rows": 1
+      },
+      "document_components": {
+        "unique_documents": 52905,
+        "connected_components": 21442,
+        "largest_component_rows": 412,
+        "largest_component_row_fraction": 0.012248781067903437,
+        "component_row_count_histogram": {
+          "1": 16450,
+          "2": 2992,
+          "3": 914,
+          "4": 388,
+          "5": 201,
+          "6": 129,
+          "7": 92,
+          "8": 61,
+          "9": 46,
+          "10": 37,
+          "11": 19,
+          "12": 12,
+          "13": 11,
+          "14": 11,
+          "15": 11,
+          "16": 5,
+          "17": 10,
+          "18": 10,
+          "19": 4,
+          "20": 3,
+          "21": 2,
+          "22": 5,
+          "23": 3,
+          "24": 1,
+          "25": 3,
+          "26": 2,
+          "27": 2,
+          "28": 1,
+          "30": 3,
+          "31": 1,
+          "33": 1,
+          "35": 1,
+          "40": 1,
+          "42": 1,
+          "43": 1,
+          "47": 1,
+          "48": 1,
+          "56": 1,
+          "60": 1,
+          "70": 1,
+          "83": 1,
+          "288": 1,
+          "412": 1
+        },
+        "largest_components": [
+          {
+            "rows": 412,
+            "documents": 384,
+            "labels": {
+              "0": 186,
+              "1": 226
+            }
+          },
+          {
+            "rows": 288,
+            "documents": 271,
+            "labels": {
+              "0": 129,
+              "1": 159
+            }
+          },
+          {
+            "rows": 83,
+            "documents": 78,
+            "labels": {
+              "0": 37,
+              "1": 46
+            }
+          },
+          {
+            "rows": 70,
+            "documents": 63,
+            "labels": {
+              "0": 33,
+              "1": 37
+            }
+          },
+          {
+            "rows": 60,
+            "documents": 56,
+            "labels": {
+              "0": 29,
+              "1": 31
+            }
+          },
+          {
+            "rows": 56,
+            "documents": 48,
+            "labels": {
+              "0": 27,
+              "1": 29
+            }
+          },
+          {
+            "rows": 48,
+            "documents": 47,
+            "labels": {
+              "0": 27,
+              "1": 21
+            }
+          },
+          {
+            "rows": 47,
+            "documents": 48,
+            "labels": {
+              "0": 27,
+              "1": 20
+            }
+          },
+          {
+            "rows": 43,
+            "documents": 41,
+            "labels": {
+              "0": 22,
+              "1": 21
+            }
+          },
+          {
+            "rows": 42,
+            "documents": 41,
+            "labels": {
+              "0": 22,
+              "1": 20
+            }
+          }
+        ]
+      }
+    }
+  },
+  "combined_document_identity": {
+    "identity_rule": "Transitive document equivalence under exact, NFC-whitespace and both unchanged legacy preprocessing functions; every labeled pair connects both documents regardless of label.",
+    "unique_raw_documents_before_pair_filtering": 52862,
+    "normalized_document_equivalence_groups_before_pair_filtering": 52764,
+    "pair_components_after_quality_filtering": {
+      "unique_documents": 52764,
+      "connected_components": 21381,
+      "largest_component_rows": 385,
+      "largest_component_row_fraction": 0.012265834076717217,
+      "component_row_count_histogram": {
+        "1": 17612,
+        "2": 2042,
+        "3": 762,
+        "4": 330,
+        "5": 192,
+        "6": 111,
+        "7": 83,
+        "8": 55,
+        "9": 36,
+        "10": 30,
+        "11": 17,
+        "12": 17,
+        "13": 13,
+        "14": 6,
+        "15": 11,
+        "16": 10,
+        "17": 5,
+        "18": 8,
+        "19": 4,
+        "20": 3,
+        "21": 3,
+        "22": 2,
+        "23": 3,
+        "24": 3,
+        "25": 1,
+        "26": 3,
+        "28": 2,
+        "30": 1,
+        "31": 2,
+        "32": 1,
+        "33": 1,
+        "34": 1,
+        "37": 1,
+        "40": 1,
+        "43": 1,
+        "44": 1,
+        "46": 1,
+        "47": 2,
+        "55": 1,
+        "62": 1,
+        "77": 1,
+        "385": 1
+      },
+      "largest_components": [
+        {
+          "rows": 385,
+          "documents": 384,
+          "labels": {
+            "0": 174,
+            "1": 211
+          }
+        },
+        {
+          "rows": 77,
+          "documents": 78,
+          "labels": {
+            "0": 34,
+            "1": 43
+          }
+        },
+        {
+          "rows": 62,
+          "documents": 63,
+          "labels": {
+            "0": 30,
+            "1": 32
+          }
+        },
+        {
+          "rows": 55,
+          "documents": 56,
+          "labels": {
+            "0": 27,
+            "1": 28
+          }
+        },
+        {
+          "rows": 47,
+          "documents": 48,
+          "labels": {
+            "0": 27,
+            "1": 20
+          }
+        },
+        {
+          "rows": 47,
+          "documents": 48,
+          "labels": {
+            "0": 22,
+            "1": 25
+          }
+        },
+        {
+          "rows": 46,
+          "documents": 47,
+          "labels": {
+            "0": 27,
+            "1": 19
+          }
+        },
+        {
+          "rows": 44,
+          "documents": 45,
+          "labels": {
+            "0": 22,
+            "1": 22
+          }
+        },
+        {
+          "rows": 43,
+          "documents": 44,
+          "labels": {
+            "0": 20,
+            "1": 23
+          }
+        },
+        {
+          "rows": 40,
+          "documents": 41,
+          "labels": {
+            "0": 20,
+            "1": 20
+          }
+        }
+      ]
+    },
+    "unordered_pair_duplicates_before_quality_filtering": {
+      "by_source": {
+        "train": {
+          "rows": 27569,
+          "unique_pairs": 26117,
+          "duplicate_extra_rows": 1452
+        },
+        "dev": {
+          "rows": 5981,
+          "unique_pairs": 5900,
+          "duplicate_extra_rows": 81
+        }
+      },
+      "combined_unique_pairs": 31388,
+      "combined_duplicate_extra_rows": 2162,
+      "duplicate_groups": 2162,
+      "maximum_group_rows": 2,
+      "dev_rows_repeating_train_pair": 629,
+      "dev_unique_pairs_repeating_train_pair": 629,
+      "conflicting_label_pair_groups": 0,
+      "rows_in_conflicting_label_groups": 0,
+      "conflicting_pair_hashes": []
+    },
+    "unordered_pair_duplicates_after_quality_filtering": {
+      "by_source": {
+        "train": {
+          "rows": 25488,
+          "unique_pairs": 25488,
+          "duplicate_extra_rows": 0
+        },
+        "dev": {
+          "rows": 5900,
+          "unique_pairs": 5900,
+          "duplicate_extra_rows": 0
+        }
+      },
+      "combined_unique_pairs": 31388,
+      "combined_duplicate_extra_rows": 0,
+      "duplicate_groups": 0,
+      "maximum_group_rows": 1,
+      "dev_rows_repeating_train_pair": 0,
+      "dev_unique_pairs_repeating_train_pair": 0,
+      "conflicting_label_pair_groups": 0,
+      "rows_in_conflicting_label_groups": 0,
+      "conflicting_pair_hashes": []
+    },
+    "quarantined_conflicting_pair_groups": [],
+    "retained_conflicting_pair_groups": []
+  },
+  "candidate_split": {
+    "seed": 378,
+    "counts": {
+      "train": {
+        "rows": 21972,
+        "labels": {
+          "0": 11039,
+          "1": 10933
+        },
+        "positive_fraction": 0.4975878390679046,
+        "target_rows": 21971.6,
+        "unique_consistent_unordered_pairs": 21972,
+        "unique_consistent_pair_labels": {
+          "0": 11039,
+          "1": 10933
+        },
+        "connected_components": 14966
+      },
+      "selection": {
+        "rows": 3139,
+        "labels": {
+          "0": 1577,
+          "1": 1562
+        },
+        "positive_fraction": 0.4976107040458745,
+        "target_rows": 3138.8,
+        "unique_consistent_unordered_pairs": 3139,
+        "unique_consistent_pair_labels": {
+          "0": 1577,
+          "1": 1562
+        },
+        "connected_components": 2139
+      },
+      "calibration": {
+        "rows": 1569,
+        "labels": {
+          "0": 788,
+          "1": 781
+        },
+        "positive_fraction": 0.49776927979604846,
+        "target_rows": 1569.4,
+        "unique_consistent_unordered_pairs": 1569,
+        "unique_consistent_pair_labels": {
+          "0": 788,
+          "1": 781
+        },
+        "connected_components": 1069
+      },
+      "locked_holdout": {
+        "rows": 4708,
+        "labels": {
+          "0": 2365,
+          "1": 2343
+        },
+        "positive_fraction": 0.4976635514018692,
+        "target_rows": 4708.2,
+        "unique_consistent_unordered_pairs": 4708,
+        "unique_consistent_pair_labels": {
+          "0": 2365,
+          "1": 2343
+        },
+        "connected_components": 3207
+      }
+    },
+    "cross_split_document_overlap": {
+      "exact": 0,
+      "nfc_whitespace": 0,
+      "legacy_stylometric": 0,
+      "legacy_roberta": 0
+    },
+    "manifest_sha256": "0cd1d2f8e59b601f62fc650d15dab68efaf57aef97cffefb60a048e4877cc807",
+    "topology_feasible": true,
+    "retained_label_conflicts": 0
+  },
+  "quality_filtering_candidate": {
+    "original_rows": 33636,
+    "retained_rows": 31388,
+    "empty_document_rows": 86,
+    "conflicting_label_rows": 0,
+    "consistent_duplicate_extra_rows": 2162,
+    "labels_modified": 0,
+    "exclusions_manifest_key": "excluded_rows",
+    "not_yet_applied_to_data_or_training": true
+  },
+  "limitations": [
+    "Document-disjoint is not verified author-disjoint or domain-disjoint without author/domain identifiers.",
+    "Train and dev were historically used; a new held-out role does not establish historically unseen data.",
+    "No near-duplicate/paraphrase or tokenizer-truncation equivalence claim follows from exact normalization hashes.",
+    "Selection10% chooses model settings; calibration5% fits probability temperature, threshold and abstention; locked_holdout15% remains excluded from model performance access until freeze."
+  ],
+  "test_or_live_files_read": false,
+  "training_or_inference_performed": false,
+  "raw_text_in_outputs": false
+}

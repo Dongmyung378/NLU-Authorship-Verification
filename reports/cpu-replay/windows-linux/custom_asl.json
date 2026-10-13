@@ -1,0 +1,37 @@
+{
+  "status": "failed",
+  "count": 4708,
+  "reference_type": "windows_cpu",
+  "evaluated_platform": "Linux CPU",
+  "reference_platform": "Windows CPU",
+  "record_ids_match_manifest_exactly": true,
+  "exact_row_mismatch_counts": {
+    "id": 0,
+    "label": 0,
+    "group_id": 0,
+    "split": 0,
+    "prediction": 0,
+    "accepted": 0,
+    "inference_method": 0,
+    "minimum_cleaned_words": 0,
+    "length_bin": 0
+  },
+  "row_mismatch_examples": [],
+  "metric_or_binding_differences": [],
+  "probability_absolute_tolerance": 1e-05,
+  "maximum_absolute_probability_difference": {
+    "raw_probability_ab": 0.00011769207354911382,
+    "raw_probability_ba": 9.876406977693541e-06,
+    "raw_probability_symmetric": 5.564712167954733e-05,
+    "raw_probability_selected": 5.564712167954733e-05,
+    "calibrated_probability": 7.042289285763559e-05,
+    "calibrated_probability_swapped_selected_policy": 7.042289285763559e-05,
+    "confidence": 7.042289285763559e-05
+  },
+  "evaluated_predictions_sha256": "c96a592ee1ed8fd1ce4d2fd09fa310de4e9a335c3e817e7656f120d5038c14b8",
+  "reference_predictions_sha256": "34e573d1326bd99af6ab3c1bc9d0b822ee61df0de758c5db5d8a7a9a47c66742",
+  "prediction_files_byte_identical": false,
+  "numeric_metric_absolute_tolerance": 1e-06,
+  "strict_discrete_decisions_required": true,
+  "near_frozen_threshold_gpu_cpu_disagreement_is_reported_not_retuned": false
+}

@@ -1,0 +1,16 @@
+[build-system]
+requires = ['setuptools==75.8.0', 'wheel==0.45.1']
+build-backend = 'setuptools.build_meta'
+
+[project]
+name = 'nlu-authorship-verification'
+version = '2.0.0'
+description = 'Document-disjoint authorship verification and calibrated CPU inference'
+readme = 'README.md'
+requires-python = '>=3.12,<3.13'
+
+[project.scripts]
+verify-authorship = 'nlu_authorship.cli:main'
+
+[tool.setuptools.packages.find]
+include = ['nlu_authorship*', 'scripts*']

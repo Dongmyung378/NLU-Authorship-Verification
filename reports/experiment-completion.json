@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "status": "completed",
+  "release_completed": true,
+  "calibration_evaluated": true,
+  "locked_holdout_evaluated": true,
+  "original_completion_report_sha256": "d64c7ec7cd8692078882b6e095758113ca4c5e8264fe63883aa2604d9915773f",
+  "release_summary_sha256": "985e961ccfea41fa03fccd6b6cb436d777c9b20fcafd1c8b8134ce0b2729479c",
+  "evaluation_freeze_sha256": "222f550a39d9e419c730a269439060106a90da826b7595fd6a4adef1b144835f",
+  "freeze_sha256": "e8fc94ee17d7ea575ecf8002e3d104d1ec70600b68cc59239f1189b0b955f924",
+  "model_inference_performed_by_curator": false,
+  "parameters_refitted_by_curator": false,
+  "decisions_changed_by_curator": false,
+  "public_model_paths_omitted": true
+}

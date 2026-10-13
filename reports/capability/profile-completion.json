@@ -1,0 +1,122 @@
+{
+  "schema_version": 1,
+  "status": "profile_completed",
+  "profile_only": true,
+  "transformer": {
+    "schema_version": 1,
+    "plan": {
+      "schema_version": 1,
+      "model_id": "FacebookAI/roberta-large",
+      "revision": "722cf37b1afa9454edce342e7895e588b6ff1d59",
+      "pretrained_sha256": "047c85f0b96269cd62e6f732644f067004eebd95af5b5d35965ae2528f13bf38",
+      "seed": 378,
+      "epochs": 3,
+      "max_length": 512,
+      "microbatch": 2,
+      "effective_batch": 32,
+      "learning_rate": 5e-06,
+      "warmup_ratio": 0.1,
+      "weight_decay": 0.01,
+      "max_grad_norm": 1.0,
+      "profile_optimizer_steps": 40,
+      "training_budget_seconds": 36000,
+      "loss_methods": [
+        "ce",
+        "custom_asl"
+      ],
+      "gradient_checkpointing": true,
+      "selection_metric": "macro_f1_ab_threshold_0.5",
+      "swap_policy": "sha256(seed:epoch:pair_id) first byte low bit; 1 means swap"
+    },
+    "plan_sha256": "8d562f76210667ca869d2490749b71d5e7aa2fe96d0774e9e6fd7adaa83ef57c",
+    "manifest_file_sha256": "bdaef137cf8f3ec48698352af1130dbbc9cb9d0e7569eb208dfa52c91ddcfdb3",
+    "source_snapshot": {
+      "nlu_authorship/__init__.py": "2bad8cb8c8ca252223faa29a713c97d1f88f4e5e9599fe0e63ca7435f207eeb8",
+      "nlu_authorship/__main__.py": "bd045ddd5242d002f692dac452be9afba38deef5cde541a5fc074bfef5987b91",
+      "nlu_authorship/calibration.py": "f0bc838911c29aeaa71335aa6cf5f15d34f77cb571909587e95abdec22eb37e7",
+      "nlu_authorship/cli.py": "f97e70f4f98be8708adf1bff6efdc3877fb7e55679ca273abf26451d10441a9d",
+      "nlu_authorship/data.py": "384cfb0b8311c53cd0a2d70a22c8abb134fd5981e917e94718c4533a78671b57",
+      "nlu_authorship/evaluation.py": "189032d14ed26ee9c520745bcdeab8e759a28a17819c7ced4ec603442a4230b0",
+      "nlu_authorship/losses.py": "54efd41a4cf3ac972d7564854b0d0ffb237026107d00943f08002bd9251c454e",
+      "nlu_authorship/metrics.py": "0d156ab4c3172e02a77431c1b23ccb892ed354b44a4f37085e92a7b5eae42045",
+      "nlu_authorship/models.py": "a3783baca35b27c72c403e2e69599842028cc5206ae39cf1fe255672116eae83",
+      "nlu_authorship/normalization.py": "a9426338a4c4335884e552085b7278c53bc94043b44756ed768cd8c89cdd6d39",
+      "nlu_authorship/release.py": "fb814e063068c79dd26603ee83da37e627ced19a65bf958df444721d08f23fbb",
+      "nlu_authorship/runtime.py": "763b733f879046c9186b6d6c1c8cb1a7e7c9ad278a23af282b5478bdfda1723c",
+      "nlu_authorship/stylometric.py": "4d5c2cd812bfd6923e411d9bd4e876816b4129e7fd8f500be9cb51273d1b1545",
+      "nlu_authorship/training.py": "32c61c3519d156d4f0669d9eda6343e146f09293bd4b2eda4c46f2f54d939996",
+      "requirements-inference.txt": "9cbc532b47d8066e6d350214e1cc4241f875801a5b3d01f8dd80dc70ed082aab",
+      "requirements-runtime.txt": "231318cd62c1bd3b9cc235c3e6e0c99d3fc1d7e645b1e2756424f95854ec42d4",
+      "requirements-training.txt": "3e21eb28d5f8c8a32e250b20c18d011fd5de1b4f933b6f4acd39c23ed678dc91",
+      "requirements.txt": "6d10e37e342472b5ba0a5d32bece2dc95fb7e17476a3d66c9d5851a673355560",
+      "pyproject.toml": "f6d1460702eb43124a2bb66642bc35bea865abc140f84a08d1c9424a345e18a2"
+    },
+    "pretrained_inventory": {
+      "model.safetensors": {
+        "bytes": 1421700479,
+        "sha256": "047c85f0b96269cd62e6f732644f067004eebd95af5b5d35965ae2528f13bf38"
+      },
+      "config.json": {
+        "bytes": 482,
+        "sha256": "82ba49810e6441735e696033ac2512ee09da555507b2917ac3865b202d592cc3"
+      },
+      "tokenizer.json": {
+        "bytes": 1355863,
+        "sha256": "847bbeab6174d66a88898f729d52fa8d355fafe1bea101cf960dd404581df70e"
+      },
+      "tokenizer_config.json": {
+        "bytes": 25,
+        "sha256": "994f46754c5bf4014f1aa92d34b1374319c3a6b3f702105cd5b742beaecd18ce"
+      },
+      "vocab.json": {
+        "bytes": 898823,
+        "sha256": "9e7f63c2d15d666b52e21d250d2e513b87c9b713cfa6987a82ed89e5e6e50655"
+      },
+      "merges.txt": {
+        "bytes": 456318,
+        "sha256": "1ce1664773c50f3e0cc8842619a93edc4624525b728b188a9e0be33b7726adc5"
+      }
+    },
+    "profile": {
+      "microbatch": 2,
+      "effective_batch": 32,
+      "optimizer_steps": 40,
+      "median_optimizer_step_seconds": 5.136252051999918,
+      "projected_training_seconds_including_30pct_margin": 27523.120245846763,
+      "budget_seconds": 36000,
+      "peak_allocated_gpu_bytes": 6539184640,
+      "peak_reserved_gpu_bytes": 6836715520,
+      "gpu_name": "Tesla T4",
+      "visible_gpu_count": 2,
+      "gpu_total_bytes": 15636037632,
+      "successful_optimizer_updates": 39,
+      "parameter_count": 355361794,
+      "within_training_budget": true,
+      "initial_state_sha256": "ffe7ba5e9107a846e6c9303dc914893535a441412c12fee323111b17a754acd3",
+      "overflow_skipped_steps": 1,
+      "oom_attempts": [],
+      "profile_weights_discarded": true
+    },
+    "train_count": 21972,
+    "selection_count": 3139,
+    "calibration_evaluated": false,
+    "locked_holdout_evaluated": false,
+    "seed_count": 1,
+    "epoch_schedule_sha256": [
+      "f0d9a1de8d0952d7be1ad765a3e940f4f3e7bcdf1be5eabc360216eef2349053",
+      "b230f67979ce4c6828c3f33badc422bd9d9846b464fe7e2579d57c4ebd2f23c7",
+      "6a494a78a2fd4fce0c090e2be6caadc060b48aab8a3aaed26631e46cf0875e9b"
+    ],
+    "methods": {},
+    "status": "profile_completed",
+    "profile_only": true,
+    "profile_weights_discarded": true,
+    "measured_models_trained": false,
+    "elapsed_profile_seconds": 215.92597900299995
+  },
+  "profile_weights_discarded": true,
+  "measured_models_trained": false,
+  "locked_holdout_evaluated": false,
+  "calibration_evaluated": false,
+  "seconds": 355.11042451200007
+}

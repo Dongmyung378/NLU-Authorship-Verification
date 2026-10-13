@@ -1,0 +1,241 @@
+{
+  "schema_version": 1,
+  "status": "completed",
+  "input_only": true,
+  "tokenizer_repository": "FacebookAI/roberta-large",
+  "tokenizer_revision": "722cf37b1afa9454edce342e7895e588b6ff1d59",
+  "tokenizer_class": "RobertaTokenizer",
+  "tokenizer_assets": {
+    "config.json": {
+      "bytes": 482,
+      "sha256": "82ba49810e6441735e696033ac2512ee09da555507b2917ac3865b202d592cc3"
+    },
+    "merges.txt": {
+      "bytes": 456318,
+      "sha256": "1ce1664773c50f3e0cc8842619a93edc4624525b728b188a9e0be33b7726adc5"
+    },
+    "tokenizer.json": {
+      "bytes": 1355863,
+      "sha256": "847bbeab6174d66a88898f729d52fa8d355fafe1bea101cf960dd404581df70e"
+    },
+    "tokenizer_config.json": {
+      "bytes": 25,
+      "sha256": "994f46754c5bf4014f1aa92d34b1374319c3a6b3f702105cd5b742beaecd18ce"
+    },
+    "vocab.json": {
+      "bytes": 898823,
+      "sha256": "9e7f63c2d15d666b52e21d250d2e513b87c9b713cfa6987a82ed89e5e6e50655"
+    }
+  },
+  "model_max_length": 512,
+  "pair_special_token_count": 4,
+  "pair_truncation_policy_in_frozen_runtime": "longest_first",
+  "audit_tokenization_truncation": false,
+  "calculation": "Actual full pair tokenization; independently verified as token_count(cleanedA,no_specials)+token_count(cleanedB,no_specials)+num_special_tokens_to_add(pair=True).",
+  "actual_pair_formula_checks": 31388,
+  "unique_executed_cleaned_passages": 52849,
+  "normalization": "Existing normalize_roberta_text: NFC guard followed by the declared RoBERTa cleanup.",
+  "ordered_cleaned_input_identity_sha256": "e323c3b1b3693d6e0ebf408592d27c4e6a97e222c3a61a317c4680813bad6f7e",
+  "manifest_sha256": "4c110a05134a75bc16fb6b82b098bb5559f59c18d40ccba94f09d2cf91452cae",
+  "manifest_file_sha256": "bdaef137cf8f3ec48698352af1130dbbc9cb9d0e7569eb208dfa52c91ddcfdb3",
+  "source_csvs": {
+    "train": {
+      "filename": "train.csv",
+      "bytes": 32293474,
+      "sha256": "f3967e0d050867c7284729b9a20ad0cdd0dc6d7ee148ba7c6854dc265aeb581a",
+      "rows": 27643
+    },
+    "dev": {
+      "filename": "dev.csv",
+      "bytes": 6989758,
+      "sha256": "44f5b411fec2508ce8f75ad241c778d98f677a6e3423ded034c24c055b78806a",
+      "rows": 5993
+    }
+  },
+  "source_inventory": {
+    "configs/experiment-plan.json": "7e614b6320b922a036939bc262ef1fc2b4a1108b353e8ca430ece784ca39ea0d",
+    "launch-nlu.bat": "384a75d9ab39b95d88cff3b199759a0eeb502b7f85b8b42edc8a46d89d21bc76",
+    "launch-nlu.sh": "c8f0d655b53ccd841c583384d7e30194ed3880052a3e27f059e4b4174ac9938d",
+    "nlu_authorship/__init__.py": "2bad8cb8c8ca252223faa29a713c97d1f88f4e5e9599fe0e63ca7435f207eeb8",
+    "nlu_authorship/__main__.py": "bd045ddd5242d002f692dac452be9afba38deef5cde541a5fc074bfef5987b91",
+    "nlu_authorship/calibration.py": "f0bc838911c29aeaa71335aa6cf5f15d34f77cb571909587e95abdec22eb37e7",
+    "nlu_authorship/cli.py": "f97e70f4f98be8708adf1bff6efdc3877fb7e55679ca273abf26451d10441a9d",
+    "nlu_authorship/data.py": "384cfb0b8311c53cd0a2d70a22c8abb134fd5981e917e94718c4533a78671b57",
+    "nlu_authorship/evaluation.py": "189032d14ed26ee9c520745bcdeab8e759a28a17819c7ced4ec603442a4230b0",
+    "nlu_authorship/losses.py": "54efd41a4cf3ac972d7564854b0d0ffb237026107d00943f08002bd9251c454e",
+    "nlu_authorship/metrics.py": "0d156ab4c3172e02a77431c1b23ccb892ed354b44a4f37085e92a7b5eae42045",
+    "nlu_authorship/models.py": "a3783baca35b27c72c403e2e69599842028cc5206ae39cf1fe255672116eae83",
+    "nlu_authorship/normalization.py": "a9426338a4c4335884e552085b7278c53bc94043b44756ed768cd8c89cdd6d39",
+    "nlu_authorship/release.py": "db6306a74988c22c79dbe2daa3e9aeb0f997f0f6144ad8aae1fa4ff75074f4a0",
+    "nlu_authorship/runtime.py": "1e92e05f0187d4b1e012f5e472cc769e02bef2ea51ae5bb552ede502e6827510",
+    "nlu_authorship/stylometric.py": "c6a617a5ecc20be440d5ef3d1031d8966ac3783713b55050ebd5b2a60501504e",
+    "nlu_authorship/training.py": "9ae5052b80481b79809c835b1b846a02b6b843bbf2a6bea9d2225d793c783a04",
+    "pyproject.toml": "f6d1460702eb43124a2bb66642bc35bea865abc140f84a08d1c9424a345e18a2",
+    "requirements-inference.txt": "9cbc532b47d8066e6d350214e1cc4241f875801a5b3d01f8dd80dc70ed082aab",
+    "requirements-runtime.txt": "231318cd62c1bd3b9cc235c3e6e0c99d3fc1d7e645b1e2756424f95854ec42d4",
+    "requirements-training.txt": "3e21eb28d5f8c8a32e250b20c18d011fd5de1b4f933b6f4acd39c23ed678dc91",
+    "requirements.txt": "6d10e37e342472b5ba0a5d32bece2dc95fb7e17476a3d66c9d5851a673355560",
+    "run.ps1": "ef1ded686d2692d5412d1a68c9614393dadb1eb778ea48107e0e37120fa2f31b",
+    "scripts/__init__.py": "e533c40041a9ee3e4d15b00041f32d5b0d9f123341fd9d0c04f5ca5a953631a8",
+    "scripts/bootstrap_results.py": "d890d10de2651a667f5410c1cc731c031e2e6ac78bb1eee736d7bdbdb7949736",
+    "scripts/bootstrap_windows.ps1": "9cd59f034d413d4d7fc64213764dda402498d56980481b7bc0cdcf394f27ec0c",
+    "scripts/download_artifacts.py": "2317b7fadd8e9a130459c9b97231cce86a66c77f0a72043a936e1a8d69634fc7",
+    "scripts/launch_nlu.py": "36b7619e9f6517e59040244ed2546ddbcd9084cd45ff42c26467f010c354d449",
+    "scripts/package_kaggle.py": "5c8978503649c432add3ec847936a37d86c9af772264d2075122ece9636bdba5",
+    "scripts/plot_results.py": "0b272f425ce06ac658e13eab6e246d74fd1c4640326fa44d8d96a691a193fd9d",
+    "scripts/run_kaggle_experiment.py": "3f42c8c600de2fc69b3980ed6b20607eed8f996ca16c50dc25451733b5e0ebb7",
+    "scripts/run_parallel_transformers.py": "8f49d9be4ba2ff6dbf1e3f621099dcf09349c5c31091885c82976fa126d35603",
+    "scripts/run_single_transformer.py": "22fea82952f142f4b1aec2bf9f38b4e580ff021975de0cdedf322b8cff1f04f1",
+    "scripts/setup_kaggle_runtime.py": "470562fc49502864e48bd1061d0e63d3f7812326c22c0c3a75041b9f4301004f",
+    "scripts/setup_runtime.py": "bfc9d7217f651b7fc9627160dc94f1cd0bfec76771d04ebeed7db25b6554923d"
+  },
+  "source_inventory_sha256": "64a1ce1b15a5aa2def4211e46803e6e506a92f63b01b5487b149043adf8e978f",
+  "audit_helper_sha256": "c5be59afc370be06afa4b0ddf8fdc4d3cd698fa3fb00f95b75979df247de5e2f",
+  "public_reference_helper": "docs/reference-code/token_length_audit.py",
+  "packages": {
+    "transformers": "5.0.0",
+    "tokenizers": "0.22.2",
+    "numpy": "1.26.4"
+  },
+  "elapsed_seconds": 30.13034769999649,
+  "all_retained_pairs": {
+    "count": 31388,
+    "above_max_length_count": 1292,
+    "truncation_fraction": 0.04116222760290557,
+    "pretruncation_pair_tokens_including_specials": {
+      "minimum": 8,
+      "mean": 275.93366891805783,
+      "percentiles": {
+        "5": 53.0,
+        "25": 182.0,
+        "50": 293.0,
+        "75": 349.0,
+        "90": 414.0,
+        "95": 492.0,
+        "99": 723.130000000001
+      },
+      "maximum": 2112,
+      "percentile_method": "linear"
+    },
+    "minimum_cleaned_word_bin_counts": {
+      "under_50": 13367,
+      "50_to_199": 17981,
+      "200_plus": 40
+    },
+    "minimum_cleaned_word_bin_policy": "Minimum whitespace word count of the two NFC/RoBERTa-cleaned passages, before token truncation."
+  },
+  "by_split": {
+    "train": {
+      "count": 21972,
+      "above_max_length_count": 930,
+      "truncation_fraction": 0.042326597487711635,
+      "pretruncation_pair_tokens_including_specials": {
+        "minimum": 8,
+        "mean": 275.86264336428184,
+        "percentiles": {
+          "5": 52.0,
+          "25": 181.0,
+          "50": 292.0,
+          "75": 349.0,
+          "90": 414.0,
+          "95": 494.0,
+          "99": 742.2900000000009
+        },
+        "maximum": 2112,
+        "percentile_method": "linear"
+      },
+      "minimum_cleaned_word_bin_counts": {
+        "under_50": 9383,
+        "50_to_199": 12561,
+        "200_plus": 28
+      },
+      "minimum_cleaned_word_bin_policy": "Minimum whitespace word count of the two NFC/RoBERTa-cleaned passages, before token truncation."
+    },
+    "selection": {
+      "count": 3139,
+      "above_max_length_count": 106,
+      "truncation_fraction": 0.03376871615164065,
+      "pretruncation_pair_tokens_including_specials": {
+        "minimum": 10,
+        "mean": 272.32685568652437,
+        "percentiles": {
+          "5": 52.0,
+          "25": 181.0,
+          "50": 290.0,
+          "75": 346.0,
+          "90": 406.0,
+          "95": 480.0999999999999,
+          "99": 729.6999999999962
+        },
+        "maximum": 1335,
+        "percentile_method": "linear"
+      },
+      "minimum_cleaned_word_bin_counts": {
+        "under_50": 1343,
+        "50_to_199": 1792,
+        "200_plus": 4
+      },
+      "minimum_cleaned_word_bin_policy": "Minimum whitespace word count of the two NFC/RoBERTa-cleaned passages, before token truncation."
+    },
+    "calibration": {
+      "count": 1569,
+      "above_max_length_count": 59,
+      "truncation_fraction": 0.03760356915232632,
+      "pretruncation_pair_tokens_including_specials": {
+        "minimum": 15,
+        "mean": 272.1905672402804,
+        "percentiles": {
+          "5": 51.0,
+          "25": 173.0,
+          "50": 292.0,
+          "75": 349.0,
+          "90": 406.20000000000005,
+          "95": 491.0,
+          "99": 656.4799999999991
+        },
+        "maximum": 1050,
+        "percentile_method": "linear"
+      },
+      "minimum_cleaned_word_bin_counts": {
+        "under_50": 653,
+        "50_to_199": 913,
+        "200_plus": 3
+      },
+      "minimum_cleaned_word_bin_policy": "Minimum whitespace word count of the two NFC/RoBERTa-cleaned passages, before token truncation."
+    },
+    "locked_holdout": {
+      "count": 4708,
+      "above_max_length_count": 197,
+      "truncation_fraction": 0.04184367034834324,
+      "pretruncation_pair_tokens_including_specials": {
+        "minimum": 11,
+        "mean": 279.91737468139337,
+        "percentiles": {
+          "5": 58.0,
+          "25": 187.0,
+          "50": 296.0,
+          "75": 353.0,
+          "90": 420.0,
+          "95": 492.2999999999993,
+          "99": 676.9300000000003
+        },
+        "maximum": 2001,
+        "percentile_method": "linear"
+      },
+      "minimum_cleaned_word_bin_counts": {
+        "under_50": 1988,
+        "50_to_199": 2715,
+        "200_plus": 5
+      },
+      "minimum_cleaned_word_bin_policy": "Minimum whitespace word count of the two NFC/RoBERTa-cleaned passages, before token truncation."
+    }
+  },
+  "labels_used": false,
+  "label_metrics_computed": false,
+  "model_weights_loaded": false,
+  "model_inference_performed": false,
+  "remote_downloads_performed": false,
+  "source_manifest_tokenizer_unchanged": true,
+  "split_or_configuration_reselected": false,
+  "scope": "Input length and support diagnostics for the already frozen 512-token policy. A length above 512 indicates token truncation under that policy; it does not measure lost meaning, label quality, prediction accuracy or new-author generalization. These diagnostics do not change the active experiment."
+}

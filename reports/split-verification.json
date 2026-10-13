@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "counts": {
+    "train": 21972,
+    "selection": 3139,
+    "calibration": 1569,
+    "locked_holdout": 4708
+  },
+  "class_counts": {
+    "train": {
+      "0": 11039,
+      "1": 10933
+    },
+    "selection": {
+      "0": 1577,
+      "1": 1562
+    },
+    "calibration": {
+      "0": 788,
+      "1": 781
+    },
+    "locked_holdout": {
+      "0": 2365,
+      "1": 2343
+    }
+  },
+  "retained": 31388,
+  "excluded": 2248,
+  "largest_component": 385,
+  "audit_candidate_topology_matches_exactly": true,
+  "manifest_content_sha256": "4c110a05134a75bc16fb6b82b098bb5559f59c18d40ccba94f09d2cf91452cae",
+  "manifest_file_sha256": "bdaef137cf8f3ec48698352af1130dbbc9cb9d0e7569eb208dfa52c91ddcfdb3",
+  "actual_selection_read_count": 3139,
+  "normalization_modes": 6,
+  "training_or_inference_performed": false,
+  "source_csvs": {
+    "train": {
+      "filename": "train.csv",
+      "bytes": 32293474,
+      "sha256": "f3967e0d050867c7284729b9a20ad0cdd0dc6d7ee148ba7c6854dc265aeb581a",
+      "rows": 27643
+    },
+    "dev": {
+      "filename": "dev.csv",
+      "bytes": 6989758,
+      "sha256": "44f5b411fec2508ce8f75ad241c778d98f677a6e3423ded034c24c055b78806a",
+      "rows": 5993
+    }
+  }
+}

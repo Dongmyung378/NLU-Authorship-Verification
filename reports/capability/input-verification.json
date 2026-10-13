@@ -1,0 +1,8 @@
+{
+  "stage": "frozen-input-verified",
+  "input_kind": "expanded",
+  "files": 36,
+  "archive_sha256": "bf943f476239b2997fa2193d558a0dc6c343c8cbcab6c36050ede1289cad509c",
+  "profile_only": true,
+  "copied_inventory_sha256": "b4ba01921225bb164aa6725f0c7490f7ed66f03dc7fc993e48293e9b988f3f5b"
+}

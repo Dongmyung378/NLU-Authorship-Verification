@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "status": "measured",
+  "platform": "Windows CPU",
+  "method": "GetProcessMemoryInfo: PeakWorkingSetSize and PeakPagefileUsage",
+  "peak_resident_working_set_bytes": 1687015424,
+  "peak_process_commit_charge_bytes": 3178934272,
+  "commit_counter_is_not_actual_disk_swapping_measurement": true,
+  "scope": "Whole fresh CLI process, including interpreter, libraries, model and preprocessing.",
+  "resident_scope": "PeakWorkingSetSize: peak resident working set.",
+  "commit_scope": "PeakPagefileUsage: peak process commit charge, not measured disk pagefile traffic.",
+  "memory_evidence_file_sha256": "431c81b6f80c27607a3cc2bced397367fc8b884443b255f7df7c76dc0b08a60b"
+}

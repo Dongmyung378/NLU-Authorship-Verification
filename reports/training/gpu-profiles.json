@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "profiles": {
+    "ce": {
+      "microbatch": 2,
+      "effective_batch": 32,
+      "optimizer_steps": 40,
+      "median_optimizer_step_seconds": 5.014208390000022,
+      "projected_training_seconds_including_30pct_margin": 26869.137078654116,
+      "budget_seconds": 32400,
+      "peak_allocated_gpu_bytes": 6539184640,
+      "peak_reserved_gpu_bytes": 6836715520,
+      "gpu_name": "Tesla T4",
+      "visible_gpu_count": 1,
+      "gpu_total_bytes": 15636037632,
+      "successful_optimizer_updates": 39,
+      "parameter_count": 355361794,
+      "within_training_budget": true,
+      "projected_method_count": 1,
+      "initial_state_sha256": "ffe7ba5e9107a846e6c9303dc914893535a441412c12fee323111b17a754acd3",
+      "overflow_skipped_steps": 1,
+      "oom_attempts": [],
+      "profile_weights_discarded": true
+    },
+    "custom_asl": {
+      "microbatch": 2,
+      "effective_batch": 32,
+      "optimizer_steps": 40,
+      "median_optimizer_step_seconds": 4.908428349000019,
+      "projected_training_seconds_including_30pct_margin": 26302.304150951502,
+      "budget_seconds": 32400,
+      "peak_allocated_gpu_bytes": 6539184640,
+      "peak_reserved_gpu_bytes": 6836715520,
+      "gpu_name": "Tesla T4",
+      "visible_gpu_count": 1,
+      "gpu_total_bytes": 15636037632,
+      "successful_optimizer_updates": 39,
+      "parameter_count": 355361794,
+      "within_training_budget": true,
+      "projected_method_count": 1,
+      "initial_state_sha256": "ffe7ba5e9107a846e6c9303dc914893535a441412c12fee323111b17a754acd3",
+      "overflow_skipped_steps": 1,
+      "oom_attempts": [],
+      "profile_weights_discarded": true
+    }
+  },
+  "initial_state_sha256": "ffe7ba5e9107a846e6c9303dc914893535a441412c12fee323111b17a754acd3",
+  "training_report_sha256": "18176d52ac81ad8b7f961b89d220921e51793b70a95d25eb4c6cd7d7521a63dc"
+}

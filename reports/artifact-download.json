@@ -1,0 +1,177 @@
+{
+  "schema_version": 1,
+  "release": "nlu-document-disjoint-large-v2",
+  "dataset_id": "dongmyungpark/nlu-authorship-frozen-large-20261012",
+  "dataset_version": 1,
+  "freeze_sha256": "e8fc94ee17d7ea575ecf8002e3d104d1ec70600b68cc59239f1189b0b955f924",
+  "artifacts": [
+    {
+      "name": "stylometric/artifact-inventory.json",
+      "kind": "file",
+      "path": "models/stylometric/artifact-inventory.json",
+      "sha256": "70668b83ff60501dfe31eac134c4c3a607e88148801f80db9c1d786b7e73781a",
+      "bytes": 985,
+      "url": "https://www.kaggle.com/api/v1/datasets/download/dongmyungpark/nlu-authorship-frozen-large-20261012/stylometric--artifact-inventory.json?datasetVersionNumber=1&raw=true"
+    },
+    {
+      "name": "stylometric/ensemble_config.json",
+      "kind": "file",
+      "path": "models/stylometric/ensemble_config.json",
+      "sha256": "dea8f62f0f7a4bc15163d58cc02275a9dd48b8e0ab810a5e7fc2ccc9a3ee6b8d",
+      "bytes": 2714,
+      "url": "https://www.kaggle.com/api/v1/datasets/download/dongmyungpark/nlu-authorship-frozen-large-20261012/stylometric--ensemble_config.json?datasetVersionNumber=1&raw=true"
+    },
+    {
+      "name": "stylometric/lgb_model.pkl",
+      "kind": "file",
+      "path": "models/stylometric/lgb_model.pkl",
+      "sha256": "c3b7a016ec14305e0dea661177619dbfef32882582e7255d2d33075b8352e49d",
+      "bytes": 4589436,
+      "url": "https://www.kaggle.com/api/v1/datasets/download/dongmyungpark/nlu-authorship-frozen-large-20261012/stylometric--lgb_model.pkl?datasetVersionNumber=1&raw=true"
+    },
+    {
+      "name": "stylometric/tfidf_char.pkl",
+      "kind": "file",
+      "path": "models/stylometric/tfidf_char.pkl",
+      "sha256": "86b67006c3ac011903f9b740739627eb62705c5c4eafe136bfe3f4344ba2063a",
+      "bytes": 179162,
+      "url": "https://www.kaggle.com/api/v1/datasets/download/dongmyungpark/nlu-authorship-frozen-large-20261012/stylometric--tfidf_char.pkl?datasetVersionNumber=1&raw=true"
+    },
+    {
+      "name": "stylometric/tfidf_fw.pkl",
+      "kind": "file",
+      "path": "models/stylometric/tfidf_fw.pkl",
+      "sha256": "1660621c44eed894dd4c8dd953866da2d933d98aaac600027b71e366c562d94a",
+      "bytes": 4443,
+      "url": "https://www.kaggle.com/api/v1/datasets/download/dongmyungpark/nlu-authorship-frozen-large-20261012/stylometric--tfidf_fw.pkl?datasetVersionNumber=1&raw=true"
+    },
+    {
+      "name": "stylometric/tfidf_word.pkl",
+      "kind": "file",
+      "path": "models/stylometric/tfidf_word.pkl",
+      "sha256": "41f6cf4935853ddf10673695a5d2b981875f6ec9434a22e74b55d966bb80d5ea",
+      "bytes": 205558,
+      "url": "https://www.kaggle.com/api/v1/datasets/download/dongmyungpark/nlu-authorship-frozen-large-20261012/stylometric--tfidf_word.pkl?datasetVersionNumber=1&raw=true"
+    },
+    {
+      "name": "stylometric/xgb_model.json",
+      "kind": "file",
+      "path": "models/stylometric/xgb_model.json",
+      "sha256": "94dcce8b6dbfb4726813bb648ffa91a8d3f2bcc0ea6aaa39a653df09ff54d24c",
+      "bytes": 1083775,
+      "url": "https://www.kaggle.com/api/v1/datasets/download/dongmyungpark/nlu-authorship-frozen-large-20261012/stylometric--xgb_model.json?datasetVersionNumber=1&raw=true"
+    },
+    {
+      "name": "ce/artifact-inventory.json",
+      "kind": "file",
+      "path": "models/ce/artifact-inventory.json",
+      "sha256": "2e53cc3123af73bcae0ece1534bacfa1e751f379a110896a4936a2288eaee8db",
+      "bytes": 965,
+      "url": "https://www.kaggle.com/api/v1/datasets/download/dongmyungpark/nlu-authorship-frozen-large-20261012/ce--artifact-inventory.json?datasetVersionNumber=1&raw=true"
+    },
+    {
+      "name": "ce/checkpoint-report.json",
+      "kind": "file",
+      "path": "models/ce/checkpoint-report.json",
+      "sha256": "d0745943a530753e226c106029e45a2a8da20d2c83088d6ef8abb6581a3241da",
+      "bytes": 3965,
+      "url": "https://www.kaggle.com/api/v1/datasets/download/dongmyungpark/nlu-authorship-frozen-large-20261012/ce--checkpoint-report.json?datasetVersionNumber=1&raw=true"
+    },
+    {
+      "name": "ce/config.json",
+      "kind": "file",
+      "path": "models/ce/config.json",
+      "sha256": "d6c814a807e367b44737bc19fadc05aa02022ddb83348166b0c9045d8d9d9351",
+      "bytes": 691,
+      "url": "https://www.kaggle.com/api/v1/datasets/download/dongmyungpark/nlu-authorship-frozen-large-20261012/ce--config.json?datasetVersionNumber=1&raw=true"
+    },
+    {
+      "name": "ce/model.safetensors",
+      "kind": "file",
+      "path": "models/ce/model.safetensors",
+      "sha256": "39c875dd559e076c24ed645da55d723cf4686898d175ecb3131f8f31766f45ab",
+      "bytes": 1421495360,
+      "url": "https://www.kaggle.com/api/v1/datasets/download/dongmyungpark/nlu-authorship-frozen-large-20261012/ce--model.safetensors?datasetVersionNumber=1&raw=true"
+    },
+    {
+      "name": "ce/tokenizer.json",
+      "kind": "file",
+      "path": "models/ce/tokenizer.json",
+      "sha256": "fdebe197cabe6cd156c7b8f3daa09b9b43388143f857bc64561e98375f8c5267",
+      "bytes": 3558740,
+      "url": "https://www.kaggle.com/api/v1/datasets/download/dongmyungpark/nlu-authorship-frozen-large-20261012/ce--tokenizer.json?datasetVersionNumber=1&raw=true"
+    },
+    {
+      "name": "ce/tokenizer_config.json",
+      "kind": "file",
+      "path": "models/ce/tokenizer_config.json",
+      "sha256": "bb5706f71e3d5cb4bf9878ad9b14a2079e6fbd618fc0a0ba2ac1b257d7824cc9",
+      "bytes": 358,
+      "url": "https://www.kaggle.com/api/v1/datasets/download/dongmyungpark/nlu-authorship-frozen-large-20261012/ce--tokenizer_config.json?datasetVersionNumber=1&raw=true"
+    },
+    {
+      "name": "ce/training-config.json",
+      "kind": "file",
+      "path": "models/ce/training-config.json",
+      "sha256": "e7320fe2fa70e465cfbf7d79ca64e31761ce8d8aaab8f1427577a275b1bf2e51",
+      "bytes": 1637,
+      "url": "https://www.kaggle.com/api/v1/datasets/download/dongmyungpark/nlu-authorship-frozen-large-20261012/ce--training-config.json?datasetVersionNumber=1&raw=true"
+    },
+    {
+      "name": "custom_asl/artifact-inventory.json",
+      "kind": "file",
+      "path": "models/custom_asl/artifact-inventory.json",
+      "sha256": "82ec7fb552b84cf86e8a230e6c42d7a3e399d6a4f6077064bab69f4160670cf6",
+      "bytes": 965,
+      "url": "https://www.kaggle.com/api/v1/datasets/download/dongmyungpark/nlu-authorship-frozen-large-20261012/custom_asl--artifact-inventory.json?datasetVersionNumber=1&raw=true"
+    },
+    {
+      "name": "custom_asl/checkpoint-report.json",
+      "kind": "file",
+      "path": "models/custom_asl/checkpoint-report.json",
+      "sha256": "ccdf90165038ac7fffe7ae61e42b0f60ba8c290e3d29724979ee74a6ede04df1",
+      "bytes": 4026,
+      "url": "https://www.kaggle.com/api/v1/datasets/download/dongmyungpark/nlu-authorship-frozen-large-20261012/custom_asl--checkpoint-report.json?datasetVersionNumber=1&raw=true"
+    },
+    {
+      "name": "custom_asl/config.json",
+      "kind": "file",
+      "path": "models/custom_asl/config.json",
+      "sha256": "d6c814a807e367b44737bc19fadc05aa02022ddb83348166b0c9045d8d9d9351",
+      "bytes": 691,
+      "url": "https://www.kaggle.com/api/v1/datasets/download/dongmyungpark/nlu-authorship-frozen-large-20261012/custom_asl--config.json?datasetVersionNumber=1&raw=true"
+    },
+    {
+      "name": "custom_asl/model.safetensors",
+      "kind": "file",
+      "path": "models/custom_asl/model.safetensors",
+      "sha256": "647fe0e7c12d8c7b03dc4946cb8bf105fb866ccb1c41530da7947bc617e040a4",
+      "bytes": 1421495360,
+      "url": "https://www.kaggle.com/api/v1/datasets/download/dongmyungpark/nlu-authorship-frozen-large-20261012/custom_asl--model.safetensors?datasetVersionNumber=1&raw=true"
+    },
+    {
+      "name": "custom_asl/tokenizer.json",
+      "kind": "file",
+      "path": "models/custom_asl/tokenizer.json",
+      "sha256": "fdebe197cabe6cd156c7b8f3daa09b9b43388143f857bc64561e98375f8c5267",
+      "bytes": 3558740,
+      "url": "https://www.kaggle.com/api/v1/datasets/download/dongmyungpark/nlu-authorship-frozen-large-20261012/custom_asl--tokenizer.json?datasetVersionNumber=1&raw=true"
+    },
+    {
+      "name": "custom_asl/tokenizer_config.json",
+      "kind": "file",
+      "path": "models/custom_asl/tokenizer_config.json",
+      "sha256": "bb5706f71e3d5cb4bf9878ad9b14a2079e6fbd618fc0a0ba2ac1b257d7824cc9",
+      "bytes": 358,
+      "url": "https://www.kaggle.com/api/v1/datasets/download/dongmyungpark/nlu-authorship-frozen-large-20261012/custom_asl--tokenizer_config.json?datasetVersionNumber=1&raw=true"
+    },
+    {
+      "name": "custom_asl/training-config.json",
+      "kind": "file",
+      "path": "models/custom_asl/training-config.json",
+      "sha256": "cd0e9c2d078af168666ef0c6856a178a08b2d1132ab998dc2b3808b4cdd76c62",
+      "bytes": 1645,
+      "url": "https://www.kaggle.com/api/v1/datasets/download/dongmyungpark/nlu-authorship-frozen-large-20261012/custom_asl--training-config.json?datasetVersionNumber=1&raw=true"
+    }
+  ]
+}

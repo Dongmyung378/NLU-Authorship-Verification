@@ -1,134 +1,120 @@
-# 저자 동일성 판별
+# Authorship Verification
 
-**Dongmyung Park과 Juho Kim의 공동 NLP 프로젝트**
+**Dongmyung Park과 Juho Kim이 2026년 2월부터 5월까지 공동 개발한 NLP 프로젝트입니다.**
 
-[English](./README.md) · [재현 가이드](./docs/reproduction.ko.md) · [포스터 미리보기(PNG)](./docs/authorship-verification-poster-preview.png) · [포스터 PDF 다운로드](./docs/authorship-verification-poster.pdf?raw=1)
+[English](./README.md) | [재현 가이드](./docs/reproduction.ko.md) | [구조](./docs/architecture.ko.md) | [평가 규칙](./docs/evaluation.ko.md) | [학습](./docs/training.ko.md)
 
-이 포트폴리오 프로젝트는 제공된 영어 글 쌍의 동일 저자·다른 저자 분류 데이터에서 문체 기반 앙상블과 파인튜닝한 RoBERTa-Large를 비교합니다. 보고된 성능은 제공된 개발 세트의 결과입니다. 저장소에는 데이터, 학습·추론 노트북, 저장된 예측 결과, 모델 문서와 다른 글에 대한 모델 출력을 시험하는 터미널 시연 도구가 있습니다. 새로운 저자나 도메인에서의 성능은 검증되지 않았습니다.
+영어 글 쌍의 저자 동일성을 확인하기 위해 최초의 두 모델 계열인 문체 기반 XGBoost-LightGBM 앙상블과 RoBERTa-Large를 비교합니다. 새로운 실행 체계는 문서가 분리된 데이터, 조건을 맞춘 CE와 직접 구현한 이진 비대칭 focal 학습, 독립 보정, 변경하지 않는 평가와 해시를 확인한 CPU 재검증을 제공합니다. 서로 다른 저자(`0`) 또는 동일 저자(`1`) 라벨을 예측하며 임의의 새로운 글에서 사람의 신원을 입증하는 도구는 아닙니다.
 
-## 제공된 개발 세트 결과
+## 현재 릴리스 상태
 
-| 모델 | 방법 | 개발 세트 Macro F1 | 개발 세트 정확도 | 실용적 특징 |
-|---|---|---:|---:|---|
-| [문체 기반 앙상블](./model-cards/stylometric-ensemble.ko.md) | 단어·문자·기능어 TF-IDF, 문체 특징 24개, XGBoost + LightGBM | 0.7702 | 0.77 | CPU 추론 가능, 모델 파일 60MB 미만 |
-| [RoBERTa-Large + ASL](./model-cards/roberta-asymmetric-loss.ko.md) | Asymmetric Loss를 사용한 텍스트 쌍 Transformer | **0.8348** | **0.83** | 제공된 개발 세트에서 더 높은 점수, 약 1.32GB의 가중치 |
+새 RoBERTa-Large CE와 custom focal 학습, 학습 데이터만 사용한 제한된 문체 실험과 Kaggle 고정 평가를 완료했습니다. Large 두 개 모두 같은 6 epoch를 완료하고 5 epoch 체크포인트를 저장했습니다. 영어와 한국어 [실측 결과](./docs/results.ko.md)에 분류, 확률 보정, 입력 순서, 길이와 판정 보류 결과를 정리했습니다.
 
-두 점수는 동일한 **라벨이 있는 개발 세트 5,993쌍**(서로 다른 저자 2,937쌍, 동일 저자 3,056쌍)에서 얻었습니다. 제공된 CSV를 직접 비교한 결과 **개발 세트의 630쌍(10.5%)이 학습 세트의 글 쌍과 완전히 동일**했습니다. 이 개발 세트는 분류 임계값 선택과 RoBERTa의 최적 체크포인트 선택에도 사용됐습니다. 따라서 표의 값은 기록된 개발 단계 결과이며, 새로운 저자나 도메인에 대한 독립적인 성능을 입증하지 않습니다. 저장소의 테스트 세트 5,985쌍에는 라벨이 없어 테스트 정확도나 F1은 제시하지 않습니다.
+| 최종 4,708쌍 전체의 고정 파이프라인 | Macro F1 | 정확도 | 정답 |
+|---|---:|---:|---:|
+| 문체 XGBoost-LightGBM 앙상블 | 0.741498 | 74.1504% | 3,491 |
+| RoBERTa-Large CE, 배포용 | 0.808383 | 80.8624% | 3,807 |
+| RoBERTa-Large custom focal, 보존한 비교 모델 | 0.815170 | 81.5208% | 3,838 |
 
-## 구현 내용
+CE는 최종 평가 전에 보정값을 고정한 파이프라인을 선택 집합에서 비교해 결정했습니다. 이후 관찰한 focal의 최종 우위로 선택을 바꾸지 않았습니다. 최초 개발 F1 0.8348과는 평가 조건이 달라 통제된 전후 비교가 아닙니다. 보정으로 세 모델의 ECE와 NLL은 줄었지만 모든 F1이 오른 것은 아니며, 판정한 사례 정확도 90% 목표에는 미달했습니다.
 
-**문체 기반 파이프라인**은 저자를 드러낼 수 있는 메타데이터를 정리한 뒤 단어·문자 n-gram, 기능어 사용 패턴, 문장 길이·구두점·어휘 다양성 등을 다루는 문체 특징 24개로 각 글을 표현합니다. 두 글의 특징을 조합해 XGBoost와 LightGBM에 입력하고, 조정된 가중치와 `0.43`의 분류 임계값으로 결과를 결합합니다. 로컬 CPU에서 사용하기 좋은 작은 모델입니다.
+[전체 고정 기록](./reports/evaluation-freeze.json)과 원본 순서의 예측을 소스, 데이터와 모델 파일 명세에 대조해 확인했습니다. 같은 실행 및 설정 파일 35개로 Windows 11에서 구현 검사 109/109, Ubuntu 24.04 WSL2에서 109/109를 통과했습니다. 모델 세 개 모두 두 환경에서 4,708쌍 전체 추론을 완료했으며, 여섯 번의 이진 분류, 판정 보류, F1과 정확도가 모두 일치했습니다. 문체 모델은 두 환경에서 정해 둔 비교 허용 오차도 충족했습니다. Large 두 개는 GPU 참조 확률값의 사전 허용 오차 `1e-5`를 넘었습니다. Windows와 Linux의 보정 확률 최대 차이는 CE가 각각 `1.79e-5`, `8.81e-6`, custom focal이 `1.80e-4`, `1.10e-4`였습니다. Linux CE의 보정 확률은 기준 안에 있었지만 원래 입력 순서의 확률 차이는 기준을 넘었습니다. 허용 오차, 참조나 보정값을 바꾸지 않고 엄격한 검증 실패로 보존했습니다. 같은 조건의 CPU 실행 비용 측정도 완료해 [CPU 요약](./reports/cpu-reproduction.json)과 [실측 결과](./docs/results.ko.md)에 연결했으며, 모델 공개와 전체 비로그인 다운로드 검증은 별도로 완료했습니다. 두 로컬 환경은 같은 물리적 컴퓨터를 사용하므로 독립된 외부 검증으로 표현하지 않습니다.
 
-**RoBERTa 파이프라인**은 이메일 헤더·주소·URL을 정리하고 두 글을 합쳐 최대 512토큰으로 인코딩합니다. `roberta-large`를 Asymmetric Loss(`gamma_neg=2`, `gamma_pos=1`)로 파인튜닝했으며, 개발 세트에서 선택한 임계값은 `0.51`입니다. 맥락 정보를 활용하는 대신 연산량과 저장 용량이 더 큽니다.
+대응 학습은 실제 경과 6.3959시간, 배정 worker 합산 12.7758시간이 걸렸고, 고정 평가까지의 전체 wrapper는 실제 경과 7.5475시간입니다. 대응 학습 9시간과 전체 커널 10시간 상한을 지켰습니다. 앞선 시간 측정 가중치는 모두 폐기했으며 제한된 비교 후 GPU 품질 실험을 더 진행하지 않았습니다. 자체 배정 시간 범위와 계정의 할당량 조회는 구분하고, 공식 T4x2 사용량 배수를 검증했다고 주장하지 않습니다.
 
-두 파이프라인 모두 학습·추론 노트북과 모델 카드를 제공합니다. [`verify_author.py`](./verify_author.py)는 두 모델에 공통으로 사용할 수 있는 단일 텍스트 쌍 명령행 인터페이스입니다.
+## CPU 실행
 
-## 직접 예측해 보기
-
-### 1. Python 환경 구성
-
-Python 3.12를 권장합니다. 시스템에서 사용할 수 있는 Python 3.12 실행 명령으로 가상 환경을 만든 뒤, 터미널 추론에 필요한 패키지를 설치하세요. Windows PowerShell 예시는 다음과 같습니다.
+새 고정 모델 파일은 [공개 Kaggle 데이터셋 버전 1](https://www.kaggle.com/datasets/dongmyungpark/nlu-authorship-frozen-large-20261012)로 제공합니다. 기존 공개 CLI로 로그인 없이 파일 21개, 총 2,856,189,574바이트를 내려받아 고정한 크기와 SHA256이 모두 일치하는지 확인했습니다. 별도 [다운로드 검증](./reports/model-download-verification.json)은 파일 전달을 확인한 기록이며 저장 모델 추론을 다시 수행했다는 의미는 아닙니다. 저장소 최상위 폴더에서 Windows PowerShell로 실행합니다.
 
 ```powershell
-python -m venv .venv
-.\.venv\Scripts\python.exe -m pip install -r requirements-inference.txt
+.\launch-nlu.bat doctor
+.\launch-nlu.bat verify-data
+.\launch-nlu.bat download
+.\launch-nlu.bat download --verify-only
+.\launch-nlu.bat predict
 ```
 
-`python` 명령을 사용할 수 없다면 설치된 다른 Python 실행 명령으로 `.venv`를 만드세요. 가상 환경을 만든 후에는 위와 아래의 명령이 그 안의 Python을 직접 실행합니다. macOS 또는 Linux에서는 `.\.venv\Scripts\python.exe` 대신 `.venv/bin/python`을 사용합니다. 노트북 실행과 재학습에는 전체 [`requirements.txt`](./requirements.txt)를 설치하세요. 환경 구성과 CUDA 안내는 [재현 가이드](./docs/reproduction.ko.md)에 있습니다.
+Linux에서는 같은 명령 앞에 `sh ./launch-nlu.sh`를 사용합니다. 실행기는 프로젝트 내부에 격리된 Python 3.12 환경을 만들고 고정 CPU 패키지를 설치하며 로컬 GPU를 숨깁니다. Docker나 API key는 필요하지 않습니다. 최초 구성과 모델 다운로드에는 인터넷이 필요하고, 이후 추론은 로컬 가중치와 토크나이저를 사용합니다.
 
-**Windows에서 NVIDIA GPU로 RoBERTa를 실행하려면** 위 의존성 설치 후(노트북도 사용할 경우 `requirements.txt` 설치 후) CUDA 12.4용 PyTorch를 설치하세요.
+기본 모델은 CPU 문체 앙상블입니다. 선택적으로 Large를 사용하면 독립적으로 맞춘 보정값을 적용해 모델 선택 집합에서 결정한 파이프라인을 실행합니다.
 
 ```powershell
-.\.venv\Scripts\python.exe -m pip install --force-reinstall --no-deps torch==2.5.1+cu124 --index-url https://download.pytorch.org/whl/cu124
-.\.venv\Scripts\python.exe -c "import torch; print(torch.__version__, torch.version.cuda, torch.cuda.is_available()); print(torch.cuda.get_device_name(0) if torch.cuda.is_available() else 'No CUDA device')"
+.\launch-nlu.bat download --model transformer
+.\launch-nlu.bat predict --model transformer --text-file-1 passage-a.txt --text-file-2 passage-b.txt
 ```
 
-확인 결과에서 CUDA 사용 가능 여부가 `True`이고 GPU 이름이 표시되어야 합니다. CUDA 12.4가 적합하지 않으면 [PyTorch 공식 버전 목록](https://pytorch.org/get-started/previous-versions/)에서 운영체제와 NVIDIA 드라이버에 맞는 빌드를 선택하세요. **Windows의 Git Bash**에서는 아래 시연 명령을 포함해 `./.venv/Scripts/python.exe` 경로를 사용합니다.
+검증한 릴리스 명세 [reports/artifact-download.json](./reports/artifact-download.json)은 모델 파일만 포함한 공개 Kaggle 데이터셋 버전 1의 비로그인 raw 주소와 모든 체크포인트, 토크나이저, 변환기 및 설정의 바이트 수와 SHA256을 고정합니다. 원격 파일은 `kind=file`로 원래 `models/ce/`, `models/custom_asl/`, `models/stylometric/` 실행 경로에 직접 연결합니다. 전체 비로그인 HTTP 200/해시 확인과 CLI verify-only 검사를 완료했습니다. 아래의 최초 Drive 파일은 새 릴리스의 파일 목록이나 평가 고정 기록을 대신할 수 없습니다.
 
-### 2. 모델 다운로드
+모델 ZIP을 별도로 전달받은 경우에는 `models/모델명/` 구조를 같은 강화 버전 소스의 `artifacts/runtime`에 해제합니다. 실행기가 예측이나 평가 전에 설치한 파일을 전체 고정 기록에 대조하며 직접 설치에는 자동 다운로드 명세가 필요하지 않습니다. 검증을 완료한 공개 전달 경로는 위 자동 다운로드입니다.
 
-학습된 모델 파일은 크기 때문에 GitHub 밖에 보관합니다. 다운로드 링크는 다음과 같습니다.
+`doctor`는 패키지, 환경 격리와 작은 CPU tensor 연산을 확인하고, `verify-data`는 CSV 해시와 문서 분리를 확인합니다. 어느 명령도 실제 모델 정확도를 측정하지 않습니다. 예측은 클래스, 보정된 동일 저자 점수와 판정 보류 시 `uncertain`을 구분합니다. 입력 제한과 전체 옵션은 [CPU 실행 가이드](./docs/runtime.ko.md)에 있습니다.
 
-| 모델 | 다운로드 | 파일을 바로 넣을 수 있는 폴더 |
-|---|---|---|
-| 문체 기반 앙상블 | [Google Drive: XGBoost, LightGBM, 벡터라이저](https://drive.google.com/drive/folders/1mF0bMpzfs3XODpQA2Hd7H_JvXLk5AGgp?usp=sharing) | `models/stylometric-ensemble/` 또는 `models/Models_ML/` |
-| RoBERTa-Large + ASL | [Google Drive: 파인튜닝 체크포인트와 토크나이저](https://drive.google.com/drive/folders/1Ty9-EpOLAgzvTWPuqrHBTbehmZZuDs3V?usp=sharing) | `models/roberta-asymmetric-loss/` 또는 `models/Models_ASL/` |
+## 고정한 최종 평가 재현
 
-Google Drive에서 내려받은 `Models_ML`, `Models_ASL` 폴더는 이름을 바꾸지 않아도 터미널 시연에 사용할 수 있습니다. 해당 폴더를 `models/` 안에 넣고, 모델 파일이 추가 하위 폴더 없이 바로 그 안에 있도록 배치하세요. 노트북은 `AV_MODEL_DIR`을 지정하지 않으면 위 표의 표준 폴더(`stylometric-ensemble`, `roberta-asymmetric-loss`)를 사용합니다. `models/`는 Git에서 제외되어 다운로드한 가중치는 로컬에만 남습니다.
-
-터미널 시연 도구가 확인하는 파일은 다음과 같습니다.
-
-```text
-models/Models_ML/                 # 또는 models/stylometric-ensemble/
-├── ensemble_config.json
-├── lgb_model.pkl
-├── tfidf_char.pkl
-├── tfidf_fw.pkl
-├── tfidf_word.pkl
-└── xgb_model.json
-
-models/Models_ASL/                # 또는 models/roberta-asymmetric-loss/
-├── best_threshold.json
-├── config.json
-├── model.safetensors
-├── tokenizer.json
-└── tokenizer_config.json
-```
-
-RoBERTa 다운로드에 다른 토크나이저 파일도 포함되어 있다면 같은 폴더에 보관하세요. 실행할 모델의 파일만 다운로드해도 됩니다.
-
-### 3. 터미널 시연 실행
-
-저장소 루트에서 실행해 영어 글 두 개를 입력합니다. 기본 모델은 문체 기반 앙상블입니다.
+릴리스 파일이 준비된 뒤 아직 없는 출력 폴더를 지정합니다.
 
 ```powershell
-.\.venv\Scripts\python.exe verify_author.py
+.\launch-nlu.bat evaluate --model stylometric --model-name stylometric --model-dir artifacts/runtime/models/stylometric --output .local/replay-stylometric --batch-size 4 --threads 4
 ```
 
-GPU에서 RoBERTa를 실행하거나 입력 글을 명령행 인자로 전달할 수도 있습니다.
+두 Large 체크포인트는 다음과 같이 검사합니다.
 
 ```powershell
-.\.venv\Scripts\python.exe verify_author.py --model roberta --device cuda
-.\.venv\Scripts\python.exe verify_author.py --text-1 "I walked by the river this morning and watched the boats pass." --text-2 "The rain started quietly in the evening, so I closed the windows."
+.\launch-nlu.bat download --model ce
+.\launch-nlu.bat download --model custom_asl
+.\launch-nlu.bat evaluate --model transformer --model-name ce --model-dir artifacts/runtime/models/ce --output .local/replay-ce --batch-size 4 --threads 4
+.\launch-nlu.bat evaluate --model transformer --model-name custom_asl --model-dir artifacts/runtime/models/custom_asl --output .local/replay-custom-asl --batch-size 4 --threads 4
 ```
 
-**Windows Git Bash**에서 실행할 때는 다음 명령을 사용합니다.
+위 전체 재검증 예시는 배치 4와 CPU 스레드 4를 명시합니다. 새 모델의 성능 결과를 확인하기 전에 기존 모델의 작은 시간 측정으로 정한 실행 설정이며, 모델 선택이나 보정값을 바꾸지 않습니다. CLI 기본값은 배치 8과 스레드 1을 유지합니다. 최종 모델의 실제 CPU 실행 비용은 [실측 결과](./docs/results.ko.md)에 제시하며, 별도 속도 비교는 배치 1과 스레드 1을 사용했습니다.
 
-```bash
-./.venv/Scripts/python.exe verify_author.py --model roberta --device cuda
-```
+기본 평가는 최종 글 쌍 4,708개 전체를 실행합니다. 소스, 데이터, 모델과 보정의 연결을 확인하고 다시 맞추지 않은 상태로 지표, 혼동행렬과 원본 순서의 예측을 저장합니다. 배포용으로 하나를 고르더라도 Large FP32 체크포인트 두 개를 유지합니다. 작은 예측이나 테스트 통과는 전체 저장 모델 재검증을 대신하지 않습니다. 같은 컴퓨터의 운영체제 두 개는 같은 호스트의 별도 환경으로 보고하며 독립된 외부 컴퓨터라고 표현하지 않습니다.
 
-실행 결과에는 **Same author**(동일 저자) 또는 **Different authors**(다른 저자), `Same-author probability`, 분류 임계값이 표시됩니다. 출력 이름과 달리 이 수치는 보정되지 않은 모델 점수로, 실제로 동일 저자일 확률이나 새로운 글에서의 정확도를 뜻하지 않습니다. 모델 파일이 다른 위치에 있다면 `--model-dir PATH`를 사용하세요. RoBERTa의 기본값 `--device auto`는 CUDA를 사용할 수 있으면 GPU를 사용합니다. NVIDIA GPU를 감지했지만 PyTorch에서 CUDA를 사용할 수 없다면 CPU로 조용히 전환하지 않고 설정 방법을 안내하며 중단합니다. `--device cuda`는 CUDA를 필수로 요구하며, 느린 CPU 추론을 의도적으로 실행할 때만 `--device cpu`를 지정하세요. 문체 앙상블은 CPU에서 실행됩니다.
+## 조건을 통제한 실험
 
-점수와 임계값은 백분율로 표시됩니다.
+제공된 학습 글 쌍 27,643개와 개발 글 쌍 5,993개를 함께 검사합니다. 전처리 후 빈 문서를 포함한 86행과 라벨이 일치하는 중복 글 쌍 2,162행을 제외해 31,388쌍을 유지합니다. 문서 동일성으로 연결한 그룹 전체를 한 집합에 배정합니다.
+
+| 역할 | 글 쌍 수 | 용도 |
+|---|---:|---|
+| 학습 | 21,972 | 과제 학습과 학습 집합만의 TF-IDF |
+| 모델 선택 | 3,139 | 체크포인트, 특징 및 가중치, 배포 정책 |
+| 보정 | 1,569 | Temperature, 분류 및 판정 보류 임계값 |
+| 최종 평가 | 4,708 | 함께 고정한 뒤 최종 평가 |
+
+배정된 T4를 하나씩 사용하는 독립 worker 두 개가 같은 초기화, seed, 기록과 epoch 순서로 고정한 새 RoBERTa-Large를 학습합니다. CE와 최초 직접 구현한 두 클래스 softmax focal 목적함수 `-(1-p_y)^gamma_y * log(p_y)`를 비교하며 `gamma_0=2`, `gamma_1=1`을 FP32로 계산합니다. 확률 clipping을 적용한 발표된 다중 라벨 sigmoid ASL과는 다른 구현입니다.
+
+별도 CPU 실험은 모든 TF-IDF를 학습 집합에서만 맞추고 120분 안에 제한한 XGBoost-LightGBM 설정 4개를 비교합니다. 최종 앙상블은 두 구성 모델을 모두 사용하며, 새 설정이나 가중치를 채택하려면 기준보다 모델 선택 macro F1이 0.002 이상 증가해야 합니다.
+
+원시 AB 손실 비교는 임계값 0.5를 유지합니다. 모델 선택 집합에서 각 입력 순서를 고르고 세 모델을 독립적으로 보정합니다. 배포 결정은 저장한 모델 선택 logits에 고정 보정값을 적용한 Large 파이프라인끼리 비교하며, custom ASL이 보정된 CE보다 macro F1을 0.002 이상 높일 때만 채택합니다. 원시 비교와 배포용 선택 모델을 구분해 보고합니다. 모든 최종 추론 전에 함께 고정하고 최종 결과로 판정 기준을 조정하지 않습니다.
+
+계획에는 seed 378의 대응 문서 그룹 bootstrap 1,000회도 있습니다. 조건부 95% percentile 구간은 고정 데이터와 학습 seed 한 번에 관한 것이며 반복 학습의 변동이나 새 저자 및 도메인의 일반화를 뜻하지 않습니다. 상세 규칙은 [평가 문서](./docs/evaluation.ko.md)에 있습니다.
+
+## 최초 개발 기록
+
+2026년 2월부터 5월까지의 노트북, 포스터, 예측과 모델 카드는 공동 개발자 정보를 유지합니다. 아래 수치는 최초 개발 집합의 결과이며 새 고정 평가와 구분합니다.
+
+| 최초 모델 | 당시 보고한 개발 macro F1 | 최초 파일 다운로드 |
+|---|---:|---|
+| [문체 앙상블](./model-cards/stylometric-ensemble.ko.md) | 0.7702 | [최초 앙상블과 변환기 Drive](https://drive.google.com/drive/folders/1mF0bMpzfs3XODpQA2Hd7H_JvXLk5AGgp?usp=sharing) |
+| [RoBERTa-Large 직접 구현 비대칭 focal](./model-cards/roberta-asymmetric-loss.ko.md) | 0.8348 | [최초 체크포인트와 토크나이저 Drive](https://drive.google.com/drive/folders/1Ty9-EpOLAgzvTWPuqrHBTbehmZZuDs3V?usp=sharing) |
+
+개발 글 쌍 5,993개 중 630개는 학습 글 쌍과 완전히 같습니다. 이 완전 중복을 포함한 총 2,738개의 개발 글 쌍에는 학습에 이미 있는 문서가 하나 이상 포함됩니다. 그중 1,658쌍은 한 문서, 1,080쌍은 두 문서를 재사용합니다. 최초 문체 노트북은 학습과 개발 글을 합쳐 TF-IDF를 맞추므로 개발 글이 어휘와 IDF에 영향을 줍니다. 체크포인트, 앙상블 가중치와 임계값도 개발 집합에서 골랐습니다. 따라서 최초 점수와 새 최종 평가 점수의 차이는 조건을 통제한 전후 개선량이 아닙니다. 새로운 규칙은 문서 그룹을 분리하고 TF-IDF를 학습 집합에서만 맞춥니다.
+
+[최초 노트북](./notebooks/)과 [포스터 미리보기](./docs/authorship-verification-poster-preview.png)([PDF](./docs/authorship-verification-poster.pdf?raw=1))는 공동 개발 기록입니다. 도메인 변화에 따른 과적합 감소는 독립된 도메인 분리 평가로 검증하지 않았습니다. `test.csv` 5,985쌍과 `live.csv` 20쌍에는 라벨이 없어 측정한 정확도를 제공하지 않습니다.
 
 ## 저장소 구성
 
 ```text
-data/                       라벨이 있는 학습·개발 쌍과 라벨 없는 테스트·예시 쌍
-notebooks/                  두 파이프라인의 학습·시연 노트북
-model-cards/                구조, 하이퍼파라미터, 평가, 한계
-models/                     다운로드한 모델 파일(Git 추적 제외)
-results/                    라벨 없는 테스트 세트의 저장된 예측 결과
-docs/                       재현 가이드와 프로젝트 포스터
-verify_author.py            대화형·인자형 터미널 시연 도구
-requirements-inference.txt  터미널 시연용 의존성
-requirements.txt            노트북·학습용 전체 의존성
+nlu_authorship/             데이터, 모델, 학습, 보정과 고정 평가
+configs/                   사전에 선언한 실험 계획
+reports/                   분리 명세, 실제 검사와 릴리스 증거
+scripts/                   격리 구성, 다운로드, Kaggle 패키징과 보고
+launch-nlu.bat / .sh        공개 CPU 실행 명령
+docs/                      영어 기본 및 한국어 가이드와 최초 포스터
+model-cards/               최초 개발 모델로 명시한 문서
+notebooks/                 공동 개발한 최초 학습과 데모 노트북
+results/                   최초의 라벨 없는 예측
+artifacts/                 Git에서 제외한 다운로드 모델
 ```
 
-라벨이 있는 [`train.csv`](./data/train.csv)는 27,643쌍, [`dev.csv`](./data/dev.csv)는 5,993쌍입니다. 라벨이 없는 [`test.csv`](./data/test.csv)와 [`live.csv`](./data/live.csv)는 각각 5,985쌍, 20쌍입니다. 각 쌍에는 `text_1`, `text_2`가 있으며, `label=1`은 동일 저자, `label=0`은 다른 저자를 뜻합니다. 노트북은 저장소에서 그대로 볼 수 있으며, [`.gitattributes`](./.gitattributes)가 `.ipynb` 파일을 GitHub 언어 통계에서 제외합니다.
-
-## 자세히 보기
-
-- [재현 가이드](./docs/reproduction.ko.md): 로컬 환경, 모델 파일 배치, 추론, 재학습.
-- [문체 기반 모델 카드](./model-cards/stylometric-ensemble.ko.md)와 [RoBERTa 모델 카드](./model-cards/roberta-asymmetric-loss.ko.md): 방법, 하이퍼파라미터, 연산 환경, 결과, 위험 요소.
-- [학습·시연 노트북](./notebooks/): 전체 실험과 배치 추론.
-- [기존 수업 포스터 미리보기](./docs/authorship-verification-poster-preview.png) ([PDF 다운로드](./docs/authorship-verification-poster.pdf?raw=1)): 당시 발표 자료입니다. 다운로드 링크는 GitHub의 PDF 미리보기를 거치지 않습니다. 포스터의 도메인 변화에 따른 과적합 감소 주장은 독립적인 도메인 분리 평가로 검증되지 않았습니다. 평가 범위는 현재 모델 카드를, 모델 파일은 위의 다운로드 링크를 확인하세요.
-
-## 한계
-
-두 방법 모두 영어 텍스트를 대상으로 하며, 매우 짧은 글·다른 언어·코드 스위칭·낯선 장르에서는 결과가 불안정할 수 있습니다. RoBERTa는 두 글의 입력이 512토큰을 넘으면 일부가 잘리고, 문체 모델은 학습된 TF-IDF 어휘 밖의 표현을 담지 못합니다. 공개된 성능 수치는 학습 쌍과 완전히 중복된 사례가 포함되고 모델 선택에도 사용된 개발 세트에서 얻었습니다. 일반화 성능을 확인하려면 저자와 도메인이 분리된 별도의 라벨 있는 평가 데이터가 필요합니다. 보정되지 않은 모델 점수는 제공된 학습 데이터에서 익힌 패턴을 반영할 뿐 신원을 증명하지 않으므로, 저자 귀속·제재·익명 해제의 단독 근거로 사용하면 안 됩니다.
-
-## 개발자
-
-Dongmyung Park과 Juho Kim이 함께 개발했습니다.
+저자 ID와 도메인 라벨이 없습니다. 확인한 범위는 제공된 데이터의 문서 분리이며, 과거 데이터 사용과 측정하지 않은 의미 유사 문서는 한계로 남습니다. Transformer는 두 글 합계 512토큰 이후를 자르며 짧거나 익숙하지 않은 글은 불안정할 수 있습니다.

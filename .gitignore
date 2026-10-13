@@ -18,3 +18,10 @@ models/
 *.safetensors
 *.pt
 *.pth
+.local/
+artifacts/
+*.egg-info/
+outputs/
+build/
+dist/
+*.log

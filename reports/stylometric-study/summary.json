@@ -1,0 +1,158 @@
+{
+  "schema_version": 1,
+  "status": "completed_selection_study",
+  "protocol": "nlu-stylometric-bounded-v1",
+  "authors": [
+    "Dongmyung Park",
+    "Juho Kim"
+  ],
+  "original_development_period": "2026-02 through 2026-05",
+  "model_family": "Original joint XGBoost plus LightGBM stylometric ensemble",
+  "train_count": 21972,
+  "selection_count": 3139,
+  "seed": 378,
+  "trained_seed_count": 1,
+  "decision_threshold": 0.5,
+  "manifest_file_sha256": "bdaef137cf8f3ec48698352af1130dbbc9cb9d0e7569eb208dfa52c91ddcfdb3",
+  "train_records_sha256": "45b2092c1532624e9edcc554e3f988c4c07ef9ba47ab5e3851a5512a655e6313",
+  "selection_records_sha256": "e296100d3c31931215f4448b46a3c0de46e30300ca86a19a12be9fead12bda3e",
+  "selected_recipe": "full-pilot",
+  "feature_mode": "full",
+  "feature_count": 28512,
+  "selected_metrics": {
+    "xgb_weight": 0.25,
+    "lgb_weight": 0.75,
+    "diagnostic_only": false,
+    "count": 3139,
+    "correct": 2333,
+    "accuracy": 0.7432303281299777,
+    "macro_f1": 0.7423546553545927,
+    "class_f1": {
+      "0": 0.75737507525587,
+      "1": 0.7273342354533153
+    },
+    "confusion": [
+      [
+        1258,
+        319
+      ],
+      [
+        487,
+        1075
+      ]
+    ]
+  },
+  "full_pilot_equal_weight_reference": {
+    "xgb_weight": 0.5,
+    "lgb_weight": 0.5,
+    "diagnostic_only": false,
+    "count": 3139,
+    "correct": 2318,
+    "accuracy": 0.7384517362217267,
+    "macro_f1": 0.7372982644239479,
+    "class_f1": {
+      "0": 0.754705706602928,
+      "1": 0.7198908222449676
+    },
+    "confusion": [
+      [
+        1263,
+        314
+      ],
+      [
+        507,
+        1055
+      ]
+    ]
+  },
+  "selection_macro_f1_gain": 0.005056390930644805,
+  "selection_additional_correct_pairs": 15,
+  "promotion_rule": {
+    "recipe": "full-pilot",
+    "feature_mode": "full",
+    "xgb_weight": 0.25,
+    "reference_macro_f1": 0.7372982644239479,
+    "candidate_macro_f1": 0.7423546553545927,
+    "candidate_gain": 0.005056390930644805,
+    "promotion_passed": true,
+    "selection_only": true
+  },
+  "selected_component_cost_and_checkpoints": {
+    "xgb": {
+      "seconds": 600.7284426000042,
+      "best_iteration_zero_based": 260,
+      "saved_trees": 261,
+      "time_stopped": true
+    },
+    "lgb": {
+      "seconds": 367.31736269999965,
+      "best_iteration_one_based": 493,
+      "saved_trees": 493,
+      "time_stopped": false
+    }
+  },
+  "complete_study_elapsed_seconds": 5703.5178954,
+  "declared_total_budget_seconds": 7200,
+  "peak_process_working_set_bytes": 10805551104,
+  "resource_scope": "Observed entire CPU training and saved-model verification process.",
+  "model_bundle": {
+    "file_count": 7,
+    "total_bytes_including_inventory": 6066073,
+    "files": [
+      {
+        "path": "artifact-inventory.json",
+        "bytes": 985,
+        "sha256": "70668b83ff60501dfe31eac134c4c3a607e88148801f80db9c1d786b7e73781a"
+      },
+      {
+        "path": "ensemble_config.json",
+        "bytes": 2714,
+        "sha256": "dea8f62f0f7a4bc15163d58cc02275a9dd48b8e0ab810a5e7fc2ccc9a3ee6b8d"
+      },
+      {
+        "path": "lgb_model.pkl",
+        "bytes": 4589436,
+        "sha256": "c3b7a016ec14305e0dea661177619dbfef32882582e7255d2d33075b8352e49d"
+      },
+      {
+        "path": "tfidf_char.pkl",
+        "bytes": 179162,
+        "sha256": "86b67006c3ac011903f9b740739627eb62705c5c4eafe136bfe3f4344ba2063a"
+      },
+      {
+        "path": "tfidf_fw.pkl",
+        "bytes": 4443,
+        "sha256": "1660621c44eed894dd4c8dd953866da2d933d98aaac600027b71e366c562d94a"
+      },
+      {
+        "path": "tfidf_word.pkl",
+        "bytes": 205558,
+        "sha256": "41f6cf4935853ddf10673695a5d2b981875f6ec9434a22e74b55d966bb80d5ea"
+      },
+      {
+        "path": "xgb_model.json",
+        "bytes": 1083775,
+        "sha256": "94dcce8b6dbfb4726813bb648ffa91a8d3f2bcc0ea6aaa39a653df09ff54d24c"
+      }
+    ],
+    "artifact_inventory_sha256": "70668b83ff60501dfe31eac134c4c3a607e88148801f80db9c1d786b7e73781a"
+  },
+  "verification": {
+    "selected_model_reloaded": true,
+    "selection_pair_count": 3139,
+    "selection_reload_max_probability_gap": 0.0,
+    "actual_ab_ba_max_probability_gap": 0.0,
+    "artifact_size_and_sha256_verified": true,
+    "training_source_sha256_verified": true,
+    "train_only_tfidf_proof_passed": true,
+    "train_document_occurrences_for_idf": 43944
+  },
+  "calibration_evaluated": false,
+  "locked_holdout_evaluated": false,
+  "gpu_used": false,
+  "historical_scores_are_controlled_comparators": false,
+  "model_choice_used_final_outcomes": false,
+  "author_or_domain_separation_verified": false,
+  "performance_scope": "Selection only. The weight gain is a model-selection observation for one trained seed. Jointly frozen final evaluation, calibrated performance and public runtime replay are reported separately; no final accuracy is inferred here.",
+  "raw_proof_preserved": true
+}

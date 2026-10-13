@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "purpose": "nlu-authorship-kaggle-runtime",
+  "python": "3.12.15",
+  "host_python": "3.13.15",
+  "versions": {
+    "numpy": "1.26.4",
+    "scipy": "1.16.3",
+    "scikit-learn": "1.6.1",
+    "joblib": "1.5.3",
+    "xgboost": "3.2.0",
+    "lightgbm": "4.6.0",
+    "transformers": "5.0.0",
+    "huggingface-hub": "1.33.0",
+    "tokenizers": "0.22.2",
+    "safetensors": "0.8.0",
+    "matplotlib": "3.10.1",
+    "setuptools": "75.8.0",
+    "wheel": "0.45.1",
+    "torch": "2.5.1+cu124",
+    "nlu-authorship-verification": "2.0.0"
+  },
+  "isolated": true,
+  "system_site_packages": false,
+  "uv_version": "0.13.0",
+  "uv_archive_sha256": "1468ebd5a5541121837c5a2817b9972ba6090fa6caa3d142620850a47fb75154",
+  "uv_binary_sha256": "3e801df892439f5cde65d8b51ea69b69abff199ef37cc3cae4481be15d592df0",
+  "requirements_sha256": "3e21eb28d5f8c8a32e250b20c18d011fd5de1b4f933b6f4acd39c23ed678dc91",
+  "local_gpu_used": false,
+  "gpu_count": 2,
+  "gpus": [
+    {
+      "name": "Tesla T4",
+      "compute_capability": [
+        7,
+        5
+      ],
+      "total_memory_bytes": 15636037632
+    },
+    {
+      "name": "Tesla T4",
+      "compute_capability": [
+        7,
+        5
+      ],
+      "total_memory_bytes": 15636037632
+    }
+  ],
+  "gpu_smoke_result": 11.0,
+  "training_gpu_index": 0,
+  "cuda_build": "12.4",
+  "original_runtime_report_sha256": "f74db01c6582c13249c69d344bea2b284299bc46c7d2e45211a56616eefb4c40",
+  "final_evaluation_devices": {
+    "ce": "cuda",
+    "custom_asl": "cuda",
+    "stylometric": "cpu"
+  },
+  "scope": "Observed training/release runtime. This is not independent Windows/Linux CPU replay evidence."
+}

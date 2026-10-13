@@ -11,7 +11,9 @@ repo: https://github.com/Dongmyung378/NLU-Authorship-Verification
 
 # Stylometric XGBoost-LightGBM Ensemble
 
-[한국어](./stylometric-ensemble.ko.md) · [Project overview](../README.md)
+[한국어](./stylometric-ensemble.ko.md) | [Project overview](../README.md)
+
+This card describes the original stylometric development artifact. Its scores are historical development results and are not a controlled comparator for models trained on the new document-disjoint split.
 
 ## Model summary
 
@@ -39,13 +41,17 @@ Preprocessing removes emails, URLs, dates, phone numbers, long repeated-characte
 
 The model used the 27,643 labeled English text pairs in the supplied [`train.csv`](../data/train.csv); no additional labeled pairs were added for task-specific training. The labeled train and development CSVs contain passages and pair labels, but no author IDs or domain labels, so an author-separated or domain-separated evaluation cannot be verified from these files.
 
+The original training notebook fits all three TF-IDF vectorizers on concatenated cleaned train and development passages (`all_txt`). Development text therefore influences vocabulary and IDF even though its labels are not used for vectorizer fitting. This is a historical feature-fitting limitation alongside development-based model selection. The new document-disjoint study fits every vectorizer on train only; its separately frozen results must not be compared with the historical development score as a controlled before-and-after gain.
+
 ## Hyperparameters
 
 ### XGBoost
 
 | Parameter | Value |
 |---|---:|
-| Estimators | 7,000; early stopping at iteration 6,213 |
+| Estimator ceiling | 7,000 |
+| Saved best iteration | 6,013, zero-based; 6,014 boosting rounds |
+| Retained trees in the saved artifact | 6,214 |
 | Learning rate | 0.01 |
 | Max depth | 7 |
 | Subsample | 0.8 |
@@ -54,11 +60,15 @@ The model used the 27,643 labeled English text pairs in the supplied [`train.csv
 | Max bins | 128 |
 | Early stopping patience | 200 rounds |
 
+The saved `xgb_model.json` records `best_iteration=6013` and contains 6,214 trees. Early stopping can retain trees after the best iteration, so the selected best round and retained tree count are distinct. The earlier card's 6,213 value was not the saved best iteration.
+
 ### LightGBM
 
 | Parameter | Value |
 |---|---:|
-| Estimators | 2,000; early stopping at iteration 1,700 |
+| Estimator ceiling | 2,000 |
+| Saved best iteration | 1,671 |
+| Trees in the saved artifact | 1,671 |
 | Learning rate | 0.01 |
 | Leaves | 127 |
 | Subsample | 0.8 |
@@ -66,6 +76,8 @@ The model used the 27,643 labeled English text pairs in the supplied [`train.csv
 | Column sample by tree | 0.8 |
 | Max bins | 127 |
 | Early stopping patience | 100 rounds |
+
+A static inspection of the saved LightGBM pickle, without executing it, found `_best_iteration=1671`; its embedded model text contains 1,671 trees. The earlier card's 1,700 stopping point is not established by that saved artifact. The selected model size and a later training stopping point should not be conflated.
 
 ### Ensemble
 

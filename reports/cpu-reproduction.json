@@ -1,0 +1,920 @@
+{
+  "schema_version": 1,
+  "status": "completed_saved_model_inference_and_resource_observations",
+  "all_six_full_inference_executions_completed": true,
+  "count_per_model_platform": 4708,
+  "original_kaggle_strict_reproduction_passed": false,
+  "original_kaggle_strict_status": "failed",
+  "exact_classification_and_acceptance_status": "passed",
+  "main_metrics_comparison_status": "passed",
+  "main_metrics_comparison_scope": "Original exact counts/confusion/F1/accuracy and selected floating ROC AUC/NLL/Brier/ECE within1e-6; not every metric bit-identical.",
+  "public_helper_sha256": "c46deec649622a3757413d9e2456bd1aac93959b38ca585816458e5f97cdcaf3",
+  "public_helper_expanded_check_status": "failed",
+  "public_helper_expanded_check_scope": "Six report-only executions of the existing published helper with unchanged1e-5/1e-6 tolerances; derived floating diagnostics are checked separately from the original selected main metric subset.",
+  "probability_absolute_tolerance": 1e-05,
+  "numeric_metric_absolute_tolerance": 1e-06,
+  "tolerances_changed": false,
+  "original_gold_reference_replaced": false,
+  "model_artifact_origin": "local_retrieved_frozen_artifacts",
+  "anonymous_public_model_download_verified": false,
+  "anonymous_download_at_replay": false,
+  "anonymous_public_model_download_verified_scope": "Original inference replay used local retrieved frozen artifacts; the separately bound public transport proof does not change that origin.",
+  "public_model_download_state": "verified_separate_anonymous_public_transport",
+  "separate_public_model_transport": {
+    "status": "passed_separate_anonymous_public_transport",
+    "receipt_file": "reports/model-download-verification.json",
+    "receipt_sha256": "c4cda41033e15ba2d456f5d0977b07e7e55b7fa99f1e89cff1ab3aeb650415db",
+    "descriptor_file": "reports/artifact-download.json",
+    "descriptor_sha256": "e3e6486da34e715bb544f87a706dbc1a93844bf7cd2100ab8a9ef8f249ee6278",
+    "dataset_id": "dongmyungpark/nlu-authorship-frozen-large-20261012",
+    "dataset_version": 1,
+    "freeze_sha256": "e8fc94ee17d7ea575ecf8002e3d104d1ec70600b68cc59239f1189b0b955f924",
+    "source_sha256": {
+      "configs/experiment-plan.json": "7e614b6320b922a036939bc262ef1fc2b4a1108b353e8ca430ece784ca39ea0d",
+      "launch-nlu.bat": "384a75d9ab39b95d88cff3b199759a0eeb502b7f85b8b42edc8a46d89d21bc76",
+      "launch-nlu.sh": "c8f0d655b53ccd841c583384d7e30194ed3880052a3e27f059e4b4174ac9938d",
+      "nlu_authorship/__init__.py": "2bad8cb8c8ca252223faa29a713c97d1f88f4e5e9599fe0e63ca7435f207eeb8",
+      "nlu_authorship/__main__.py": "bd045ddd5242d002f692dac452be9afba38deef5cde541a5fc074bfef5987b91",
+      "nlu_authorship/calibration.py": "f0bc838911c29aeaa71335aa6cf5f15d34f77cb571909587e95abdec22eb37e7",
+      "nlu_authorship/cli.py": "f97e70f4f98be8708adf1bff6efdc3877fb7e55679ca273abf26451d10441a9d",
+      "nlu_authorship/data.py": "384cfb0b8311c53cd0a2d70a22c8abb134fd5981e917e94718c4533a78671b57",
+      "nlu_authorship/evaluation.py": "189032d14ed26ee9c520745bcdeab8e759a28a17819c7ced4ec603442a4230b0",
+      "nlu_authorship/losses.py": "54efd41a4cf3ac972d7564854b0d0ffb237026107d00943f08002bd9251c454e",
+      "nlu_authorship/metrics.py": "0d156ab4c3172e02a77431c1b23ccb892ed354b44a4f37085e92a7b5eae42045",
+      "nlu_authorship/models.py": "a3783baca35b27c72c403e2e69599842028cc5206ae39cf1fe255672116eae83",
+      "nlu_authorship/normalization.py": "a9426338a4c4335884e552085b7278c53bc94043b44756ed768cd8c89cdd6d39",
+      "nlu_authorship/release.py": "db6306a74988c22c79dbe2daa3e9aeb0f997f0f6144ad8aae1fa4ff75074f4a0",
+      "nlu_authorship/runtime.py": "1e92e05f0187d4b1e012f5e472cc769e02bef2ea51ae5bb552ede502e6827510",
+      "nlu_authorship/stylometric.py": "c6a617a5ecc20be440d5ef3d1031d8966ac3783713b55050ebd5b2a60501504e",
+      "nlu_authorship/training.py": "9ae5052b80481b79809c835b1b846a02b6b843bbf2a6bea9d2225d793c783a04",
+      "pyproject.toml": "f6d1460702eb43124a2bb66642bc35bea865abc140f84a08d1c9424a345e18a2",
+      "requirements-inference.txt": "9cbc532b47d8066e6d350214e1cc4241f875801a5b3d01f8dd80dc70ed082aab",
+      "requirements-runtime.txt": "231318cd62c1bd3b9cc235c3e6e0c99d3fc1d7e645b1e2756424f95854ec42d4",
+      "requirements-training.txt": "3e21eb28d5f8c8a32e250b20c18d011fd5de1b4f933b6f4acd39c23ed678dc91",
+      "requirements.txt": "6d10e37e342472b5ba0a5d32bece2dc95fb7e17476a3d66c9d5851a673355560",
+      "run.ps1": "ef1ded686d2692d5412d1a68c9614393dadb1eb778ea48107e0e37120fa2f31b",
+      "scripts/__init__.py": "e533c40041a9ee3e4d15b00041f32d5b0d9f123341fd9d0c04f5ca5a953631a8",
+      "scripts/bootstrap_results.py": "d890d10de2651a667f5410c1cc731c031e2e6ac78bb1eee736d7bdbdb7949736",
+      "scripts/bootstrap_windows.ps1": "9cd59f034d413d4d7fc64213764dda402498d56980481b7bc0cdcf394f27ec0c",
+      "scripts/download_artifacts.py": "2317b7fadd8e9a130459c9b97231cce86a66c77f0a72043a936e1a8d69634fc7",
+      "scripts/launch_nlu.py": "36b7619e9f6517e59040244ed2546ddbcd9084cd45ff42c26467f010c354d449",
+      "scripts/package_kaggle.py": "5c8978503649c432add3ec847936a37d86c9af772264d2075122ece9636bdba5",
+      "scripts/plot_results.py": "0b272f425ce06ac658e13eab6e246d74fd1c4640326fa44d8d96a691a193fd9d",
+      "scripts/run_kaggle_experiment.py": "3f42c8c600de2fc69b3980ed6b20607eed8f996ca16c50dc25451733b5e0ebb7",
+      "scripts/run_parallel_transformers.py": "8f49d9be4ba2ff6dbf1e3f621099dcf09349c5c31091885c82976fa126d35603",
+      "scripts/run_single_transformer.py": "22fea82952f142f4b1aec2bf9f38b4e580ff021975de0cdedf322b8cff1f04f1",
+      "scripts/setup_kaggle_runtime.py": "470562fc49502864e48bd1061d0e63d3f7812326c22c0c3a75041b9f4301004f",
+      "scripts/setup_runtime.py": "bfc9d7217f651b7fc9627160dc94f1cd0bfec76771d04ebeed7db25b6554923d"
+    },
+    "artifact_count": 21,
+    "bytes": 2856189574,
+    "frozen_runtime_files": [
+      {
+        "path": "models/stylometric/artifact-inventory.json",
+        "bytes": 985,
+        "sha256": "70668b83ff60501dfe31eac134c4c3a607e88148801f80db9c1d786b7e73781a",
+        "version_pinned_url": "https://www.kaggle.com/api/v1/datasets/download/dongmyungpark/nlu-authorship-frozen-large-20261012/stylometric--artifact-inventory.json?datasetVersionNumber=1&raw=true"
+      },
+      {
+        "path": "models/stylometric/ensemble_config.json",
+        "bytes": 2714,
+        "sha256": "dea8f62f0f7a4bc15163d58cc02275a9dd48b8e0ab810a5e7fc2ccc9a3ee6b8d",
+        "version_pinned_url": "https://www.kaggle.com/api/v1/datasets/download/dongmyungpark/nlu-authorship-frozen-large-20261012/stylometric--ensemble_config.json?datasetVersionNumber=1&raw=true"
+      },
+      {
+        "path": "models/stylometric/lgb_model.pkl",
+        "bytes": 4589436,
+        "sha256": "c3b7a016ec14305e0dea661177619dbfef32882582e7255d2d33075b8352e49d",
+        "version_pinned_url": "https://www.kaggle.com/api/v1/datasets/download/dongmyungpark/nlu-authorship-frozen-large-20261012/stylometric--lgb_model.pkl?datasetVersionNumber=1&raw=true"
+      },
+      {
+        "path": "models/stylometric/tfidf_char.pkl",
+        "bytes": 179162,
+        "sha256": "86b67006c3ac011903f9b740739627eb62705c5c4eafe136bfe3f4344ba2063a",
+        "version_pinned_url": "https://www.kaggle.com/api/v1/datasets/download/dongmyungpark/nlu-authorship-frozen-large-20261012/stylometric--tfidf_char.pkl?datasetVersionNumber=1&raw=true"
+      },
+      {
+        "path": "models/stylometric/tfidf_fw.pkl",
+        "bytes": 4443,
+        "sha256": "1660621c44eed894dd4c8dd953866da2d933d98aaac600027b71e366c562d94a",
+        "version_pinned_url": "https://www.kaggle.com/api/v1/datasets/download/dongmyungpark/nlu-authorship-frozen-large-20261012/stylometric--tfidf_fw.pkl?datasetVersionNumber=1&raw=true"
+      },
+      {
+        "path": "models/stylometric/tfidf_word.pkl",
+        "bytes": 205558,
+        "sha256": "41f6cf4935853ddf10673695a5d2b981875f6ec9434a22e74b55d966bb80d5ea",
+        "version_pinned_url": "https://www.kaggle.com/api/v1/datasets/download/dongmyungpark/nlu-authorship-frozen-large-20261012/stylometric--tfidf_word.pkl?datasetVersionNumber=1&raw=true"
+      },
+      {
+        "path": "models/stylometric/xgb_model.json",
+        "bytes": 1083775,
+        "sha256": "94dcce8b6dbfb4726813bb648ffa91a8d3f2bcc0ea6aaa39a653df09ff54d24c",
+        "version_pinned_url": "https://www.kaggle.com/api/v1/datasets/download/dongmyungpark/nlu-authorship-frozen-large-20261012/stylometric--xgb_model.json?datasetVersionNumber=1&raw=true"
+      },
+      {
+        "path": "models/ce/artifact-inventory.json",
+        "bytes": 965,
+        "sha256": "2e53cc3123af73bcae0ece1534bacfa1e751f379a110896a4936a2288eaee8db",
+        "version_pinned_url": "https://www.kaggle.com/api/v1/datasets/download/dongmyungpark/nlu-authorship-frozen-large-20261012/ce--artifact-inventory.json?datasetVersionNumber=1&raw=true"
+      },
+      {
+        "path": "models/ce/checkpoint-report.json",
+        "bytes": 3965,
+        "sha256": "d0745943a530753e226c106029e45a2a8da20d2c83088d6ef8abb6581a3241da",
+        "version_pinned_url": "https://www.kaggle.com/api/v1/datasets/download/dongmyungpark/nlu-authorship-frozen-large-20261012/ce--checkpoint-report.json?datasetVersionNumber=1&raw=true"
+      },
+      {
+        "path": "models/ce/config.json",
+        "bytes": 691,
+        "sha256": "d6c814a807e367b44737bc19fadc05aa02022ddb83348166b0c9045d8d9d9351",
+        "version_pinned_url": "https://www.kaggle.com/api/v1/datasets/download/dongmyungpark/nlu-authorship-frozen-large-20261012/ce--config.json?datasetVersionNumber=1&raw=true"
+      },
+      {
+        "path": "models/ce/model.safetensors",
+        "bytes": 1421495360,
+        "sha256": "39c875dd559e076c24ed645da55d723cf4686898d175ecb3131f8f31766f45ab",
+        "version_pinned_url": "https://www.kaggle.com/api/v1/datasets/download/dongmyungpark/nlu-authorship-frozen-large-20261012/ce--model.safetensors?datasetVersionNumber=1&raw=true"
+      },
+      {
+        "path": "models/ce/tokenizer.json",
+        "bytes": 3558740,
+        "sha256": "fdebe197cabe6cd156c7b8f3daa09b9b43388143f857bc64561e98375f8c5267",
+        "version_pinned_url": "https://www.kaggle.com/api/v1/datasets/download/dongmyungpark/nlu-authorship-frozen-large-20261012/ce--tokenizer.json?datasetVersionNumber=1&raw=true"
+      },
+      {
+        "path": "models/ce/tokenizer_config.json",
+        "bytes": 358,
+        "sha256": "bb5706f71e3d5cb4bf9878ad9b14a2079e6fbd618fc0a0ba2ac1b257d7824cc9",
+        "version_pinned_url": "https://www.kaggle.com/api/v1/datasets/download/dongmyungpark/nlu-authorship-frozen-large-20261012/ce--tokenizer_config.json?datasetVersionNumber=1&raw=true"
+      },
+      {
+        "path": "models/ce/training-config.json",
+        "bytes": 1637,
+        "sha256": "e7320fe2fa70e465cfbf7d79ca64e31761ce8d8aaab8f1427577a275b1bf2e51",
+        "version_pinned_url": "https://www.kaggle.com/api/v1/datasets/download/dongmyungpark/nlu-authorship-frozen-large-20261012/ce--training-config.json?datasetVersionNumber=1&raw=true"
+      },
+      {
+        "path": "models/custom_asl/artifact-inventory.json",
+        "bytes": 965,
+        "sha256": "82ec7fb552b84cf86e8a230e6c42d7a3e399d6a4f6077064bab69f4160670cf6",
+        "version_pinned_url": "https://www.kaggle.com/api/v1/datasets/download/dongmyungpark/nlu-authorship-frozen-large-20261012/custom_asl--artifact-inventory.json?datasetVersionNumber=1&raw=true"
+      },
+      {
+        "path": "models/custom_asl/checkpoint-report.json",
+        "bytes": 4026,
+        "sha256": "ccdf90165038ac7fffe7ae61e42b0f60ba8c290e3d29724979ee74a6ede04df1",
+        "version_pinned_url": "https://www.kaggle.com/api/v1/datasets/download/dongmyungpark/nlu-authorship-frozen-large-20261012/custom_asl--checkpoint-report.json?datasetVersionNumber=1&raw=true"
+      },
+      {
+        "path": "models/custom_asl/config.json",
+        "bytes": 691,
+        "sha256": "d6c814a807e367b44737bc19fadc05aa02022ddb83348166b0c9045d8d9d9351",
+        "version_pinned_url": "https://www.kaggle.com/api/v1/datasets/download/dongmyungpark/nlu-authorship-frozen-large-20261012/custom_asl--config.json?datasetVersionNumber=1&raw=true"
+      },
+      {
+        "path": "models/custom_asl/model.safetensors",
+        "bytes": 1421495360,
+        "sha256": "647fe0e7c12d8c7b03dc4946cb8bf105fb866ccb1c41530da7947bc617e040a4",
+        "version_pinned_url": "https://www.kaggle.com/api/v1/datasets/download/dongmyungpark/nlu-authorship-frozen-large-20261012/custom_asl--model.safetensors?datasetVersionNumber=1&raw=true"
+      },
+      {
+        "path": "models/custom_asl/tokenizer.json",
+        "bytes": 3558740,
+        "sha256": "fdebe197cabe6cd156c7b8f3daa09b9b43388143f857bc64561e98375f8c5267",
+        "version_pinned_url": "https://www.kaggle.com/api/v1/datasets/download/dongmyungpark/nlu-authorship-frozen-large-20261012/custom_asl--tokenizer.json?datasetVersionNumber=1&raw=true"
+      },
+      {
+        "path": "models/custom_asl/tokenizer_config.json",
+        "bytes": 358,
+        "sha256": "bb5706f71e3d5cb4bf9878ad9b14a2079e6fbd618fc0a0ba2ac1b257d7824cc9",
+        "version_pinned_url": "https://www.kaggle.com/api/v1/datasets/download/dongmyungpark/nlu-authorship-frozen-large-20261012/custom_asl--tokenizer_config.json?datasetVersionNumber=1&raw=true"
+      },
+      {
+        "path": "models/custom_asl/training-config.json",
+        "bytes": 1645,
+        "sha256": "cd0e9c2d078af168666ef0c6856a178a08b2d1132ab998dc2b3808b4cdd76c62",
+        "version_pinned_url": "https://www.kaggle.com/api/v1/datasets/download/dongmyungpark/nlu-authorship-frozen-large-20261012/custom_asl--training-config.json?datasetVersionNumber=1&raw=true"
+      }
+    ],
+    "authentication_used_for_download": false,
+    "model_inference_repeated": false,
+    "original_local_inference_origin_reclassified": false
+  },
+  "same_physical_host_windows_linux": true,
+  "linux_environment": "WSL2 Linux on the same physical Windows host",
+  "independent_external_reviewer": false,
+  "reference_execution_device": {
+    "stylometric": "Kaggle CPU",
+    "ce": "Kaggle CUDA/T4",
+    "custom_asl": "Kaggle CUDA/T4"
+  },
+  "freeze_sha256": "e8fc94ee17d7ea575ecf8002e3d104d1ec70600b68cc59239f1189b0b955f924",
+  "manifest_sha256": "4c110a05134a75bc16fb6b82b098bb5559f59c18d40ccba94f09d2cf91452cae",
+  "manifest_file_sha256": "bdaef137cf8f3ec48698352af1130dbbc9cb9d0e7569eb208dfa52c91ddcfdb3",
+  "source_sha256": {
+    "configs/experiment-plan.json": "7e614b6320b922a036939bc262ef1fc2b4a1108b353e8ca430ece784ca39ea0d",
+    "launch-nlu.bat": "384a75d9ab39b95d88cff3b199759a0eeb502b7f85b8b42edc8a46d89d21bc76",
+    "launch-nlu.sh": "c8f0d655b53ccd841c583384d7e30194ed3880052a3e27f059e4b4174ac9938d",
+    "nlu_authorship/__init__.py": "2bad8cb8c8ca252223faa29a713c97d1f88f4e5e9599fe0e63ca7435f207eeb8",
+    "nlu_authorship/__main__.py": "bd045ddd5242d002f692dac452be9afba38deef5cde541a5fc074bfef5987b91",
+    "nlu_authorship/calibration.py": "f0bc838911c29aeaa71335aa6cf5f15d34f77cb571909587e95abdec22eb37e7",
+    "nlu_authorship/cli.py": "f97e70f4f98be8708adf1bff6efdc3877fb7e55679ca273abf26451d10441a9d",
+    "nlu_authorship/data.py": "384cfb0b8311c53cd0a2d70a22c8abb134fd5981e917e94718c4533a78671b57",
+    "nlu_authorship/evaluation.py": "189032d14ed26ee9c520745bcdeab8e759a28a17819c7ced4ec603442a4230b0",
+    "nlu_authorship/losses.py": "54efd41a4cf3ac972d7564854b0d0ffb237026107d00943f08002bd9251c454e",
+    "nlu_authorship/metrics.py": "0d156ab4c3172e02a77431c1b23ccb892ed354b44a4f37085e92a7b5eae42045",
+    "nlu_authorship/models.py": "a3783baca35b27c72c403e2e69599842028cc5206ae39cf1fe255672116eae83",
+    "nlu_authorship/normalization.py": "a9426338a4c4335884e552085b7278c53bc94043b44756ed768cd8c89cdd6d39",
+    "nlu_authorship/release.py": "db6306a74988c22c79dbe2daa3e9aeb0f997f0f6144ad8aae1fa4ff75074f4a0",
+    "nlu_authorship/runtime.py": "1e92e05f0187d4b1e012f5e472cc769e02bef2ea51ae5bb552ede502e6827510",
+    "nlu_authorship/stylometric.py": "c6a617a5ecc20be440d5ef3d1031d8966ac3783713b55050ebd5b2a60501504e",
+    "nlu_authorship/training.py": "9ae5052b80481b79809c835b1b846a02b6b843bbf2a6bea9d2225d793c783a04",
+    "pyproject.toml": "f6d1460702eb43124a2bb66642bc35bea865abc140f84a08d1c9424a345e18a2",
+    "requirements-inference.txt": "9cbc532b47d8066e6d350214e1cc4241f875801a5b3d01f8dd80dc70ed082aab",
+    "requirements-runtime.txt": "231318cd62c1bd3b9cc235c3e6e0c99d3fc1d7e645b1e2756424f95854ec42d4",
+    "requirements-training.txt": "3e21eb28d5f8c8a32e250b20c18d011fd5de1b4f933b6f4acd39c23ed678dc91",
+    "requirements.txt": "6d10e37e342472b5ba0a5d32bece2dc95fb7e17476a3d66c9d5851a673355560",
+    "run.ps1": "ef1ded686d2692d5412d1a68c9614393dadb1eb778ea48107e0e37120fa2f31b",
+    "scripts/__init__.py": "e533c40041a9ee3e4d15b00041f32d5b0d9f123341fd9d0c04f5ca5a953631a8",
+    "scripts/bootstrap_results.py": "d890d10de2651a667f5410c1cc731c031e2e6ac78bb1eee736d7bdbdb7949736",
+    "scripts/bootstrap_windows.ps1": "9cd59f034d413d4d7fc64213764dda402498d56980481b7bc0cdcf394f27ec0c",
+    "scripts/download_artifacts.py": "2317b7fadd8e9a130459c9b97231cce86a66c77f0a72043a936e1a8d69634fc7",
+    "scripts/launch_nlu.py": "36b7619e9f6517e59040244ed2546ddbcd9084cd45ff42c26467f010c354d449",
+    "scripts/package_kaggle.py": "5c8978503649c432add3ec847936a37d86c9af772264d2075122ece9636bdba5",
+    "scripts/plot_results.py": "0b272f425ce06ac658e13eab6e246d74fd1c4640326fa44d8d96a691a193fd9d",
+    "scripts/run_kaggle_experiment.py": "3f42c8c600de2fc69b3980ed6b20607eed8f996ca16c50dc25451733b5e0ebb7",
+    "scripts/run_parallel_transformers.py": "8f49d9be4ba2ff6dbf1e3f621099dcf09349c5c31091885c82976fa126d35603",
+    "scripts/run_single_transformer.py": "22fea82952f142f4b1aec2bf9f38b4e580ff021975de0cdedf322b8cff1f04f1",
+    "scripts/setup_kaggle_runtime.py": "470562fc49502864e48bd1061d0e63d3f7812326c22c0c3a75041b9f4301004f",
+    "scripts/setup_runtime.py": "bfc9d7217f651b7fc9627160dc94f1cd0bfec76771d04ebeed7db25b6554923d"
+  },
+  "source_csvs": {
+    "train": {
+      "filename": "train.csv",
+      "bytes": 32293474,
+      "sha256": "f3967e0d050867c7284729b9a20ad0cdd0dc6d7ee148ba7c6854dc265aeb581a",
+      "rows": 27643
+    },
+    "dev": {
+      "filename": "dev.csv",
+      "bytes": 6989758,
+      "sha256": "44f5b411fec2508ce8f75ad241c778d98f677a6e3423ded034c24c055b78806a",
+      "rows": 5993
+    }
+  },
+  "frozen_model_inventories": {
+    "ce": {
+      "kind": "directory",
+      "files": {
+        "artifact-inventory.json": {
+          "sha256": "2e53cc3123af73bcae0ece1534bacfa1e751f379a110896a4936a2288eaee8db",
+          "bytes": 965
+        },
+        "checkpoint-report.json": {
+          "sha256": "d0745943a530753e226c106029e45a2a8da20d2c83088d6ef8abb6581a3241da",
+          "bytes": 3965
+        },
+        "config.json": {
+          "sha256": "d6c814a807e367b44737bc19fadc05aa02022ddb83348166b0c9045d8d9d9351",
+          "bytes": 691
+        },
+        "model.safetensors": {
+          "sha256": "39c875dd559e076c24ed645da55d723cf4686898d175ecb3131f8f31766f45ab",
+          "bytes": 1421495360
+        },
+        "tokenizer.json": {
+          "sha256": "fdebe197cabe6cd156c7b8f3daa09b9b43388143f857bc64561e98375f8c5267",
+          "bytes": 3558740
+        },
+        "tokenizer_config.json": {
+          "sha256": "bb5706f71e3d5cb4bf9878ad9b14a2079e6fbd618fc0a0ba2ac1b257d7824cc9",
+          "bytes": 358
+        },
+        "training-config.json": {
+          "sha256": "e7320fe2fa70e465cfbf7d79ca64e31761ce8d8aaab8f1427577a275b1bf2e51",
+          "bytes": 1637
+        }
+      },
+      "content_sha256": "a5f0c30f03f44bfc52acd8436a58594aac556bdf0fc28f1b285d345ad9970a5d"
+    },
+    "custom_asl": {
+      "kind": "directory",
+      "files": {
+        "artifact-inventory.json": {
+          "sha256": "82ec7fb552b84cf86e8a230e6c42d7a3e399d6a4f6077064bab69f4160670cf6",
+          "bytes": 965
+        },
+        "checkpoint-report.json": {
+          "sha256": "ccdf90165038ac7fffe7ae61e42b0f60ba8c290e3d29724979ee74a6ede04df1",
+          "bytes": 4026
+        },
+        "config.json": {
+          "sha256": "d6c814a807e367b44737bc19fadc05aa02022ddb83348166b0c9045d8d9d9351",
+          "bytes": 691
+        },
+        "model.safetensors": {
+          "sha256": "647fe0e7c12d8c7b03dc4946cb8bf105fb866ccb1c41530da7947bc617e040a4",
+          "bytes": 1421495360
+        },
+        "tokenizer.json": {
+          "sha256": "fdebe197cabe6cd156c7b8f3daa09b9b43388143f857bc64561e98375f8c5267",
+          "bytes": 3558740
+        },
+        "tokenizer_config.json": {
+          "sha256": "bb5706f71e3d5cb4bf9878ad9b14a2079e6fbd618fc0a0ba2ac1b257d7824cc9",
+          "bytes": 358
+        },
+        "training-config.json": {
+          "sha256": "cd0e9c2d078af168666ef0c6856a178a08b2d1132ab998dc2b3808b4cdd76c62",
+          "bytes": 1645
+        }
+      },
+      "content_sha256": "10ffa6bd384121062ab9acea49ecc5702bbd7bd15733dd2d4b7002e32f5b478e"
+    },
+    "stylometric": {
+      "kind": "directory",
+      "files": {
+        "artifact-inventory.json": {
+          "sha256": "70668b83ff60501dfe31eac134c4c3a607e88148801f80db9c1d786b7e73781a",
+          "bytes": 985
+        },
+        "ensemble_config.json": {
+          "sha256": "dea8f62f0f7a4bc15163d58cc02275a9dd48b8e0ab810a5e7fc2ccc9a3ee6b8d",
+          "bytes": 2714
+        },
+        "lgb_model.pkl": {
+          "sha256": "c3b7a016ec14305e0dea661177619dbfef32882582e7255d2d33075b8352e49d",
+          "bytes": 4589436
+        },
+        "tfidf_char.pkl": {
+          "sha256": "86b67006c3ac011903f9b740739627eb62705c5c4eafe136bfe3f4344ba2063a",
+          "bytes": 179162
+        },
+        "tfidf_fw.pkl": {
+          "sha256": "1660621c44eed894dd4c8dd953866da2d933d98aaac600027b71e366c562d94a",
+          "bytes": 4443
+        },
+        "tfidf_word.pkl": {
+          "sha256": "41f6cf4935853ddf10673695a5d2b981875f6ec9434a22e74b55d966bb80d5ea",
+          "bytes": 205558
+        },
+        "xgb_model.json": {
+          "sha256": "94dcce8b6dbfb4726813bb648ffa91a8d3f2bcc0ea6aaa39a653df09ff54d24c",
+          "bytes": 1083775
+        }
+      },
+      "content_sha256": "eb7e99a46cce03890409ff5bf0c646b3fc6574b17bc47fe1599b34d079b11aa1"
+    }
+  },
+  "frozen_calibration_sha256": {
+    "stylometric": "15dedf9554ad18299efd52786a393b49c91302ebb8d3b01313368a97afd657fd",
+    "ce": "be975356578accd852b2895134cfee968807435a1e4200eb2dedda12f6195823",
+    "custom_asl": "abab558c1f020f2fb82bc55381b3040edbe12d6c2d150c0ee0ae593f2d70672e"
+  },
+  "platforms": {
+    "windows": {
+      "evaluation_device": "cpu",
+      "evaluation_batch_size": 4,
+      "evaluation_threads": 4,
+      "same_physical_host": true,
+      "external_independent_reviewer": false,
+      "models": {
+        "stylometric": {
+          "cli_exit_code": 0,
+          "cli_elapsed_seconds": 146.40113269998983,
+          "evaluated_count": 4708,
+          "model_content_sha256": "eb7e99a46cce03890409ff5bf0c646b3fc6574b17bc47fe1599b34d079b11aa1",
+          "execution_receipt_sha256": "393e9256ff6f4fe3c47d9e2eb72c1b85b34403be577b47cce2d1b30e1b952554",
+          "original_kaggle_strict_comparison_status": "passed",
+          "exact_classification_and_acceptance_status": "passed",
+          "main_metrics_comparison_status": "passed",
+          "main_metrics_comparison_scope": "Original exact count/confusion/F1/accuracy checks and ROC AUC/NLL/Brier/ECE absolute differences <=1e-6, not every metric byte-identical.",
+          "public_helper_expanded_comparison_status": "passed",
+          "public_helper_metric_difference_count": 0,
+          "maximum_absolute_probability_difference": {
+            "raw_probability_ab": 7.45058065243498e-09,
+            "raw_probability_ba": 7.45058065243498e-09,
+            "raw_probability_symmetric": 7.45058065243498e-09,
+            "raw_probability_selected": 7.45058065243498e-09,
+            "calibrated_probability": 8.919874783241966e-09,
+            "calibrated_probability_swapped_selected_policy": 8.919874783241966e-09,
+            "confidence": 8.919874783241966e-09
+          },
+          "classification": {
+            "count": 4708,
+            "correct": 3491,
+            "accuracy": 0.7415038232795242,
+            "macro_f1": 0.7414976538181034,
+            "confusion": [
+              [
+                1734,
+                631
+              ],
+              [
+                586,
+                1757
+              ]
+            ]
+          },
+          "abstention": {
+            "accepted_count": 3858,
+            "rejected_count": 850,
+            "coverage": 0.8194562446898895,
+            "accepted_accuracy": 0.7936754795230689,
+            "confidence_threshold": 0.5749337880994199,
+            "target_coverage": 0.8,
+            "target_accepted_accuracy": 0.9,
+            "target_achieved_on_this_evaluation": false,
+            "parameters_fitted_on": "calibration",
+            "no_refit_on_evaluation": true
+          },
+          "raw_evaluation_sha256": {
+            "metrics.json": "8da6f7a45f390d33376df78ab0a49299ee4872f71870a039c057cb20da2d6b70",
+            "confusion.json": "63cb47488e3928bb4e510c68cefdc680b1ec4e826d060721b904dd197e8821e6",
+            "predictions.jsonl": "f015681ce048d05ef57f1027cd609fa47144c9ed67269b9f6cf27cf8ab0d2d70"
+          },
+          "original_comparison_sha256": "652ea431fddd4e09f86ba70b67405bc354344b438efc6b20b2ac1b59a6def8dd",
+          "cost_cli_elapsed_seconds": 28.15009110000392,
+          "raw_cost_sha256": "1f855e781da34aa17a2cce89108b6ad50d33c34370c054fe8f99e88781be8db5",
+          "cpu_cost_parameters": {
+            "samples": 32,
+            "warmup": 5,
+            "repetitions": 3,
+            "threads": 1,
+            "batch_size": 1,
+            "record_ids_sha256": "46b1f563a99c58ac94276192952dcf80f786ce9853a0b4ec67c6b33a2c89ac38"
+          },
+          "process_memory": {
+            "schema_version": 1,
+            "status": "measured",
+            "platform": "Windows CPU",
+            "method": "GetProcessMemoryInfo: PeakWorkingSetSize and PeakPagefileUsage",
+            "peak_resident_working_set_bytes": 291590144,
+            "peak_process_commit_charge_bytes": 249561088,
+            "commit_counter_is_not_actual_disk_swapping_measurement": true,
+            "scope": "Whole fresh CLI process, including interpreter, libraries, model and preprocessing.",
+            "resident_scope": "PeakWorkingSetSize: peak resident working set.",
+            "commit_scope": "PeakPagefileUsage: peak process commit charge, not measured disk pagefile traffic.",
+            "memory_evidence_file_sha256": "e3c5d147949ba42cbcebe2d618e46ffcd8fd5f00f37e014205f9c0cc7344c801"
+          }
+        },
+        "ce": {
+          "cli_exit_code": 0,
+          "cli_elapsed_seconds": 8161.128255600008,
+          "evaluated_count": 4708,
+          "model_content_sha256": "a5f0c30f03f44bfc52acd8436a58594aac556bdf0fc28f1b285d345ad9970a5d",
+          "execution_receipt_sha256": "393e9256ff6f4fe3c47d9e2eb72c1b85b34403be577b47cce2d1b30e1b952554",
+          "original_kaggle_strict_comparison_status": "failed",
+          "exact_classification_and_acceptance_status": "passed",
+          "main_metrics_comparison_status": "passed",
+          "main_metrics_comparison_scope": "Original exact count/confusion/F1/accuracy checks and ROC AUC/NLL/Brier/ECE absolute differences <=1e-6, not every metric byte-identical.",
+          "public_helper_expanded_comparison_status": "failed",
+          "public_helper_metric_difference_count": 2,
+          "maximum_absolute_probability_difference": {
+            "raw_probability_ab": 1.609396818497144e-05,
+            "raw_probability_ba": 5.430758980407013e-05,
+            "raw_probability_symmetric": 2.7547702152186382e-05,
+            "raw_probability_selected": 2.7547702152186382e-05,
+            "calibrated_probability": 1.7899845360491717e-05,
+            "calibrated_probability_swapped_selected_policy": 1.7899845360491717e-05,
+            "confidence": 1.7899845360491717e-05
+          },
+          "classification": {
+            "count": 4708,
+            "correct": 3807,
+            "accuracy": 0.8086236193712829,
+            "macro_f1": 0.8083825205111266,
+            "confusion": [
+              [
+                1987,
+                378
+              ],
+              [
+                523,
+                1820
+              ]
+            ]
+          },
+          "abstention": {
+            "accepted_count": 3875,
+            "rejected_count": 833,
+            "coverage": 0.8230671197960917,
+            "accepted_accuracy": 0.863741935483871,
+            "confidence_threshold": 0.6009338103838517,
+            "target_coverage": 0.8,
+            "target_accepted_accuracy": 0.9,
+            "target_achieved_on_this_evaluation": false,
+            "parameters_fitted_on": "calibration",
+            "no_refit_on_evaluation": true
+          },
+          "raw_evaluation_sha256": {
+            "metrics.json": "639a86dc721e94ed70f7e7762e8687df158731788073b2935562b47747ca2303",
+            "confusion.json": "ba86d7c00cb216ca15d277178aa2e884a0056ed5ae7596b2cf5e22a893ef8acb",
+            "predictions.jsonl": "ed241d18667301100cfe86693331e4b18a40e7fc3df75502268eb753056935be"
+          },
+          "original_comparison_sha256": "33414d47acd438c5367ba957066f411f4048d651045a7b262019fbde63661c8a",
+          "cost_cli_elapsed_seconds": 362.32107380000525,
+          "raw_cost_sha256": "ed2bb64090e50290a2e2b75f79de08890019271f53104722750ff01b66066ef9",
+          "cpu_cost_parameters": {
+            "samples": 32,
+            "warmup": 5,
+            "repetitions": 3,
+            "threads": 1,
+            "batch_size": 1,
+            "record_ids_sha256": "46b1f563a99c58ac94276192952dcf80f786ce9853a0b4ec67c6b33a2c89ac38"
+          },
+          "process_memory": {
+            "schema_version": 1,
+            "status": "measured",
+            "platform": "Windows CPU",
+            "method": "GetProcessMemoryInfo: PeakWorkingSetSize and PeakPagefileUsage",
+            "peak_resident_working_set_bytes": 1687089152,
+            "peak_process_commit_charge_bytes": 3179204608,
+            "commit_counter_is_not_actual_disk_swapping_measurement": true,
+            "scope": "Whole fresh CLI process, including interpreter, libraries, model and preprocessing.",
+            "resident_scope": "PeakWorkingSetSize: peak resident working set.",
+            "commit_scope": "PeakPagefileUsage: peak process commit charge, not measured disk pagefile traffic.",
+            "memory_evidence_file_sha256": "8b1167c5895ef254723b4a58c96c595316c3d247f2e4dd9cf7ad9d5586ad9422"
+          }
+        },
+        "custom_asl": {
+          "cli_exit_code": 0,
+          "cli_elapsed_seconds": 8809.442031400002,
+          "evaluated_count": 4708,
+          "model_content_sha256": "10ffa6bd384121062ab9acea49ecc5702bbd7bd15733dd2d4b7002e32f5b478e",
+          "execution_receipt_sha256": "e6acb2ea79a1aee602d39ad9c0ea4c8be4d4c837dab5c737fc142da156b2f0f1",
+          "original_kaggle_strict_comparison_status": "failed",
+          "exact_classification_and_acceptance_status": "passed",
+          "main_metrics_comparison_status": "passed",
+          "main_metrics_comparison_scope": "Original exact count/confusion/F1/accuracy checks and ROC AUC/NLL/Brier/ECE absolute differences <=1e-6, not every metric byte-identical.",
+          "public_helper_expanded_comparison_status": "failed",
+          "public_helper_metric_difference_count": 2,
+          "maximum_absolute_probability_difference": {
+            "raw_probability_ab": 0.0003015515727392004,
+            "raw_probability_ba": 6.923369227029852e-06,
+            "raw_probability_symmetric": 0.0001422613775039494,
+            "raw_probability_selected": 0.0001422613775039494,
+            "calibrated_probability": 0.0001800454283635844,
+            "calibrated_probability_swapped_selected_policy": 0.0001800454283635844,
+            "confidence": 0.0001800454283635844
+          },
+          "classification": {
+            "count": 4708,
+            "correct": 3838,
+            "accuracy": 0.8152081563296517,
+            "macro_f1": 0.8151695979899498,
+            "confusion": [
+              [
+                1953,
+                412
+              ],
+              [
+                458,
+                1885
+              ]
+            ]
+          },
+          "abstention": {
+            "accepted_count": 3902,
+            "rejected_count": 806,
+            "coverage": 0.8288020390824129,
+            "accepted_accuracy": 0.866735007688365,
+            "confidence_threshold": 0.5948757886505989,
+            "target_coverage": 0.8,
+            "target_accepted_accuracy": 0.9,
+            "target_achieved_on_this_evaluation": false,
+            "parameters_fitted_on": "calibration",
+            "no_refit_on_evaluation": true
+          },
+          "raw_evaluation_sha256": {
+            "metrics.json": "5f34f8bbdb034fae023c82fb16e6b37eccaa039f5c1651e9e81b2545a336c31e",
+            "confusion.json": "2de2d9d20b4d228cb44541bfb010f252ad6920f83a3b66ab495d36450b787050",
+            "predictions.jsonl": "34e573d1326bd99af6ab3c1bc9d0b822ee61df0de758c5db5d8a7a9a47c66742"
+          },
+          "original_comparison_sha256": "0311502c8462218327fbfa60141a35a548ac63d768c0febd713e09a01caaaf20",
+          "cost_cli_elapsed_seconds": 352.60873309998715,
+          "raw_cost_sha256": "9891b33fc622a9304915fcfdb0a5da90825c812180f270394556ccc95757a0b7",
+          "cpu_cost_parameters": {
+            "samples": 32,
+            "warmup": 5,
+            "repetitions": 3,
+            "threads": 1,
+            "batch_size": 1,
+            "record_ids_sha256": "46b1f563a99c58ac94276192952dcf80f786ce9853a0b4ec67c6b33a2c89ac38"
+          },
+          "process_memory": {
+            "schema_version": 1,
+            "status": "measured",
+            "platform": "Windows CPU",
+            "method": "GetProcessMemoryInfo: PeakWorkingSetSize and PeakPagefileUsage",
+            "peak_resident_working_set_bytes": 1687015424,
+            "peak_process_commit_charge_bytes": 3178934272,
+            "commit_counter_is_not_actual_disk_swapping_measurement": true,
+            "scope": "Whole fresh CLI process, including interpreter, libraries, model and preprocessing.",
+            "resident_scope": "PeakWorkingSetSize: peak resident working set.",
+            "commit_scope": "PeakPagefileUsage: peak process commit charge, not measured disk pagefile traffic.",
+            "memory_evidence_file_sha256": "431c81b6f80c27607a3cc2bced397367fc8b884443b255f7df7c76dc0b08a60b"
+          }
+        }
+      }
+    },
+    "linux": {
+      "evaluation_device": "cpu",
+      "evaluation_batch_size": 4,
+      "evaluation_threads": 4,
+      "same_physical_host": true,
+      "external_independent_reviewer": false,
+      "models": {
+        "stylometric": {
+          "cli_exit_code": 0,
+          "cli_elapsed_seconds": 118.70313335600001,
+          "evaluated_count": 4708,
+          "model_content_sha256": "eb7e99a46cce03890409ff5bf0c646b3fc6574b17bc47fe1599b34d079b11aa1",
+          "execution_receipt_sha256": "945450d226bcc2e0b9c1bd21ab78b005b6129171ff6c721d9e8649b12fa08e98",
+          "original_kaggle_strict_comparison_status": "passed",
+          "exact_classification_and_acceptance_status": "passed",
+          "main_metrics_comparison_status": "passed",
+          "main_metrics_comparison_scope": "Original exact count/confusion/F1/accuracy checks and ROC AUC/NLL/Brier/ECE absolute differences <=1e-6, not every metric byte-identical.",
+          "public_helper_expanded_comparison_status": "passed",
+          "public_helper_metric_difference_count": 0,
+          "maximum_absolute_probability_difference": {
+            "raw_probability_ab": 0.0,
+            "raw_probability_ba": 0.0,
+            "raw_probability_symmetric": 0.0,
+            "raw_probability_selected": 0.0,
+            "calibrated_probability": 0.0,
+            "calibrated_probability_swapped_selected_policy": 0.0,
+            "confidence": 0.0
+          },
+          "classification": {
+            "count": 4708,
+            "correct": 3491,
+            "accuracy": 0.7415038232795242,
+            "macro_f1": 0.7414976538181034,
+            "confusion": [
+              [
+                1734,
+                631
+              ],
+              [
+                586,
+                1757
+              ]
+            ]
+          },
+          "abstention": {
+            "accepted_count": 3858,
+            "rejected_count": 850,
+            "coverage": 0.8194562446898895,
+            "accepted_accuracy": 0.7936754795230689,
+            "confidence_threshold": 0.5749337880994199,
+            "target_coverage": 0.8,
+            "target_accepted_accuracy": 0.9,
+            "target_achieved_on_this_evaluation": false,
+            "parameters_fitted_on": "calibration",
+            "no_refit_on_evaluation": true
+          },
+          "raw_evaluation_sha256": {
+            "metrics.json": "3368f5565bef1a5fc44c8be44bcd48ee428202b06b490e15c23db04a81b71399",
+            "confusion.json": "63cb47488e3928bb4e510c68cefdc680b1ec4e826d060721b904dd197e8821e6",
+            "predictions.jsonl": "c688f079a49c376ad00b18294a9cea883e1b7acd0f5f293e1d43b7b23e57c7fa"
+          },
+          "original_comparison_sha256": "d4567b8bb866adc5a154cde51c9234fdb242c013070cf2dbc022798af0921b1f",
+          "cost_cli_elapsed_seconds": 23.152626741,
+          "raw_cost_sha256": "44334c1fd9f0fd25b08f7c3125d5a524df27ccc500cdec088509f1671e73adf5",
+          "cpu_cost_parameters": {
+            "samples": 32,
+            "warmup": 5,
+            "repetitions": 3,
+            "threads": 1,
+            "batch_size": 1,
+            "record_ids_sha256": "46b1f563a99c58ac94276192952dcf80f786ce9853a0b4ec67c6b33a2c89ac38"
+          },
+          "process_memory": {
+            "schema_version": 1,
+            "status": "measured",
+            "platform": "Linux CPU on WSL2",
+            "method": "GNU /usr/bin/time -v",
+            "scope": "Whole fresh CLI process resident peak, including interpreter, libraries, model and preprocessing.",
+            "memory_evidence_file_sha256": "f6e6e1596f327928368a8ef61abd9d2420b9c841e57dea4e3237880e684338b6",
+            "peak_resident_kib": 335128,
+            "peak_resident_bytes": 343171072,
+            "source_reported_unit": "GNU time Linux maxRSS kbytes interpreted as KiB (1024 bytes).",
+            "raw_private_memory_log_sha256": "2958e9a4d44456f8274878e537b55a8eacf46f0b2dba5b277c80cd02a7f1ea2b"
+          }
+        },
+        "ce": {
+          "cli_exit_code": 0,
+          "cli_elapsed_seconds": 9792.30112295,
+          "evaluated_count": 4708,
+          "model_content_sha256": "a5f0c30f03f44bfc52acd8436a58594aac556bdf0fc28f1b285d345ad9970a5d",
+          "execution_receipt_sha256": "945450d226bcc2e0b9c1bd21ab78b005b6129171ff6c721d9e8649b12fa08e98",
+          "original_kaggle_strict_comparison_status": "failed",
+          "exact_classification_and_acceptance_status": "passed",
+          "main_metrics_comparison_status": "passed",
+          "main_metrics_comparison_scope": "Original exact count/confusion/F1/accuracy checks and ROC AUC/NLL/Brier/ECE absolute differences <=1e-6, not every metric byte-identical.",
+          "public_helper_expanded_comparison_status": "failed",
+          "public_helper_metric_difference_count": 2,
+          "maximum_absolute_probability_difference": {
+            "raw_probability_ab": 1.2727074418017459e-05,
+            "raw_probability_ba": 1.1479523922552914e-05,
+            "raw_probability_symmetric": 8.664330762631067e-06,
+            "raw_probability_selected": 8.664330762631067e-06,
+            "calibrated_probability": 8.806711984998827e-06,
+            "calibrated_probability_swapped_selected_policy": 8.806711984998827e-06,
+            "confidence": 8.806711984998827e-06
+          },
+          "classification": {
+            "count": 4708,
+            "correct": 3807,
+            "accuracy": 0.8086236193712829,
+            "macro_f1": 0.8083825205111266,
+            "confusion": [
+              [
+                1987,
+                378
+              ],
+              [
+                523,
+                1820
+              ]
+            ]
+          },
+          "abstention": {
+            "accepted_count": 3875,
+            "rejected_count": 833,
+            "coverage": 0.8230671197960917,
+            "accepted_accuracy": 0.863741935483871,
+            "confidence_threshold": 0.6009338103838517,
+            "target_coverage": 0.8,
+            "target_accepted_accuracy": 0.9,
+            "target_achieved_on_this_evaluation": false,
+            "parameters_fitted_on": "calibration",
+            "no_refit_on_evaluation": true
+          },
+          "raw_evaluation_sha256": {
+            "metrics.json": "b1d51c098b700d6b17451c975868a153514fe0b8bdc6ff59669939ab2621ac6d",
+            "confusion.json": "ba86d7c00cb216ca15d277178aa2e884a0056ed5ae7596b2cf5e22a893ef8acb",
+            "predictions.jsonl": "d7f09109ca6ed4ce1eee5cb7588ffe216495192c417c9a665fd18ebaa9954519"
+          },
+          "original_comparison_sha256": "a052ed517ec990ff4a0c7b65ee3945512c75fd8fdcb24c0dc51f1d3a24005e4c",
+          "cost_cli_elapsed_seconds": 334.341387464,
+          "raw_cost_sha256": "d33abec5b54dee5749587a87a01a657878835012be71ec1da32efecdeb4eec8d",
+          "cpu_cost_parameters": {
+            "samples": 32,
+            "warmup": 5,
+            "repetitions": 3,
+            "threads": 1,
+            "batch_size": 1,
+            "record_ids_sha256": "46b1f563a99c58ac94276192952dcf80f786ce9853a0b4ec67c6b33a2c89ac38"
+          },
+          "process_memory": {
+            "schema_version": 1,
+            "status": "measured",
+            "platform": "Linux CPU on WSL2",
+            "method": "GNU /usr/bin/time -v",
+            "scope": "Whole fresh CLI process resident peak, including interpreter, libraries, model and preprocessing.",
+            "memory_evidence_file_sha256": "763ad9531c65e8bc30e77686f833576db571b49e27ea52038fc52a570c15c8d6",
+            "peak_resident_kib": 1781020,
+            "peak_resident_bytes": 1823764480,
+            "source_reported_unit": "GNU time Linux maxRSS kbytes interpreted as KiB (1024 bytes).",
+            "raw_private_memory_log_sha256": "d2c0f9f1da9a5435026a147324c6d137f0214c47442b4fd1ef95a883218202b9"
+          }
+        },
+        "custom_asl": {
+          "cli_exit_code": 0,
+          "cli_elapsed_seconds": 9686.582352018,
+          "evaluated_count": 4708,
+          "model_content_sha256": "10ffa6bd384121062ab9acea49ecc5702bbd7bd15733dd2d4b7002e32f5b478e",
+          "execution_receipt_sha256": "3055d7ca85a457d8b5f32a4ea3d83b2ec030c12fa73445674a5acaa59a31438f",
+          "original_kaggle_strict_comparison_status": "failed",
+          "exact_classification_and_acceptance_status": "passed",
+          "main_metrics_comparison_status": "passed",
+          "main_metrics_comparison_scope": "Original exact count/confusion/F1/accuracy checks and ROC AUC/NLL/Brier/ECE absolute differences <=1e-6, not every metric byte-identical.",
+          "public_helper_expanded_comparison_status": "failed",
+          "public_helper_metric_difference_count": 3,
+          "maximum_absolute_probability_difference": {
+            "raw_probability_ab": 0.0001838594991900866,
+            "raw_probability_ba": 6.631934422851593e-06,
+            "raw_probability_symmetric": 8.661425582440208e-05,
+            "raw_probability_selected": 8.661425582440208e-05,
+            "calibrated_probability": 0.0001096225355059488,
+            "calibrated_probability_swapped_selected_policy": 0.0001096225355059488,
+            "confidence": 0.0001096225355059488
+          },
+          "classification": {
+            "count": 4708,
+            "correct": 3838,
+            "accuracy": 0.8152081563296517,
+            "macro_f1": 0.8151695979899498,
+            "confusion": [
+              [
+                1953,
+                412
+              ],
+              [
+                458,
+                1885
+              ]
+            ]
+          },
+          "abstention": {
+            "accepted_count": 3902,
+            "rejected_count": 806,
+            "coverage": 0.8288020390824129,
+            "accepted_accuracy": 0.866735007688365,
+            "confidence_threshold": 0.5948757886505989,
+            "target_coverage": 0.8,
+            "target_accepted_accuracy": 0.9,
+            "target_achieved_on_this_evaluation": false,
+            "parameters_fitted_on": "calibration",
+            "no_refit_on_evaluation": true
+          },
+          "raw_evaluation_sha256": {
+            "metrics.json": "6dac4ea6904741d8bc354adf8ce10e8e9c2a08b5d849c2851f86ba44fddccd2d",
+            "confusion.json": "2de2d9d20b4d228cb44541bfb010f252ad6920f83a3b66ab495d36450b787050",
+            "predictions.jsonl": "c96a592ee1ed8fd1ce4d2fd09fa310de4e9a335c3e817e7656f120d5038c14b8"
+          },
+          "original_comparison_sha256": "ff8e95d6c023d48206ae467b722f44ad34dc4dec2ec06a862bd95634cf857fe2",
+          "cost_cli_elapsed_seconds": 339.731199692,
+          "raw_cost_sha256": "dc90386e145e9d5062c9acd051b2f445a65ebd030e911fbe1b1fa8bbc6ecb34a",
+          "cpu_cost_parameters": {
+            "samples": 32,
+            "warmup": 5,
+            "repetitions": 3,
+            "threads": 1,
+            "batch_size": 1,
+            "record_ids_sha256": "46b1f563a99c58ac94276192952dcf80f786ce9853a0b4ec67c6b33a2c89ac38"
+          },
+          "process_memory": {
+            "schema_version": 1,
+            "status": "measured",
+            "platform": "Linux CPU on WSL2",
+            "method": "GNU /usr/bin/time -v",
+            "scope": "Whole fresh CLI process resident peak, including interpreter, libraries, model and preprocessing.",
+            "memory_evidence_file_sha256": "ecd1fb3c29e77602b6b567cfa205e822ab011839ff35c74d28816ed0ebbf5277",
+            "peak_resident_kib": 1783820,
+            "peak_resident_bytes": 1826631680,
+            "source_reported_unit": "GNU time Linux maxRSS kbytes interpreted as KiB (1024 bytes).",
+            "raw_private_memory_log_sha256": "46380b47f1dc935a4c7610a52087dcbc2bf15988b12302d105577175a10301c1"
+          }
+        }
+      }
+    }
+  },
+  "windows_linux_cpu_comparisons": {
+    "stylometric": {
+      "status": "passed",
+      "count": 4708,
+      "exact_classification_and_acceptance_status": "passed",
+      "maximum_absolute_probability_difference": {
+        "raw_probability_ab": 7.45058065243498e-09,
+        "raw_probability_ba": 7.45058065243498e-09,
+        "raw_probability_symmetric": 7.45058065243498e-09,
+        "raw_probability_selected": 7.45058065243498e-09,
+        "calibrated_probability": 8.919874783241966e-09,
+        "calibrated_probability_swapped_selected_policy": 8.919874783241966e-09,
+        "confidence": 8.919874783241966e-09
+      },
+      "receipt_sha256": "67c6536ef604a33f007fd1b14ad2339704c49ad62d6ba81993f1fb6736382990"
+    },
+    "ce": {
+      "status": "failed",
+      "count": 4708,
+      "exact_classification_and_acceptance_status": "passed",
+      "maximum_absolute_probability_difference": {
+        "raw_probability_ab": 1.5253872622356113e-05,
+        "raw_probability_ba": 4.9358431748469656e-05,
+        "raw_probability_symmetric": 2.408078624971388e-05,
+        "raw_probability_selected": 2.408078624971388e-05,
+        "calibrated_probability": 2.0420750413863153e-05,
+        "calibrated_probability_swapped_selected_policy": 2.0420750413863153e-05,
+        "confidence": 2.0420750413863153e-05
+      },
+      "receipt_sha256": "f6b5b58bcf7b5a344b67c79339c6513d4bc6304ed1add6d8f29c6d1a891fb2f3"
+    },
+    "custom_asl": {
+      "status": "failed",
+      "count": 4708,
+      "exact_classification_and_acceptance_status": "passed",
+      "maximum_absolute_probability_difference": {
+        "raw_probability_ab": 0.00011769207354911382,
+        "raw_probability_ba": 9.876406977693541e-06,
+        "raw_probability_symmetric": 5.564712167954733e-05,
+        "raw_probability_selected": 5.564712167954733e-05,
+        "calibrated_probability": 7.042289285763559e-05,
+        "calibrated_probability_swapped_selected_policy": 7.042289285763559e-05,
+        "confidence": 7.042289285763559e-05
+      },
+      "receipt_sha256": "a076d20459b1be69b0bc2e3d1c40b3b7e41b268a1ddd31e59faa522cd7f49d8e"
+    }
+  },
+  "windows_linux_cpu_strict_status": "failed",
+  "cost_scope": "Sequential resource-only observations after all six completed frozen inferences. A passed cost execution does not promote a failed original GPU/CPU numerical comparison.",
+  "memory_scope": "Whole-process peaks. Windows working set and Linux maxRSS are resident measures; Windows PeakPagefileUsage is process commit charge, not disk swapping. Different OS accounting and the shared host limit comparisons.",
+  "private_windows_cost_receipt_sha256": "115cc6461a64aa32999729ced0c02e921fe97f9bf722ab0bbd24426c32a6075b",
+  "private_linux_cost_receipt_sha256": "25d020afa2a34a7ae5e5458475e0a31e89248f907d5f2fbed7782a7f67cc53bd",
+  "curator_sha256": "0b6c62482877c7ea8b61a3033a618d8cd3c95134c1336ba7707c4b4ca05dfff3",
+  "resource_ledger_helper_sha256": "f84e4a9c3a88ce07df27e94917efbfe07ff30176134d54ca1b4886733832a745",
+  "no_training_refit_reselection_or_new_reference": true
+}

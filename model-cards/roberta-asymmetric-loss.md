@@ -11,11 +11,13 @@ repo: https://github.com/Dongmyung378/NLU-Authorship-Verification
 
 # RoBERTa-Large with Asymmetric Loss
 
-[한국어](./roberta-asymmetric-loss.ko.md) · [Project overview](../README.md)
+[한국어](./roberta-asymmetric-loss.ko.md) | [Project overview](../README.md)
+
+This card describes the original RoBERTa-Large development artifact. Its scores are historical development results and are not a controlled comparator for the new document-disjoint RoBERTa-Large experiment, which starts from fresh pinned pretrained weights.
 
 ## Model summary
 
-This supervised binary classifier was trained to label pairs in the supplied English text dataset as same-author or different-author. It fine-tunes `roberta-large` with a sequence-classification head and Asymmetric Loss, placing extra emphasis on difficult negative pairs with subtle stylistic differences. Its reported performance is limited to the supplied development split.
+This supervised binary classifier was trained to label pairs in the supplied English text dataset as same-author or different-author. It fine-tunes `roberta-large` with a sequence-classification head and a custom binary asymmetric focal loss. Its reported performance is limited to the supplied development split.
 
 - **Developed by:** Dongmyung Park and Juho Kim
 - **Language:** English
@@ -27,7 +29,7 @@ This supervised binary classifier was trained to label pairs in the supplied Eng
 
 Email headers, email addresses, URLs, and redundant whitespace are removed before tokenization. The two passages are encoded as a standard RoBERTa pair and truncated with `longest_first` to a combined maximum of 512 tokens.
 
-The model replaces cross-entropy with Asymmetric Loss using `gamma_neg=2` and `gamma_pos=1`. Easy examples are down-weighted, with a stronger focal penalty on the negative class. A development-set threshold sweep selected `0.51` for inference.
+The model replaces cross-entropy with the custom loss `-(1-p_y)^gamma_y * log(max(p_y, 1e-8))`, averaged over examples, using a two-class softmax with `gamma_neg=2` and `gamma_pos=1`. It down-weights easy examples more strongly for class 0. The `1e-8` floor is a numerical safeguard for the logarithm; the implementation does not use the published ASL's negative-probability shifting mechanism or independent multi-label sigmoid outputs. It is not an exact implementation of [the published multi-label ASL](https://openaccess.thecvf.com/content/ICCV2021/html/Ridnik_Asymmetric_Loss_for_Multi-Label_Classification_ICCV_2021_paper.html). A development-set threshold sweep selected `0.51` for inference. A causal improvement in cross-domain generalization has not been established.
 
 ## Training data
 
@@ -41,12 +43,15 @@ The model used the 27,643 labeled English text pairs in the supplied [`train.csv
 | Training batch size | 32 |
 | Evaluation batch size | 32 |
 | Maximum sequence length | 512 |
-| Epochs | 14; early stopping at epoch 13 |
+| Epoch ceiling | 14 |
+| Saved best checkpoint | Epoch 10, step 8,640 |
 | Early stopping patience | 3 evaluation epochs |
 | Warmup ratio | 0.1 |
 | Weight decay | 0.01 |
-| Loss | Asymmetric Loss (`gamma_neg=2`, `gamma_pos=1`) |
+| Loss | Custom binary asymmetric focal loss (`gamma_neg=2`, `gamma_pos=1`) |
 | Decision threshold | 0.51 |
+
+The downloaded checkpoint's `trainer_state.json` records epoch 10.0, global step 8,640 and best metric 0.8346138164975799. The epoch-13 stopping point stated in an earlier card is not established by this saved checkpoint's state. A selected best checkpoint and the final training stopping point are separate facts.
 
 ## Evaluation
 
@@ -83,7 +88,7 @@ Per-class results:
 - Training time: approximately 6 hours 11 minutes.
 - Training hardware: one NVIDIA A100 40 GB GPU.
 - Model parameters: approximately 355 million.
-- Model weights: approximately 1.32 GB.
+- Model weights: 1,421,495,360 bytes, approximately 1.42 GB or 1.32 GiB.
 - Inference: 16 GB system RAM and a CUDA-capable GPU with a CUDA-enabled PyTorch build are recommended; CPU inference is possible but slow.
 - [Download trained artifacts](https://drive.google.com/drive/folders/1Ty9-EpOLAgzvTWPuqrHBTbehmZZuDs3V?usp=sharing). The downloaded model files are kept outside GitHub; the repository ignores `models/`.
 
@@ -91,14 +96,14 @@ Per-class results:
 
 From the repository root, download all files from the link above and put them directly in `models/Models_ASL/` (the original download folder name) or `models/roberta-asymmetric-loss/`. The directory must contain `best_threshold.json`, `config.json`, `model.safetensors`, `tokenizer.json`, and `tokenizer_config.json`. Keep any additional downloaded tokenizer files together, and avoid an extra nested folder between the chosen directory and these files.
 
-Install the [terminal demo dependencies](../requirements-inference.txt). For GPU inference, follow the [CUDA-enabled PyTorch setup in the reproduction guide](../docs/reproduction.md) and confirm that PyTorch detects your GPU. Then enter two English passages when prompted:
+Install the [historical terminal demo dependencies](../requirements-inference.txt). The example below explicitly uses CPU and prompts for two English passages. Original GPU training and demo procedures remain in the notebooks linked below; the current [reproduction guide](../docs/reproduction.md) describes the new frozen CPU release rather than a CUDA setup for this historical artifact:
 
 ```bash
 python -m pip install -r requirements-inference.txt
-python verify_author.py --model roberta --device cuda
+python verify_author.py --model roberta --device cpu
 ```
 
-The default `--device auto` selects CUDA when available. If an NVIDIA GPU is detected but PyTorch cannot use CUDA, it stops with setup guidance; it uses CPU when no NVIDIA GPU is detected. Use `--device cuda` to require GPU inference, or `--device cpu` to force CPU inference. To pass text on the command line, use `python verify_author.py --model roberta --text-1 "First English passage" --text-2 "Second English passage"`. The output includes `Same-author probability`, the loaded model's decision threshold, and the resulting label. Despite the displayed name, this is a raw class-1 softmax score, not a calibrated probability that the passages share an author. Results for arbitrary new authors or domains have not been established. If the files live elsewhere, add `--model-dir PATH` with the directory that directly contains them. See the [reproduction guide](../docs/reproduction.md) for environment setup and notebook use.
+The default `--device auto` selects CUDA when available. If an NVIDIA GPU is detected but PyTorch cannot use CUDA, it stops with setup guidance; it uses CPU when no NVIDIA GPU is detected. Use `--device cuda` to require GPU inference, or `--device cpu` to force CPU inference. To pass text on the command line, use `python verify_author.py --model roberta --text-1 "First English passage" --text-2 "Second English passage"`. The output includes `Same-author probability`, the loaded model's decision threshold, and the resulting label. Despite the displayed name, this is a raw class-1 softmax score, not a calibrated probability that the passages share an author. Results for arbitrary new authors or domains have not been established. If the files live elsewhere, add `--model-dir PATH` with the directory that directly contains them. The [current reproduction guide](../docs/reproduction.md) covers the new frozen CPU release, whose artifacts and evaluation bindings are separate from this historical demo.
 
 ## Limitations and risks
 

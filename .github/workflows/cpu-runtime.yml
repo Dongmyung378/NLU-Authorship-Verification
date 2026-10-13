@@ -1,0 +1,58 @@
+name: CPU runtime verification
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: cpu-runtime-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    name: ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, windows-2022]
+    env:
+      NLU_USE_MANAGED_PYTHON: "1"
+      PYTHONUTF8: "1"
+      OMP_NUM_THREADS: "1"
+      MKL_NUM_THREADS: "1"
+      OPENBLAS_NUM_THREADS: "1"
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - name: Set up and verify the public Windows CPU runtime
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: .\run.ps1 doctor
+      - name: Set up and verify the public Linux CPU runtime
+        if: runner.os == 'Linux'
+        shell: bash
+        run: sh ./launch-nlu.sh doctor
+      - name: Test implementation and native model loading on Windows
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: .\.venv\Scripts\python.exe -I -m unittest discover -s tests -v
+      - name: Test implementation and native model loading on Linux
+        if: runner.os == 'Linux'
+        shell: bash
+        run: ./.venv/bin/python -I -m unittest discover -s tests -v
+      - name: Verify the complete frozen source dataset on Windows
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: .\run.ps1 verify-data
+      - name: Verify the complete frozen source dataset on Linux
+        if: runner.os == 'Linux'
+        shell: bash
+        run: sh ./launch-nlu.sh verify-data

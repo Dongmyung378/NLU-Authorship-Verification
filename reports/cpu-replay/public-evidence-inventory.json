@@ -1,0 +1,240 @@
+{
+  "schema_version": 1,
+  "status": "complete_validated_cpu_evidence",
+  "freeze_sha256": "e8fc94ee17d7ea575ecf8002e3d104d1ec70600b68cc59239f1189b0b955f924",
+  "all_raw_evaluation_comparison_cost_bytes_preserved": true,
+  "memory_metadata_sanitized": true,
+  "private_paths_pids_logs_secrets_or_model_weights_published": false,
+  "files": [
+    {
+      "path": "reports/cpu-replay/linux/ce/confusion.json",
+      "bytes": 249,
+      "sha256": "ba86d7c00cb216ca15d277178aa2e884a0056ed5ae7596b2cf5e22a893ef8acb"
+    },
+    {
+      "path": "reports/cpu-replay/linux/ce/kaggle-reference-comparison.json",
+      "bytes": 1381,
+      "sha256": "a052ed517ec990ff4a0c7b65ee3945512c75fd8fdcb24c0dc51f1d3a24005e4c"
+    },
+    {
+      "path": "reports/cpu-replay/linux/ce/metrics.json",
+      "bytes": 40611,
+      "sha256": "b1d51c098b700d6b17451c975868a153514fe0b8bdc6ff59669939ab2621ac6d"
+    },
+    {
+      "path": "reports/cpu-replay/linux/ce/predictions.jsonl",
+      "bytes": 2823285,
+      "sha256": "d7f09109ca6ed4ce1eee5cb7588ffe216495192c417c9a665fd18ebaa9954519"
+    },
+    {
+      "path": "reports/cpu-replay/linux/ce/public-helper-comparison.json",
+      "bytes": 2314,
+      "sha256": "d0d9a98c0c29d9c3309bd281dc3c30b76d38e8b699ed183ae86b24adb9038881"
+    },
+    {
+      "path": "reports/cpu-replay/linux/costs/ce.json",
+      "bytes": 1242,
+      "sha256": "d33abec5b54dee5749587a87a01a657878835012be71ec1da32efecdeb4eec8d"
+    },
+    {
+      "path": "reports/cpu-replay/linux/costs/custom_asl.json",
+      "bytes": 1250,
+      "sha256": "dc90386e145e9d5062c9acd051b2f445a65ebd030e911fbe1b1fa8bbc6ecb34a"
+    },
+    {
+      "path": "reports/cpu-replay/linux/costs/memory-ce.json",
+      "bytes": 597,
+      "sha256": "6b7ed54375f4dac36d6009d8f97448f6f3814bd4377ef815bfc267e45f51264f"
+    },
+    {
+      "path": "reports/cpu-replay/linux/costs/memory-custom_asl.json",
+      "bytes": 597,
+      "sha256": "186949f894212dcb9a32a04a57af16296cc681a7c742fbb97776c0dd22ec040d"
+    },
+    {
+      "path": "reports/cpu-replay/linux/costs/memory-stylometric.json",
+      "bytes": 595,
+      "sha256": "99338e3b6661535303cd25c513a71291581322d49acacc39fd8ebfe6f9114d38"
+    },
+    {
+      "path": "reports/cpu-replay/linux/costs/stylometric.json",
+      "bytes": 1240,
+      "sha256": "44334c1fd9f0fd25b08f7c3125d5a524df27ccc500cdec088509f1671e73adf5"
+    },
+    {
+      "path": "reports/cpu-replay/linux/custom_asl/confusion.json",
+      "bytes": 249,
+      "sha256": "2de2d9d20b4d228cb44541bfb010f252ad6920f83a3b66ab495d36450b787050"
+    },
+    {
+      "path": "reports/cpu-replay/linux/custom_asl/kaggle-reference-comparison.json",
+      "bytes": 1379,
+      "sha256": "ff8e95d6c023d48206ae467b722f44ad34dc4dec2ec06a862bd95634cf857fe2"
+    },
+    {
+      "path": "reports/cpu-replay/linux/custom_asl/metrics.json",
+      "bytes": 40557,
+      "sha256": "6dac4ea6904741d8bc354adf8ce10e8e9c2a08b5d849c2851f86ba44fddccd2d"
+    },
+    {
+      "path": "reports/cpu-replay/linux/custom_asl/predictions.jsonl",
+      "bytes": 2815602,
+      "sha256": "c96a592ee1ed8fd1ce4d2fd09fa310de4e9a335c3e817e7656f120d5038c14b8"
+    },
+    {
+      "path": "reports/cpu-replay/linux/custom_asl/public-helper-comparison.json",
+      "bytes": 2493,
+      "sha256": "7f7d6c5d91b2ff93d001335af2c14f87e46ab6809ef1339af73c19ce4913b853"
+    },
+    {
+      "path": "reports/cpu-replay/linux/stylometric/confusion.json",
+      "bytes": 249,
+      "sha256": "63cb47488e3928bb4e510c68cefdc680b1ec4e826d060721b904dd197e8821e6"
+    },
+    {
+      "path": "reports/cpu-replay/linux/stylometric/kaggle-reference-comparison.json",
+      "bytes": 1252,
+      "sha256": "d4567b8bb866adc5a154cde51c9234fdb242c013070cf2dbc022798af0921b1f"
+    },
+    {
+      "path": "reports/cpu-replay/linux/stylometric/metrics.json",
+      "bytes": 40516,
+      "sha256": "3368f5565bef1a5fc44c8be44bcd48ee428202b06b490e15c23db04a81b71399"
+    },
+    {
+      "path": "reports/cpu-replay/linux/stylometric/predictions.jsonl",
+      "bytes": 2783389,
+      "sha256": "c688f079a49c376ad00b18294a9cea883e1b7acd0f5f293e1d43b7b23e57c7fa"
+    },
+    {
+      "path": "reports/cpu-replay/linux/stylometric/public-helper-comparison.json",
+      "bytes": 1775,
+      "sha256": "a537c5e9e67be90e75b25a31487380b60e0e7fc2b9b0838487178e3078ebb137"
+    },
+    {
+      "path": "reports/cpu-replay/windows-linux/ce.json",
+      "bytes": 1424,
+      "sha256": "f6b5b58bcf7b5a344b67c79339c6513d4bc6304ed1add6d8f29c6d1a891fb2f3"
+    },
+    {
+      "path": "reports/cpu-replay/windows-linux/custom_asl.json",
+      "bytes": 1420,
+      "sha256": "a076d20459b1be69b0bc2e3d1c40b3b7e41b268a1ddd31e59faa522cd7f49d8e"
+    },
+    {
+      "path": "reports/cpu-replay/windows-linux/stylometric.json",
+      "bytes": 1415,
+      "sha256": "67c6536ef604a33f007fd1b14ad2339704c49ad62d6ba81993f1fb6736382990"
+    },
+    {
+      "path": "reports/cpu-replay/windows/ce/confusion.json",
+      "bytes": 249,
+      "sha256": "ba86d7c00cb216ca15d277178aa2e884a0056ed5ae7596b2cf5e22a893ef8acb"
+    },
+    {
+      "path": "reports/cpu-replay/windows/ce/kaggle-reference-comparison.json",
+      "bytes": 1423,
+      "sha256": "33414d47acd438c5367ba957066f411f4048d651045a7b262019fbde63661c8a"
+    },
+    {
+      "path": "reports/cpu-replay/windows/ce/metrics.json",
+      "bytes": 40602,
+      "sha256": "639a86dc721e94ed70f7e7762e8687df158731788073b2935562b47747ca2303"
+    },
+    {
+      "path": "reports/cpu-replay/windows/ce/predictions.jsonl",
+      "bytes": 2823284,
+      "sha256": "ed241d18667301100cfe86693331e4b18a40e7fc3df75502268eb753056935be"
+    },
+    {
+      "path": "reports/cpu-replay/windows/ce/public-helper-comparison.json",
+      "bytes": 2319,
+      "sha256": "9daeb162b491526badc2a70612aa223042f0e22dc7c341605f35ede024fcba3d"
+    },
+    {
+      "path": "reports/cpu-replay/windows/costs/ce.json",
+      "bytes": 1258,
+      "sha256": "ed2bb64090e50290a2e2b75f79de08890019271f53104722750ff01b66066ef9"
+    },
+    {
+      "path": "reports/cpu-replay/windows/costs/custom_asl.json",
+      "bytes": 1256,
+      "sha256": "9891b33fc622a9304915fcfdb0a5da90825c812180f270394556ccc95757a0b7"
+    },
+    {
+      "path": "reports/cpu-replay/windows/costs/memory-ce.json",
+      "bytes": 695,
+      "sha256": "bd4302dceb18ae3fe428a5c36164f3db2f05c4132dda8b98b8540d3172accdc6"
+    },
+    {
+      "path": "reports/cpu-replay/windows/costs/memory-custom_asl.json",
+      "bytes": 695,
+      "sha256": "ffe7a8e71ed73f09657024306eb72b0e5fca8ad952bb7f404a5fc026c9847d4e"
+    },
+    {
+      "path": "reports/cpu-replay/windows/costs/memory-stylometric.json",
+      "bytes": 693,
+      "sha256": "183094ef2365b9784ba153ecf1b897421a95632a8c09b7d2fa60915c9833ebf9"
+    },
+    {
+      "path": "reports/cpu-replay/windows/costs/stylometric.json",
+      "bytes": 1253,
+      "sha256": "1f855e781da34aa17a2cce89108b6ad50d33c34370c054fe8f99e88781be8db5"
+    },
+    {
+      "path": "reports/cpu-replay/windows/custom_asl/confusion.json",
+      "bytes": 249,
+      "sha256": "2de2d9d20b4d228cb44541bfb010f252ad6920f83a3b66ab495d36450b787050"
+    },
+    {
+      "path": "reports/cpu-replay/windows/custom_asl/kaggle-reference-comparison.json",
+      "bytes": 1418,
+      "sha256": "0311502c8462218327fbfa60141a35a548ac63d768c0febd713e09a01caaaf20"
+    },
+    {
+      "path": "reports/cpu-replay/windows/custom_asl/metrics.json",
+      "bytes": 40553,
+      "sha256": "5f34f8bbdb034fae023c82fb16e6b37eccaa039f5c1651e9e81b2545a336c31e"
+    },
+    {
+      "path": "reports/cpu-replay/windows/custom_asl/predictions.jsonl",
+      "bytes": 2815581,
+      "sha256": "34e573d1326bd99af6ab3c1bc9d0b822ee61df0de758c5db5d8a7a9a47c66742"
+    },
+    {
+      "path": "reports/cpu-replay/windows/custom_asl/public-helper-comparison.json",
+      "bytes": 2322,
+      "sha256": "6f22f4fbe6801b33e4a1e73418f856b6ccb2d43a94acea9538d3b8586473e0e0"
+    },
+    {
+      "path": "reports/cpu-replay/windows/stylometric/confusion.json",
+      "bytes": 249,
+      "sha256": "63cb47488e3928bb4e510c68cefdc680b1ec4e826d060721b904dd197e8821e6"
+    },
+    {
+      "path": "reports/cpu-replay/windows/stylometric/kaggle-reference-comparison.json",
+      "bytes": 1414,
+      "sha256": "652ea431fddd4e09f86ba70b67405bc354344b438efc6b20b2ac1b59a6def8dd"
+    },
+    {
+      "path": "reports/cpu-replay/windows/stylometric/metrics.json",
+      "bytes": 40512,
+      "sha256": "8da6f7a45f390d33376df78ab0a49299ee4872f71870a039c057cb20da2d6b70"
+    },
+    {
+      "path": "reports/cpu-replay/windows/stylometric/predictions.jsonl",
+      "bytes": 2783243,
+      "sha256": "f015681ce048d05ef57f1027cd609fa47144c9ed67269b9f6cf27cf8ab0d2d70"
+    },
+    {
+      "path": "reports/cpu-replay/windows/stylometric/public-helper-comparison.json",
+      "bytes": 1900,
+      "sha256": "67d7507c353d33a187a2f2fbefdcd734454e2e6dd9a4349e2d0f92939a5b3e03"
+    },
+    {
+      "path": "reports/cpu-reproduction.json",
+      "bytes": 49133,
+      "sha256": "27124b2f42d30c86243ae90f1c9d0261983dabb6b8e68dfc025185c345ba6e5b"
+    }
+  ]
+}

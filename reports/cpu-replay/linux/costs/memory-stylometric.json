@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "status": "measured",
+  "platform": "Linux CPU on WSL2",
+  "method": "GNU /usr/bin/time -v",
+  "scope": "Whole fresh CLI process resident peak, including interpreter, libraries, model and preprocessing.",
+  "memory_evidence_file_sha256": "f6e6e1596f327928368a8ef61abd9d2420b9c841e57dea4e3237880e684338b6",
+  "peak_resident_kib": 335128,
+  "peak_resident_bytes": 343171072,
+  "source_reported_unit": "GNU time Linux maxRSS kbytes interpreted as KiB (1024 bytes).",
+  "raw_private_memory_log_sha256": "2958e9a4d44456f8274878e537b55a8eacf46f0b2dba5b277c80cd02a7f1ea2b"
+}

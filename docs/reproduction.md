@@ -1,155 +1,161 @@
 # Reproduction guide
 
-[한국어](./reproduction.ko.md) · [Project overview](../README.md)
+[한국어](./reproduction.ko.md) | [Project overview](../README.md) | [Runtime](./runtime.md) | [Evaluation](./evaluation.md) | [Measured results](./results.md)
 
-Reproduce the models' results on the supplied English text-pair development split, or explore their outputs on other text with the terminal script. The reported performance applies to that development split; accuracy on new authors or domains has not been measured. The trained model files are downloaded separately because they are too large for this GitHub repository.
+This guide replays the new frozen document-disjoint experiment from saved artifacts. The default model is the CPU stylometric ensemble; both RoBERTa-Large checkpoints are optional downloads. Windows and Linux use isolated pinned Python 3.12 CPU environments without Docker, API keys or local GPU setup. Retraining is a separate Kaggle procedure.
 
-## 1. Set up Python
+**Release status:** capability and throughput probes are complete, with microbatch 2 and a maximum of six matched epochs retained. Implementation checks passed 109/109 on Windows 11 and 109/109 on Ubuntu 24.04 WSL2 against the same 35 executable/config files and isolated Python 3.12.15 CPU environments. They share one physical host and do not represent external third-party review. Both Large losses completed six matched epochs, and all three models completed frozen evaluation on 4,708 locked-holdout pairs. [Measured results](./results.md) and [execution timing](../reports/execution-timing.json) record the completed run. All six full saved-model CPU inference executions using exact local frozen artifacts are complete; resource-cost observations are complete and linked in the [CPU summary](../reports/cpu-reproduction.json). They measure whole fresh CLI processes on one shared physical host; successful cost execution does not change strict numerical failures. All 21 model files are publicly available in Kaggle dataset version 1 and passed full anonymous HTTP 200, byte-count and SHA256 verification through the unchanged public CLI; see the [transport receipt](../reports/model-download-verification.json). The following commands describe the finalized interface; passing synthetic tests is not a full saved-model evaluation.
 
-Use Python 3.12 (the notebooks were checked with 3.12.7). Run these commands from the repository root. Activation is optional; the examples call the virtual environment directly.
+All six saved-model CPU inference executions are complete: all three models ran on all 4,708 locked-holdout pairs on Windows and Linux. Ordered IDs, class and acceptance decisions, counts, confusion matrices, F1, accuracy and frozen bindings matched the original references. The original selected-main floating metrics stayed within `1e-6`; this does not claim every diagnostic is bit-identical. The stylometric CPU-to-CPU checks passed. Both Large models failed the unchanged `1e-5` GPU-to-CPU probability checks. Custom-focal calibrated maximum differences were `1.80045428e-4` on Windows and `1.09622536e-4` on Linux; the CE failures are also preserved. Full strict numerical reproduction therefore remains failed despite classification agreement. Shared eager attention/FP32 inference is unchanged; device arithmetic drift is plausible, not a proven cause. CPU resource-cost observations are complete and linked in the [CPU summary](../reports/cpu-reproduction.json). They measure whole fresh CLI processes on one shared physical host; successful cost execution does not change strict numerical failures. The separate anonymous transport verification for all 21 public model files is in the [delivery receipt](../reports/model-download-verification.json).
 
-**Windows PowerShell**
+Measured CPU costs use the same first 32 selection records, one CPU thread, batch size one, five warmup predictions and three timed repetitions, sequentially on Windows and then Linux WSL2. The [Windows raw CE record](../reports/cpu-replay/windows/costs/ce.json) and [Linux raw CE record](../reports/cpu-replay/linux/costs/ce.json) include preprocessing, both frozen AB/BA forwards and calibration; model loading is separate. Whole-process resident peaks use Windows PeakWorkingSetSize and Linux GNU-time maxRSS. Windows PeakPagefileUsage is peak process commit charge, not measured disk swapping. These 32 nonrandom cases, OS memory accounting and one shared physical host limit performance comparisons. Both Large Windows-to-Linux CPU probability comparisons also failed the unchanged tolerance, with all classifications and acceptance decisions identical; the [CPU summary](../reports/cpu-reproduction.json) preserves those results separately from the original Kaggle comparisons.
+
+## 1. Preserve the released source
+
+Use the exact released source snapshot and its `reports/split-manifest.json`. Keep executable files, pinned requirements and the experiment plan intact: the evaluation freeze binds them, and changing them invalidates that release's replay. Do not regenerate splits or fit new thresholds to reproduce the recorded result.
+
+The labeled `data/train.csv` and `data/dev.csv` are source inputs to the new manifest, not its current train/selection partitions. The manifest retains 31,388 pairs: 21,972 train, 3,139 selection, 1,569 calibration and 4,708 locked holdout. Identity-connected document groups are disjoint under all declared normalization views. The source has no author IDs or domain labels; this does not establish unseen-author or cross-domain generalization.
+
+## 2. Set up a clean CPU environment
+
+Run from the repository root in Windows PowerShell:
 
 ```powershell
-py -3.12 -m venv .venv
-.\.venv\Scripts\python.exe -m pip install -r requirements-inference.txt
+.\launch-nlu.bat doctor
+.\launch-nlu.bat verify-data
 ```
 
-If `py` is unavailable, use `python` to create the environment. For Jupyter notebooks or retraining, also install the full dependency list:
-
-```powershell
-.\.venv\Scripts\python.exe -m pip install -r requirements.txt
-```
-
-**macOS or Linux**
+Linux equivalents:
 
 ```bash
-python3.12 -m venv .venv
-.venv/bin/python -m pip install -r requirements-inference.txt
-# For Jupyter notebooks or retraining:
-.venv/bin/python -m pip install -r requirements.txt
+sh ./launch-nlu.sh doctor
+sh ./launch-nlu.sh verify-data
 ```
 
-The inference requirements cover the terminal script. `requirements.txt` also includes Jupyter and training dependencies.
+The launcher obtains a suitable 64-bit Python 3.12 runtime, creating a managed one if necessary, then installs `requirements-runtime.txt` in the local `.venv`. It uses no system-site packages and changes no global Python installation. An incompatible existing environment is preserved under `.local/environment-backups/` before replacement. Initial setup needs Internet; it hides local GPUs and uses the pinned CPU PyTorch build.
 
-**Windows with an NVIDIA GPU:** after installing the requirements above, install the CUDA 12.4 build of PyTorch. Run this after `requirements.txt` too if you installed the full notebook dependencies:
+`doctor` checks package pins, isolation and an actual small CPU tensor operation. It does not check model bytes or accuracy. `verify-data` checks CSV hashes, original rows, split roles and actual normalized-document isolation. Keep the resulting environment report when recording a reproduction.
+
+## 3. Install the selected artifacts
+
+### Manual installation from an already obtained verified package
+
+Three model-only ZIPs are prepared locally: `nlu-frozen-stylometric.zip`, `nlu-frozen-ce.zip` and `nlu-frozen-custom_asl.zip`. These optional manual ZIPs have no separate published links; automatic raw-file download is available. If you already have these verified packages, place them in the matching project root. Each contains seven immutable files under `models/<model-name>/`; extract it into `artifacts/runtime` after launcher setup:
 
 ```powershell
-.\.venv\Scripts\python.exe -m pip install --force-reinstall --no-deps torch==2.5.1+cu124 --index-url https://download.pytorch.org/whl/cu124
-.\.venv\Scripts\python.exe -c "import torch; print(torch.__version__, torch.version.cuda, torch.cuda.is_available()); print(torch.cuda.get_device_name(0) if torch.cuda.is_available() else 'No CUDA device')"
+.\launch-nlu.bat doctor
+.\.venv\Scripts\python.exe -I -m zipfile -e nlu-frozen-stylometric.zip artifacts/runtime
+.\.venv\Scripts\python.exe -I -m zipfile -e nlu-frozen-ce.zip artifacts/runtime
+.\.venv\Scripts\python.exe -I -m zipfile -e nlu-frozen-custom_asl.zip artifacts/runtime
 ```
 
-The verification should show `2.5.1+cu124`, `12.4`, `True`, and your GPU name. If CUDA availability is `False`, check the NVIDIA driver and the installed wheel before running RoBERTa. CUDA 12.4 is an example for a compatible Windows setup; select a build for your platform and driver from the [official PyTorch previous-versions page](https://pytorch.org/get-started/previous-versions/). Installing a Python package named `torch` alone does not guarantee CUDA support. In Windows Git Bash, write the interpreter path as `./.venv/Scripts/python.exe`; the `.\.venv\Scripts\python.exe` spelling above is for PowerShell.
+Only the stylometric package is required for default use. The two Large packages are optional comparisons. Linux uses `.venv/bin/python -I -m zipfile -e` with the same archive and destination. This route does not require `reports/artifact-download.json`: `predict` and `evaluate` directly verify all model files against the joint freeze before loading them. The matching strengthened source and freeze are required; historical Drive models use a separate format. Public automatic download is available through the version-pinned descriptor.
 
-## 2. Download the model artifacts
 
-Download either model or both. Keep each model's files **directly inside** its directory, without an extra nested Google Drive folder. The entire `models/` directory is ignored by Git and is not included in a clone.
 
-| Model | Download | Canonical directory |
+Use the verified public descriptor included in this release:
+
+```powershell
+.\launch-nlu.bat download
+.\launch-nlu.bat download --verify-only
+```
+
+The default installs `artifacts/runtime/models/stylometric/`. [`reports/artifact-download.json`](../reports/artifact-download.json) uses `kind=file` entries with anonymous, version-pinned raw URLs in a public model-only Kaggle dataset. Flat remote names such as `ce--model.safetensors` map to their original local runtime paths such as `models/ce/model.safetensors`. All 21 files passed full anonymous HTTP 200, byte-count and SHA256 checks; the [delivery receipt](../reports/model-download-verification.json) preserves the actual CLI evidence.
+
+Every model, transform, tokenizer, configuration and inventory file must match its exact byte count and SHA256. The downloader stages verified files before installation, preserves existing destinations and rejects unsafe paths or symlinks. A model's own inventory and the trusted evaluation freeze are checked again before inference, including before decoding stylometric pickle files.
+
+Optional groups:
+
+```powershell
+.\launch-nlu.bat download --model transformer
+.\launch-nlu.bat download --model ce
+.\launch-nlu.bat download --model custom_asl
+.\launch-nlu.bat download --model all
+.\launch-nlu.bat download --model all --verify-only
+```
+
+`transformer` resolves the calibrated pipeline chosen on selection and bound in the freeze. Both Large FP32 checkpoints are available for comparative replay; together their weights are about 2.84 GB before auxiliary files. Actual sizes come from the descriptor. Downloading the default ensemble does not install either transformer.
+
+## 4. Predict two passages
+
+```powershell
+.\launch-nlu.bat predict
+.\launch-nlu.bat predict --text-file-1 passage-a.txt --text-file-2 passage-b.txt
+.\launch-nlu.bat predict --model transformer --text-file-1 passage-a.txt --text-file-2 passage-b.txt
+```
+
+Linux uses `sh ./launch-nlu.sh` with the same arguments. Supply both passages or both UTF-8 files for unattended use. Inputs are limited to 2 MiB per passage and 1,000,000 characters by the normalizer; NUL and empty-after-cleanup text are rejected. RoBERTa caps the combined pair at 512 tokens with longest-first truncation.
+
+The output reports the numeric class, calibrated same-author score, frozen temperature, threshold and inference policy. `decision=uncertain` means the frozen abstention rule declined to decide. A calibrated score from this corpus is not proof of identity on new text. All installed model and tokenizer files are loaded locally.
+
+## 5. Replay all fixed final records
+
+Use an absent output directory for each model:
+
+```powershell
+.\launch-nlu.bat evaluate --model stylometric --model-name stylometric --model-dir artifacts/runtime/models/stylometric --output .local/replay-stylometric --batch-size 4 --threads 4
+.\launch-nlu.bat evaluate --model transformer --model-name ce --model-dir artifacts/runtime/models/ce --output .local/replay-ce --batch-size 4 --threads 4
+.\launch-nlu.bat evaluate --model transformer --model-name custom_asl --model-dir artifacts/runtime/models/custom_asl --output .local/replay-custom-asl --batch-size 4 --threads 4
+```
+
+These full-replay examples explicitly use batch size 4 and four CPU threads. The setting was chosen from a small historical-model timing probe for practical CPU execution, before new-model quality outputs; it does not select a model or alter calibration. CLI defaults remain batch size 8 and one thread. Actual final-model CPU costs are available in the [CPU summary](../reports/cpu-reproduction.json) and [measured results](./results.md); the separate benchmark uses batch size 1 and one thread.
+
+The default split is the entire 4,708-pair `locked_holdout`. Defaults bind `reports/split-manifest.json` and `reports/evaluation-freeze.json`. Evaluation reloads fixed weights and calibration without training or decision fitting, saving `metrics.json`, `confusion.json` and ordered `predictions.jsonl`. Compare support, correct counts, confusion, calibrated metrics, coverage and ordered predictions against the release reports. Retain model, source, data and freeze hashes with the observed OS/Python/package versions.
+
+After evaluation, automate the comparison with the [report-only helper](./reference-code/compare_frozen_predictions.py). The commands use the project-local `.venv` interpreter created by the launcher; no global `python` command is needed. This standard-library checker can also use an existing Python 3.12 interpreter. Use a new comparison JSON path each time:
+
+```powershell
+.\.venv\Scripts\python.exe -I docs/reference-code/compare_frozen_predictions.py --model-name stylometric --evaluation-dir .local/replay-stylometric --output .local/compare-stylometric.json
+.\.venv\Scripts\python.exe -I docs/reference-code/compare_frozen_predictions.py --model-name ce --evaluation-dir .local/replay-ce --output .local/compare-ce.json
+.\.venv\Scripts\python.exe -I docs/reference-code/compare_frozen_predictions.py --model-name custom_asl --evaluation-dir .local/replay-custom-asl --output .local/compare-custom-asl.json
+```
+
+On Linux, use `.venv/bin/python -I` with the same helper and arguments. It checks every ordered ID, prediction-file SHA256 and manifest, freeze, executable source, model inventory, calibration and class binding. Labels, predictions, acceptance, groups, lengths, counts, F1 and accuracy must match exactly. Probability differences allow at most `1e-5`; other floating metrics allow at most `1e-6`. These fixed tolerances cannot be changed through arguments. Exit code 0 means pass; 1 means failure, with an auditable JSON receipt. It does not overwrite an existing receipt or refit any decision. The Kaggle reference used CPU for the stylometric ensemble and CUDA/T4 for Large; numerical comparison does not require identical JSON bytes across devices. Report comparison performs no inference and does not establish public download availability. A numerical failure remains a failure even if classifications and accepted cases agree; retain the failed receipt and original reference without changing the tolerances.
+
+The raw AB comparison at threshold 0.5 and the deployed calibrated-pipeline choice are separate reports. Both are fixed before final evaluation; evaluating the alternative Large checkpoint does not authorize choosing a different model from its heldout score.
+
+All six full saved-model CPU inference executions in fresh Windows and Linux environments are complete using exact local frozen artifacts. This local-origin inference evidence remains separate from the completed public anonymous transport verification linked above. When both environments share one physical computer, describe them as clean environments on the same host, not independent third-party machines. CPU Large evaluation has hardware-dependent time and memory requirements; the T4 probe does not benchmark local CPU inference.
+
+## 6. Check correctness, timing and uncertainty
+
+Synthetic tests after setup:
+
+```powershell
+.\.venv\Scripts\python.exe -I -m unittest discover -s tests -v
+```
+
+Linux uses `.venv/bin/python -I -m unittest discover -s tests -v`. These cover grouping, loss/calibration behavior, artifact integrity and small round trips. Actual-model replay above is a distinct check.
+
+```powershell
+.\launch-nlu.bat benchmark --model stylometric --model-name stylometric --model-dir artifacts/runtime/models/stylometric --output .local/benchmark-stylometric.json
+.\launch-nlu.bat benchmark --model transformer --model-name ce --model-dir artifacts/runtime/models/ce --output .local/benchmark-ce.json
+```
+
+Default timing uses 32 fixed selection examples, one CPU thread, batch size 1, five warmups and three repetitions. It includes preprocessing, tokenization/features, selected orientation and calibration; loading is reported separately. Symmetric Large inference makes two forward passes. Compare fresh processes on the same hardware and examples.
+
+The predeclared [bootstrap helper](../scripts/bootstrap_results.py) takes `--manifest`, `--freeze`, `--summary`, `--prediction-root` and a new `--output` path. Point it at the completed release summary and the directory containing all three final prediction reports. It verifies their exact IDs/hashes, then uses 1,000 paired whole-document-component draws with seed 378 for conditional 95% percentile intervals. No model is loaded, no decision is refitted and no winner is reselected. These intervals condition on this corpus and one seed, not new authors, domains or training-seed variation.
+
+Figure generation is optional and uses Matplotlib in a separate environment; it is not installed by the model launcher. After the completed release report exists, Windows can run:
+
+```powershell
+.\.venv\Scripts\python.exe -m venv .local/plotting-env
+.\.local\plotting-env\Scripts\python.exe -m pip install -r docs/reference-code/requirements-plotting.txt
+.\.local\plotting-env\Scripts\python.exe docs/reference-code/plot_frozen_results.py --summary reports/release-summary.json --output .local/frozen-evaluation.png
+```
+
+On Linux, use `.venv/bin/python` to create the environment and `.local/plotting-env/bin/python` for the remaining commands. Plotting reads the saved report without loading models, recalibrating or changing their CPU packages. The release report and model evaluation must already be complete; the figure does not substitute for them.
+
+For a new matched training experiment, use the [Kaggle training guide](./training.md). It preserves RoBERTa-Large, runs the bounded stylometric study separately on CPU and packages its verified model for the two assigned T4 loss workers.
+
+## Historical notebooks and Drive artifacts
+
+The original joint work from February to May 2026 is preserved under `notebooks/`, with its [poster](./authorship-verification-poster-preview.png) and [historical model cards](../model-cards/). These files describe the earlier development procedure and are not the new runtime release or evaluation protocol. Original notebooks are unchanged; notebook dependencies and historical demos should not replace the new pinned CPU environment.
+
+| Historical artifact | Original download | Historical local folder |
 |---|---|---|
-| Stylometric XGBoost + LightGBM ensemble | [Model and vectorizer files](https://drive.google.com/drive/folders/1mF0bMpzfs3XODpQA2Hd7H_JvXLk5AGgp?usp=sharing) | `models/stylometric-ensemble/` |
-| Fine-tuned RoBERTa-Large | [Checkpoint and tokenizer files](https://drive.google.com/drive/folders/1Ty9-EpOLAgzvTWPuqrHBTbehmZZuDs3V?usp=sharing) | `models/roberta-asymmetric-loss/` |
+| Stylometric ensemble | [Original models and vectorizers](https://drive.google.com/drive/folders/1mF0bMpzfs3XODpQA2Hd7H_JvXLk5AGgp?usp=sharing) | `models/stylometric-ensemble/` or `models/Models_ML/` |
+| RoBERTa-Large custom asymmetric focal | [Original checkpoint and tokenizer](https://drive.google.com/drive/folders/1Ty9-EpOLAgzvTWPuqrHBTbehmZZuDs3V?usp=sharing) | `models/roberta-asymmetric-loss/` or `models/Models_ASL/` |
 
-Expected minimum contents:
+The original 5,993 development pairs contain 630 exact training-pair duplicates. Including those duplicates, 2,738 pairs reuse at least one train document (1,658 one-document and 1,080 two-document reuse). The historical stylometric notebook fits TF-IDF on combined train and development passages, influencing vocabulary and IDF. Checkpoints, weights and thresholds also use development. Its scores are development results, not an independent comparator for new holdout performance.
 
-```text
-models/
-├── stylometric-ensemble/
-│   ├── ensemble_config.json
-│   ├── lgb_model.pkl
-│   ├── tfidf_char.pkl
-│   ├── tfidf_fw.pkl
-│   ├── tfidf_word.pkl
-│   └── xgb_model.json
-└── roberta-asymmetric-loss/
-    ├── best_threshold.json
-    ├── config.json
-    ├── model.safetensors
-    ├── tokenizer.json
-    └── tokenizer_config.json
-```
-
-Keep any additional downloaded tokenizer or training files in the same directory. The RoBERTa weights alone are approximately 1.3 GiB, so leave enough disk space.
-
-The terminal script also accepts the original download folder names `models/Models_ML/` for the ensemble and `models/Models_ASL/` for RoBERTa. It searches the canonical directory first, then the matching original name, and selects a directory only when all required files are present. **The notebooks use only the canonical directory by default.** To run a notebook with an original folder name, either rename the folder to its canonical name or set `AV_MODEL_DIR` to that exact folder before starting Jupyter (section 5).
-
-## 3. Run a terminal prediction
-
-From the repository root, start the interactive demo. It prompts for two English passages and uses the CPU-friendly stylometric ensemble by default:
-
-```powershell
-.\.venv\Scripts\python.exe verify_author.py
-```
-
-On macOS or Linux, replace `.\.venv\Scripts\python.exe` with `.venv/bin/python`. You can select RoBERTa, supply both passages on the command line, or point to a model directory outside `models/`:
-
-```powershell
-.\.venv\Scripts\python.exe verify_author.py --model roberta --device cuda
-.\.venv\Scripts\python.exe verify_author.py --text-1 "I walked by the river this morning." --text-2 "The rain began quietly that evening."
-.\.venv\Scripts\python.exe verify_author.py --model roberta --model-dir "D:\models\Models_ASL" --text-1 "First passage." --text-2 "Second passage."
-```
-
-For a Unix path, use `--model-dir /path/to/Models_ASL`. The `--model-dir` value must be the directory containing the files above, not its parent. Both `--text-1` and `--text-2` must be provided together; otherwise the script prompts for both.
-
-For **Git Bash on Windows**, run:
-
-```bash
-./.venv/Scripts/python.exe verify_author.py --model roberta --device cuda
-```
-
-For RoBERTa, `--device auto` is the default and selects CUDA when PyTorch can use it. If an NVIDIA GPU is detected but PyTorch cannot use CUDA, the command stops with setup guidance instead of silently using CPU. `--device cuda` requires CUDA; `--device cpu` explicitly opts into slower CPU inference. The stylometric model uses CPU.
-
-The output reports `Prediction`, `Same-author probability`, and `Decision threshold`. A score **greater than or equal to** the model's saved threshold yields “Same author”; a lower score yields “Different authors.” Despite the output label, this is an uncalibrated model score, not the measured probability that the two authors match. Very short passages can give unreliable results, even when the displayed score is high.
-
-Scores and thresholds are displayed as percentages.
-
-## 4. Run the notebooks and inspect results
-
-Install `requirements.txt` as in section 1, then start Jupyter from the repository root:
-
-```powershell
-.\.venv\Scripts\jupyter.exe lab
-```
-
-On macOS or Linux, run `.venv/bin/jupyter lab`. Open either [stylometric demo](../notebooks/stylometric-ensemble/demo.ipynb) or [RoBERTa demo](../notebooks/roberta-asymmetric-loss/demo.ipynb), then run the cells in order. Each notebook:
-
-1. Loads its model files and evaluates labeled `data/dev.csv`.
-2. Predicts the unlabeled `data/test.csv` rows and writes a one-column CSV under `results/`.
-3. Defines `predict_author_match` and runs a sample pair. Edit `text_a` and `text_b` in the last cell for your own passages.
-
-The saved files are `results/stylometric-ensemble.csv` and `results/roberta-asymmetric-loss.csv`. Each has a `prediction` column with one 0 or 1 per test row, in the original row order. The current `test.csv` has 5,985 rows. Here `1` means same author and `0` means different authors. The test split has no labels, so its prediction CSV is not a measured test score. The reported metrics come from `dev.csv`; this split was also used to select thresholds and RoBERTa's best checkpoint. A direct comparison of the supplied `train.csv` and `dev.csv` found **630 of 5,993 development pairs (10.5%) that exactly duplicate training pairs**. These metrics therefore do not establish performance on independent new authors or domains. A separate labeled evaluation with authors and domains held out is needed to assess generalization.
-
-## 5. Data and path overrides
-
-The supplied datasets live in `data/`:
-
-| File | Columns | Use |
-|---|---|---|
-| `train.csv` | `text_1`, `text_2`, `label` | Training |
-| `dev.csv` | `text_1`, `text_2`, `label` | Development evaluation and threshold selection |
-| `test.csv` | `text_1`, `text_2` | Unlabeled batch inference |
-| `live.csv` | `text_1`, `text_2` | Additional unlabeled pairs |
-
-The notebooks look upward from the working directory for a repository containing `data/`. Set these environment variables before starting Jupyter if your files are elsewhere:
-
-| Variable | Notebook path |
-|---|---|
-| `AV_PROJECT_ROOT` | Repository root |
-| `AV_DATA_DIR` | Directory containing the CSV files |
-| `AV_MODEL_DIR` | Directory containing the **selected model's files** |
-| `AV_RESULTS_DIR` | Directory for output prediction CSV files |
-
-For example, to keep an unrenamed ensemble download on Windows:
-
-```powershell
-$env:AV_MODEL_DIR = (Resolve-Path .\models\Models_ML).Path
-.\.venv\Scripts\jupyter.exe lab
-```
-
-On macOS or Linux, use `AV_MODEL_DIR="$PWD/models/Models_ML" .venv/bin/jupyter lab`. Change `Models_ML` to `Models_ASL` when running the RoBERTa notebook. The terminal script uses `--model-dir` instead of `AV_MODEL_DIR`. Restart the Jupyter kernel after changing environment variables or installed packages.
-
-## 6. Optional retraining and hardware
-
-The [stylometric training notebook](../notebooks/stylometric-ensemble/training.ipynb) and [RoBERTa training notebook](../notebooks/roberta-asymmetric-loss/training.ipynb) read `train.csv` and `dev.csv`. They save artifacts to the canonical model directories by default; `AV_MODEL_DIR` can change the output directory. The RoBERTa notebook loads the base `roberta-large` model, which may need a separate download if it is not cached.
-
-RoBERTa-Large training needs substantially more memory and compute than inference. The [model cards](../model-cards/) record the original model setup and results.
+The original custom ASL is two-class softmax focal weighting with gamma 2/1, not the published multi-label sigmoid/clipping recipe. The saved 5,985 test predictions and 20 live pairs have no labels, so they provide no accuracy or F1. Document separation, train-only TF-IDF and frozen evaluation improve the new protocol's validity; they do not erase historical corpus exposure or prove unseen-author/domain generalization.

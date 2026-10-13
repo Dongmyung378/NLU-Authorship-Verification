@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "status": "completed",
+  "curated_utc": "2026-10-12T18:48:35.488006+00:00",
+  "kernel": {
+    "owner": "dongmyungpark",
+    "slug": "nlu-document-disjoint-20261012",
+    "numeric_version": 2,
+    "sdk_request_version_label": "v2",
+    "official_terminal_status": "COMPLETE",
+    "response_echoes_version": false
+  },
+  "source_package_archive_sha256": "05b0b65e3b781ae6d3cd3f1c55d4da19b673a6994d091f45ea4121a47dc761d0",
+  "source_package_receipt_sha256": "fd1ecccc7c2617d4d39b0bd5de199f7f538ddee559561d0e5beaa2b9b3335d72",
+  "freeze_sha256": "e8fc94ee17d7ea575ecf8002e3d104d1ec70600b68cc59239f1189b0b955f924",
+  "frozen_source_count": 35,
+  "event_records_sha256": "1171062115a0724947ef054c8c950f523fd36eed7020c394f61d23761fd7459b",
+  "terminal_raw_log_sha256": "24b9022a690eefa14d31b97daae3a53811a47deec41444657ef9bb8b2016868a",
+  "wrapper_events": {
+    "training_complete": {
+      "stage": "training-complete",
+      "seconds": 23027.612730145
+    },
+    "frozen_release_complete": {
+      "stage": "frozen-release-complete",
+      "seconds": 27171.01552611,
+      "selected_transformer": "ce",
+      "freeze_sha256": "e8fc94ee17d7ea575ecf8002e3d104d1ec70600b68cc59239f1189b0b955f924"
+    },
+    "project_complete": {
+      "stage": "project-complete",
+      "exit_code": 0
+    }
+  },
+  "timing_scopes": {
+    "paired_training_parent_wall": {
+      "seconds": 23025.25431797,
+      "scope": "Parallel paired-training parent duration, including preparation, discarded profiling, epoch barriers, validation and canonical checkpoint promotion."
+    },
+    "training_complete_wrapper_event": {
+      "seconds": 23027.612730145,
+      "scope": "Measured worker experiment start through training-complete; transported CPU model verification/copy and paired training included."
+    },
+    "full_frozen_release_wrapper_event": {
+      "seconds": 27171.01552611,
+      "scope": "Same worker experiment timer through independent calibration, final selection, joint freeze and all fixed final evaluations. GPU queue and managed-runtime installation precede this timer and are not included."
+    },
+    "assigned_worker_sum": {
+      "seconds": 45993.035828287,
+      "scope": "Sum of worker wall durations while assigned GPUs are reserved; includes CPU preparation/barrier waiting, not device-kernel-only busy time.",
+      "device_kernel_busy_time_measured": false,
+      "official_quota_consumption_attributed": false
+    },
+    "experiment_completion_seconds_field": {
+      "meaning": "Training-only preserved field; not full release elapsed time",
+      "raw_completion_modified": false
+    },
+    "full_kernel_wall_seconds": null
+  },
+  "matched_training": {
+    "epochs": 6,
+    "microbatch": {
+      "ce": 2,
+      "custom_asl": 2
+    },
+    "effective_batch": 32,
+    "best_epoch": {
+      "ce": 5,
+      "custom_asl": 5
+    },
+    "shared_stop_reason": "matched_epoch_cap",
+    "parent_training_wall_budget_seconds": 32400,
+    "assigned_worker_budget_seconds": 64800.0
+  },
+  "final_account_gpu_quota": {
+    "observed_utc": "2026-10-12T18:46:39.9060974Z",
+    "reported": [
+      {
+        "resource": "GPU",
+        "used": "13.91h",
+        "remaining": "16.09h",
+        "total": "30.00h",
+        "refreshAt": "2026-10-17T00:00:00"
+      }
+    ],
+    "source_receipt_sha256": "51d905ca808ac4bcc7f68a5ace990fb0df00b907e2dc97f59dee8f02b405be46",
+    "scope": "Observed whole-account snapshot, not attributed to this kernel or other jobs. No T4x2 charging multiplier inferred."
+  },
+  "figure": {
+    "path": "docs/figures/frozen-evaluation.png",
+    "sha256": "039d5076ab8932b4e74eb28d76cf0aced95a76fef9a1bf6ac47892be71e7b451",
+    "renderer": "docs/reference-code/plot_frozen_results.py",
+    "renderer_sha256": "d878751268e765e0788d132ae86f9b926993b8d8d82661551d274f428a9acfd6",
+    "frozen_plot_helper_sha256": "0b272f425ce06ac658e13eab6e246d74fd1c4640326fa44d8d96a691a193fd9d",
+    "display_only_adjustment": "Middle panel upper display limit1.12 with F1 ticks0..1, creating room for actual n=5 annotation; all measured values/support unchanged.",
+    "visual_inspection_passed": true
+  },
+  "raw_scientific_reports_modified": false,
+  "model_inference_performed": false,
+  "parameters_refitted": false,
+  "decisions_changed": false
+}

@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "protocol": "nlu-stylometric-bounded-v1",
+  "seed": 378,
+  "cpu_threads": 2,
+  "total_budget_seconds": 7200,
+  "promotion_macro_f1_gain": 0.002,
+  "reported_xgb_weights": [
+    0.0,
+    0.25,
+    0.5,
+    0.75,
+    1.0
+  ],
+  "final_xgb_weights": [
+    0.25,
+    0.5,
+    0.75
+  ],
+  "decision_threshold": 0.5,
+  "reference_recipe": "full-pilot",
+  "reference_xgb_weight": 0.5,
+  "component_checkpoint_metric": "selection logloss; native best iteration",
+  "recipes": [
+    {
+      "name": "full-pilot",
+      "feature_mode": "full",
+      "xgb_cap": 500,
+      "lgb_cap": 500,
+      "learning_rate": 0.03,
+      "max_depth": 6,
+      "num_leaves": 63,
+      "xgb_patience": 30,
+      "lgb_patience": 30,
+      "fit_budget_seconds": 600
+    },
+    {
+      "name": "tfidf-pilot",
+      "feature_mode": "tfidf_only",
+      "xgb_cap": 500,
+      "lgb_cap": 500,
+      "learning_rate": 0.03,
+      "max_depth": 6,
+      "num_leaves": 63,
+      "xgb_patience": 30,
+      "lgb_patience": 30,
+      "fit_budget_seconds": 600
+    },
+    {
+      "name": "style-pilot",
+      "feature_mode": "style_only",
+      "xgb_cap": 500,
+      "lgb_cap": 500,
+      "learning_rate": 0.03,
+      "max_depth": 6,
+      "num_leaves": 63,
+      "xgb_patience": 30,
+      "lgb_patience": 30,
+      "fit_budget_seconds": 600
+    },
+    {
+      "name": "full-original-caps",
+      "feature_mode": "full",
+      "xgb_cap": 7000,
+      "lgb_cap": 2000,
+      "learning_rate": 0.01,
+      "max_depth": 7,
+      "num_leaves": 127,
+      "xgb_patience": 200,
+      "lgb_patience": 100,
+      "fit_budget_seconds": 1800
+    }
+  ],
+  "tie_policy": "Prefer full features, then weight closest to0.5, then pilot, then lower XGB weight",
+  "singles_are_diagnostics_only": true,
+  "calibration_used": false,
+  "locked_holdout_used": false
+}
