@@ -26,7 +26,7 @@ Actual paired training took 6.3959 wall hours, with 12.7758 summed assigned-work
 
 ## Run the CPU interface
 
-The frozen model files are available in [public Kaggle dataset version 1](https://www.kaggle.com/datasets/dongmyungpark/nlu-authorship-frozen-large-20261012). All 21 files, totaling 2,856,189,574 bytes, were downloaded anonymously through the unchanged public CLI and matched their frozen byte counts and SHA256 hashes. The separate [download verification](./reports/model-download-verification.json) establishes artifact delivery, not another saved-model inference run. From the repository root in Windows PowerShell:
+Automatic model download uses [version-1 raw files in the public Kaggle dataset](https://www.kaggle.com/datasets/dongmyungpark/nlu-authorship-frozen-large-20261012). All 21 files, totaling 2,856,189,574 bytes, were downloaded anonymously through the unchanged public CLI and matched their frozen byte counts and SHA256 hashes. The separate [download verification](./reports/model-download-verification.json) establishes artifact delivery, not another saved-model inference run. From the repository root in Windows PowerShell:
 
 ```powershell
 .\launch-nlu.bat doctor
@@ -46,6 +46,8 @@ The default model is the CPU stylometric ensemble. Optional Large inference uses
 ```
 
 The verified release descriptor, [reports/artifact-download.json](./reports/artifact-download.json), pins anonymous version-1 raw URLs, byte counts and SHA256 for every checkpoint, tokenizer, transform and configuration file. Flat remote files map directly to the original `models/ce/`, `models/custom_asl/` and `models/stylometric/` runtime paths using `kind=file`. Full anonymous HTTP 200/hash verification and the CLI verify-only check completed successfully. The historical Drive files below cannot substitute for this new release's inventories and freeze.
+
+The automatic download and verification CLI continues to pin the existing version-1 raw-file URLs and SHA256 hashes. The [complete ZIP download](https://www.kaggle.com/api/v1/datasets/download/dongmyungpark/nlu-authorship-frozen-large-20261012?datasetVersionNumber=2) is provided by dataset version 2, which repackages the same 21 frozen model files. The separate [archive verification](./reports/model-archive-verification.json) records the downloaded ZIP's byte counts and SHA256 hashes. Models and evaluation results are unchanged. The complete ZIP preserves Kaggle's flat filenames. To install files under `artifacts/runtime/models/<model-name>/`, use the automatic download commands in this guide.
 
 If model-only ZIPs are supplied separately, extract their `models/<model-name>/` contents into `artifacts/runtime` in this matching source checkout. The runtime verifies installed bytes against the joint freeze before prediction or evaluation; the automatic-download descriptor is unnecessary for a manual installation. The public automatic route above is the verified release distribution.
 

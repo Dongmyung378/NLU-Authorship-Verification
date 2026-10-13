@@ -62,6 +62,8 @@ Use the verified public descriptor included in this release:
 
 The default installs `artifacts/runtime/models/stylometric/`. [`reports/artifact-download.json`](../reports/artifact-download.json) uses `kind=file` entries with anonymous, version-pinned raw URLs in a public model-only Kaggle dataset. Flat remote names such as `ce--model.safetensors` map to their original local runtime paths such as `models/ce/model.safetensors`. All 21 files passed full anonymous HTTP 200, byte-count and SHA256 checks; the [delivery receipt](../reports/model-download-verification.json) preserves the actual CLI evidence.
 
+The automatic download and verification CLI continues to pin the existing version-1 raw-file URLs and SHA256 hashes. The [complete ZIP download](https://www.kaggle.com/api/v1/datasets/download/dongmyungpark/nlu-authorship-frozen-large-20261012?datasetVersionNumber=2) is provided by dataset version 2, which repackages the same 21 frozen model files. The separate [archive verification](../reports/model-archive-verification.json) records the downloaded ZIP's byte counts and SHA256 hashes. Models and evaluation results are unchanged. The complete ZIP preserves Kaggle's flat filenames. To install files under `artifacts/runtime/models/<model-name>/`, use the automatic download commands in this guide.
+
 Every model, transform, tokenizer, configuration and inventory file must match its exact byte count and SHA256. The downloader stages verified files before installation, preserves existing destinations and rejects unsafe paths or symlinks. A model's own inventory and the trusted evaluation freeze are checked again before inference, including before decoding stylometric pickle files.
 
 Optional groups:

@@ -14,6 +14,8 @@ Measured CPU costs use the same first 32 selection records, one CPU thread, batc
 
 Public automatic model download is available without Kaggle credentials. The descriptor pins dataset version 1, and every downloaded file must match the frozen size and SHA256. Run these commands with the matching release source and descriptor.
 
+The automatic download and verification CLI continues to pin the existing version-1 raw-file URLs and SHA256 hashes. The [complete ZIP download](https://www.kaggle.com/api/v1/datasets/download/dongmyungpark/nlu-authorship-frozen-large-20261012?datasetVersionNumber=2) is provided by dataset version 2, which repackages the same 21 frozen model files. The separate [archive verification](../reports/model-archive-verification.json) records the downloaded ZIP's byte counts and SHA256 hashes. Models and evaluation results are unchanged. The complete ZIP preserves Kaggle's flat filenames. To install files under `artifacts/runtime/models/<model-name>/`, use the automatic download commands in this guide.
+
 Run these commands from the repository root in Windows PowerShell:
 
 ```powershell

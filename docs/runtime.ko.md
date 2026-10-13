@@ -14,6 +14,8 @@ CPU 비용은 같은 선택 집합의 첫 32쌍, CPU 스레드 1, 배치 1, 준�
 
 Kaggle 인증 정보 없이 공개 모델을 자동으로 다운로드할 수 있습니다. 명세는 데이터셋 버전 1을 고정하며 모든 파일은 고정한 크기와 SHA256이 일치해야 합니다. 일치하는 릴리스 소스와 명세에서 아래 명령을 실행합니다.
 
+자동 다운로드 및 검증 CLI는 기존 버전 1 raw 파일의 주소와 SHA256을 계속 고정합니다. [전체 ZIP 다운로드](https://www.kaggle.com/api/v1/datasets/download/dongmyungpark/nlu-authorship-frozen-large-20261012?datasetVersionNumber=2)는 동일한 고정 모델 파일 21개를 다시 묶은 데이터셋 버전 2에서 제공합니다. 다운로드한 ZIP의 파일 크기와 SHA256은 별도 [압축 파일 검증 기록](../reports/model-archive-verification.json)에서 확인할 수 있습니다. 모델과 평가 결과는 변경하지 않았습니다. 전체 ZIP은 Kaggle의 평면 파일 이름을 유지합니다. 원래 모델 실행 경로에 설치할 때는 이 안내의 자동 다운로드 명령을 사용합니다.
+
 저장소 최상위 폴더에서 Windows PowerShell로 실행합니다.
 
 ```powershell

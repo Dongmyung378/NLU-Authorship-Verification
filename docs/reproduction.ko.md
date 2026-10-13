@@ -62,6 +62,8 @@ sh ./launch-nlu.sh verify-data
 
 기본 모델은 `artifacts/runtime/models/stylometric/`에 설치합니다. `reports/artifact-download.json`은 모델 파일만 포함한 공개 Kaggle 데이터셋의 비로그인 고정 버전 raw 주소를 `kind=file`로 기록합니다. `ce--model.safetensors` 같은 원격 파일 이름은 `models/ce/model.safetensors` 같은 원래 실행 경로에 연결합니다. 파일 21개 모두 전체 비로그인 HTTP 200 다운로드와 바이트 수 및 SHA256 검사를 통과했으며, [전달 검증 기록](../reports/model-download-verification.json)에 실제 CLI 근거를 보존했습니다.
 
+자동 다운로드 및 검증 CLI는 기존 버전 1 raw 파일의 주소와 SHA256을 계속 고정합니다. [전체 ZIP 다운로드](https://www.kaggle.com/api/v1/datasets/download/dongmyungpark/nlu-authorship-frozen-large-20261012?datasetVersionNumber=2)는 동일한 고정 모델 파일 21개를 다시 묶은 데이터셋 버전 2에서 제공합니다. 다운로드한 ZIP의 파일 크기와 SHA256은 별도 [압축 파일 검증 기록](../reports/model-archive-verification.json)에서 확인할 수 있습니다. 모델과 평가 결과는 변경하지 않았습니다. 전체 ZIP은 Kaggle의 평면 파일 이름을 유지합니다. 원래 모델 실행 경로에 설치할 때는 이 안내의 자동 다운로드 명령을 사용합니다.
+
 모든 모델, 변환기, 토크나이저, 설정과 파일 목록은 정확한 바이트 수와 SHA256에 일치해야 합니다. 다운로드는 검증한 파일을 임시 영역에 준비한 뒤 설치하고 기존 출력 폴더를 보존하며 위험한 경로나 심볼릭 링크를 거부합니다. 추론 전 모델 자체 목록과 신뢰한 평가 고정 기록을 다시 확인하며 문체 모델의 pickle을 해석하기 전에도 검사합니다.
 
 선택적으로 다음 그룹을 설치합니다.

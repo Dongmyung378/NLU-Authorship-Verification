@@ -26,7 +26,7 @@ CE는 최종 평가 전에 보정값을 고정한 파이프라인을 선택 집�
 
 ## CPU 실행
 
-새 고정 모델 파일은 [공개 Kaggle 데이터셋 버전 1](https://www.kaggle.com/datasets/dongmyungpark/nlu-authorship-frozen-large-20261012)로 제공합니다. 기존 공개 CLI로 로그인 없이 파일 21개, 총 2,856,189,574바이트를 내려받아 고정한 크기와 SHA256이 모두 일치하는지 확인했습니다. 별도 [다운로드 검증](./reports/model-download-verification.json)은 파일 전달을 확인한 기록이며 저장 모델 추론을 다시 수행했다는 의미는 아닙니다. 저장소 최상위 폴더에서 Windows PowerShell로 실행합니다.
+자동 모델 다운로드는 [공개 Kaggle 데이터셋의 버전 1 raw 파일](https://www.kaggle.com/datasets/dongmyungpark/nlu-authorship-frozen-large-20261012)을 사용합니다. 기존 공개 CLI로 로그인 없이 파일 21개, 총 2,856,189,574바이트를 내려받아 고정한 크기와 SHA256이 모두 일치하는지 확인했습니다. 별도 [다운로드 검증](./reports/model-download-verification.json)은 파일 전달을 확인한 기록이며 저장 모델 추론을 다시 수행했다는 의미는 아닙니다. 저장소 최상위 폴더에서 Windows PowerShell로 실행합니다.
 
 ```powershell
 .\launch-nlu.bat doctor
@@ -46,6 +46,8 @@ Linux에서는 같은 명령 앞에 `sh ./launch-nlu.sh`를 사용합니다. 실
 ```
 
 검증한 릴리스 명세 [reports/artifact-download.json](./reports/artifact-download.json)은 모델 파일만 포함한 공개 Kaggle 데이터셋 버전 1의 비로그인 raw 주소와 모든 체크포인트, 토크나이저, 변환기 및 설정의 바이트 수와 SHA256을 고정합니다. 원격 파일은 `kind=file`로 원래 `models/ce/`, `models/custom_asl/`, `models/stylometric/` 실행 경로에 직접 연결합니다. 전체 비로그인 HTTP 200/해시 확인과 CLI verify-only 검사를 완료했습니다. 아래의 최초 Drive 파일은 새 릴리스의 파일 목록이나 평가 고정 기록을 대신할 수 없습니다.
+
+자동 다운로드 및 검증 CLI는 기존 버전 1 raw 파일의 주소와 SHA256을 계속 고정합니다. [전체 ZIP 다운로드](https://www.kaggle.com/api/v1/datasets/download/dongmyungpark/nlu-authorship-frozen-large-20261012?datasetVersionNumber=2)는 동일한 고정 모델 파일 21개를 다시 묶은 데이터셋 버전 2에서 제공합니다. 다운로드한 ZIP의 파일 크기와 SHA256은 별도 [압축 파일 검증 기록](./reports/model-archive-verification.json)에서 확인할 수 있습니다. 모델과 평가 결과는 변경하지 않았습니다. 전체 ZIP은 Kaggle의 평면 파일 이름을 유지합니다. 원래 모델 실행 경로에 설치할 때는 이 안내의 자동 다운로드 명령을 사용합니다.
 
 모델 ZIP을 별도로 전달받은 경우에는 `models/모델명/` 구조를 같은 강화 버전 소스의 `artifacts/runtime`에 해제합니다. 실행기가 예측이나 평가 전에 설치한 파일을 전체 고정 기록에 대조하며 직접 설치에는 자동 다운로드 명세가 필요하지 않습니다. 검증을 완료한 공개 전달 경로는 위 자동 다운로드입니다.
 
