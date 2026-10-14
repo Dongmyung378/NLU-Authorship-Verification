@@ -58,7 +58,7 @@
         },
         {
           "id": "custom_asl",
-          "label_ko": "RoBERTa-Large 커스텀 이진 focal",
+          "label_ko": "RoBERTa-Large 커스텀 ASL (이진 focal)",
           "macro_f1": 0.8151695979899498,
           "accuracy_pct": 81.52081563296517,
           "count": 4708,
@@ -82,7 +82,7 @@
         "TF-IDF와 문체 특징",
         "XGBoost 및 LightGBM 앙상블",
         "RoBERTa-Large CE",
-        "직접 구현한 클래스별 비대칭 이진 softmax focal: gamma_0=2, gamma_1=1",
+        "ASL의 비대칭 focusing을 적용한 커스텀 이진 softmax focal: gamma_0=2, gamma_1=1",
         "문서 연결 그룹 분할",
         "입력 순서 대칭 평균",
         "독립 확률 보정",
@@ -91,7 +91,7 @@
       ],
       "caveats_ko": [
         "최종 평가 4,708쌍에서 focal의 관측 F1이 더 높아도 최종 결과로 CE 배포 선택을 변경하지 않았다.",
-        "최초 프로젝트에서 ASL로 부른 것은 직접 구현한 클래스별 비대칭 이진 softmax focal이며, 공식 다중 라벨 ASL 및 단일 레이블 ASLSingleLabel을 그대로 구현한 것은 아니다. custom_asl은 과거 실행 식별자로 보존한다.",
+        "커스텀 ASL은 ASL의 비대칭 focusing을 적용한 클래스별 비대칭 이진 softmax focal 변형이다. 공식 ASL 또는 ASLSingleLabel 코드의 기본 설정을 그대로 재현한 실험과 구분하며, custom_asl은 기존 실행 식별자로 보존한다.",
         "이전 개발 F1 0.8348과 새 평가 점수는 분할 및 평가 조건이 달라 개선율로 비교할 수 없다.",
         "ECE는 선택된 입력 순서를 유지하고 온도 보정 전후를 비교한다. 분류 정확도나 F1 개선을 의미하지 않는다.",
         "Windows와 Linux에서 분류 결과는 일치했으나 Large의 GPU 대비 일부 확률 차이는 사전 허용 오차를 넘었다.",
@@ -105,11 +105,11 @@
         },
         {
           "path": "docs/results.ko.md",
-          "sha256": "b50b7c5f47c955f5d8c092abc13a9c7ddc341b250990e9d871e640c4d8ebd42b"
+          "sha256": "244d04c9dc8d2e0f68b7a1016b4dc1ecc03b0bb5ea007bfb4e2b01921b22de63"
         },
         {
           "path": "README.ko.md",
-          "sha256": "b8b0068acbb50d0e1d5a71c881bfac626d0270b8fea5b4f31791dd18e4a76ab3"
+          "sha256": "05f88a042aee77e4b228b652a9bd4ace4356e73ecce2d98335416c17f29e6f6e"
         }
       ]
     }

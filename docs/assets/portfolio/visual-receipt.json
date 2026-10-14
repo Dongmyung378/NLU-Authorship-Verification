@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "status": "generated_from_published_measurements",
-  "visual_data_sha256": "457a99667cd40a23c1a6b845c48bbd58e8559d048fe8623d8db38dea62ec8c59",
+  "visual_data_sha256": "9fe35c6a7e349657b4a492e2122f4483bdee85cb95ab6916516b708325528af0",
   "project_ids": [
     "project-05"
   ],
@@ -10,19 +10,19 @@
       "filename": "nlu-thumbnail.svg",
       "project_id": "project-05",
       "bytes": 3555,
-      "sha256": "40f50b12b1fb0cfc49675de6d1f057c5bfbd335ca16657ac229b1893870da1b2"
+      "sha256": "6d513e46edcbc9637b4866bc4e49d819f34a113ba82e8ed35b490aa1fbcfc101"
     },
     {
       "filename": "nlu-results.svg",
       "project_id": "project-05",
-      "bytes": 5000,
-      "sha256": "9c951f744dd8875b5c17e08a200fcae496a2b0c9da59e8db90a118a13085d7ad"
+      "bytes": 5090,
+      "sha256": "24989063d664721b063507065214740c350451536fe676e4d1a4208c9965f4a6"
     },
     {
       "filename": "nlu-calibration.svg",
       "project_id": "project-05",
-      "bytes": 5828,
-      "sha256": "d9492adc0395e4a3939fe685f9748923b07526b2e3c2f7e5671d662c458f2c5e"
+      "bytes": 5906,
+      "sha256": "cae412ab7b4cb5fd648824e064a5914dded5895d7179a6923af6538c68f871dd"
     }
   ],
   "network_or_model_execution_performed": false,

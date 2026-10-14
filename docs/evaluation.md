@@ -2,7 +2,7 @@
 
 [한국어](./evaluation.ko.md) | [Project overview](../README.md) | [Architecture](./architecture.md) | [Measured results](./results.md)
 
-The experiment has four separate roles: train fits task weights, selection chooses checkpoints and model policy, calibration fits the output decisions, and locked holdout evaluates the frozen system. The target proportions are 70 / 10 / 5 / 15. All reported counts and labels must come from the saved split manifest and source CSV hashes. The alternative loss is [custom class-dependent binary focal](./loss-terminology.md), historically named ASL; this protocol does not compare CE with either official ASL variant.
+The experiment has four separate roles: train fits task weights, selection chooses checkpoints and model policy, calibration fits the output decisions, and locked holdout evaluates the frozen system. The target proportions are 70 / 10 / 5 / 15. All reported counts and labels must come from the saved split manifest and source CSV hashes. The alternative loss is [custom class-dependent binary focal](./loss-terminology.md), historically named ASL; this protocol compares CE with that direct binary ASL adaptation and does not claim an exact reproduction of official defaults or paper experiments.
 
 ## Model selection
 

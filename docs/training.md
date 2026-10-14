@@ -8,7 +8,7 @@ All six saved-model CPU inference executions are complete: all three models ran 
 
 ## Fixed recipe
 
-The trained alternative uses [custom class-dependent binary focal](./loss-terminology.md), historically called ASL or ASLoss. The preserved `custom_asl` runtime name is a compatibility identifier, not an official-ASL reproduction claim.
+The trained alternative uses [custom class-dependent binary focal](./loss-terminology.md), historically called ASL or ASLoss. The preserved `custom_asl` runtime name is a compatibility identifier, not an exact reproduction claim for the official default recipe or paper experiment.
 
 [`configs/experiment-plan.json`](../configs/experiment-plan.json) declares the full experiment before task training. It pins `FacebookAI/roberta-large` revision `722cf37b1afa9454edce342e7895e588b6ff1d59` and pretrained safetensors SHA256 `047c85f0b96269cd62e6f732644f067004eebd95af5b5d35965ae2528f13bf38`. Its binary classifier has 355,361,794 parameters. Both losses start from the same fresh task initialization, rather than the historical task checkpoint.
 

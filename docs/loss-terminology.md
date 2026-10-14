@@ -2,7 +2,7 @@
 
 [한국어](./loss-terminology.ko.md) | [Project overview](../README.md) | [Measured results](./results.md) | [Architecture](./architecture.md)
 
-The trained alternative to cross entropy is a **custom class-dependent binary focal loss**, historically named `ASL` and `ASLoss` in the original project. The public runtime keeps the compatibility identifier `custom_asl`. This name connects the preserved artifacts; it does not mean that the official ASL implementation was trained or reproduced.
+The trained alternative to cross entropy is a **directly implemented binary ASL adaptation using class-dependent focal weighting**, named `ASL` and `ASLoss` in the original project and labeled custom focal in the reports. The public runtime keeps `custom_asl` for compatibility. This is an ASL-family adaptation; it is not an exact reproduction of the official library's default recipe or the paper's experiment.
 
 ## What the project implements
 
@@ -10,11 +10,11 @@ For different-author class `0` and same-author class `1`, let `p_y` be the true-
 
 `L = mean(-(1 - p_y)^gamma_y * log(p_y))`
 
-The focal factor reduces the contribution of easy examples, with a stronger reduction for class `0`. This is a class-dependent weighting choice inspired by asymmetric focusing. It is not presented as a new loss method or a reproduction of the ASL paper.
+The focal factor reduces the contribution of easy examples, with a stronger reduction for class `0`. Gamma also appears in ordinary focal loss, as documented by [Torchvision's sigmoid focal loss](https://docs.pytorch.org/vision/main/generated/torchvision.ops.sigmoid_focal_loss.html). Gamma alone therefore does not identify ASL. Using different exponents for the binary positive and negative classes is the asymmetric-focusing part of this adaptation. It is not presented as a new loss method or a reproduction of the paper's experiment.
 
 The [original notebook](../notebooks/roberta-asymmetric-loss/training.ipynb) names the class `ASLoss` and computes softmax probabilities followed by `log(max(p_y, 1e-8))`. The [maintained implementation](../nlu_authorship/losses.py) computes the true-class log probability directly with FP32 log-softmax. It retains the same focal mechanism and class exponents, while removing the original logarithm floor. Values below that floor can therefore differ; the implementations are not claimed to be numerically identical at extreme probabilities or in mixed precision.
 
-## How this differs from official ASL
+## Relationship to official ASL variants
 
 The authors' [official implementation](https://github.com/Alibaba-MIIL/ASL/blob/main/src/loss_functions/losses.py) provides both multi-label and single-label variants. ASL is not restricted to multi-label classification.
 
@@ -24,7 +24,9 @@ The authors' [official implementation](https://github.com/Alibaba-MIIL/ASL/blob/
 | Official `ASLSingleLabel` | Softmax with positive and negative target masks and configurable label smoothing |
 | This project's custom binary focal | Two-class softmax, weighting determined by the true class (`gamma_0=2`, `gamma_1=1`), and no negative-probability shifting or label smoothing |
 
-This project's code is neither of those official recipes. Merely using two-class softmax does not establish equivalence to `ASLSingleLabel`. The [ASL paper](https://openaccess.thecvf.com/content/ICCV2021/html/Ridnik_Asymmetric_Loss_for_Multi-Label_Classification_ICCV_2021_paper.html) is background for the asymmetric-focusing idea.
+Negative-probability shifting is configurable in official ASL, so its absence alone does not exclude an ASL variant. For a binary task, let `d = z_1 - z_0`. Then `sigmoid(d) = softmax([z_0, z_1])_1`. Configuring official `AsymmetricLoss` with `clip=0`, `gamma_neg=2`, `gamma_pos=1` and `disable_torch_grad_focal_loss=False` yields the same class-dependent focal objective for a single binary output, apart from its sum reduction versus this project's mean and logarithm floors at extreme probabilities. With matched normalization and outside the floors, these mathematical objectives coincide. This observation follows from the displayed formula and official code; it is not a new training experiment or a claim of bit-identical execution.
+
+The project implements that binary adaptation directly rather than importing the official loss. Its settings and experiment differ from the official defaults and from `ASLSingleLabel`'s target-mask and label-smoothing recipe. The [ASL paper](https://openaccess.thecvf.com/content/ICCV2021/html/Ridnik_Asymmetric_Loss_for_Multi-Label_Classification_ICCV_2021_paper.html) is method background. Neither a two-class softmax nor the presence of gamma alone establishes exact reproduction of a published recipe.
 
 ## What was trained and selected
 
@@ -34,4 +36,4 @@ On all 4,708 final pairs, the retained focal pipeline scored macro F1 `0.815170`
 
 ## Preserved names and evidence
 
-Historical notebook names, `ASLoss`, paths such as `Models_ASL`, and the runtime/model identifier `custom_asl` remain for compatibility and provenance. Frozen configurations, weights, predictions and metric reports remain unchanged. Reader-facing descriptions use **custom binary focal (historical name: ASL)** to distinguish the implemented method from the official ASL variants. This terminology correction does not involve retraining or recalculating results.
+Historical notebook names, `ASLoss`, paths such as `Models_ASL`, and the runtime/model identifier `custom_asl` remain for compatibility and provenance. Frozen configurations, weights, predictions and metric reports remain unchanged. Reader-facing descriptions use **custom binary focal (direct binary ASL adaptation)** to connect the ASL name with the implemented objective without claiming an exact official-default reproduction. This terminology correction does not involve retraining or recalculating results.

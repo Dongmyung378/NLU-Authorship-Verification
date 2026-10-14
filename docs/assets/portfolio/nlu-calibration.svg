@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="765" viewBox="0 0 1200 765" role="img" aria-labelledby="title desc">
 <title id="title">같은 입력 순서에서의 확률 보정 전후 ECE</title>
-<desc id="desc">고정 입력 순서를 유지하고 같은 최종 4,708쌍에서 온도 보정 전후의 동일 저자 확률 ECE를 비교했습니다. Large 커스텀 focal은 최초 명칭 ASL의 클래스별 비대칭 이진 softmax focal 구현이며 공식 ASL 및 ASLSingleLabel과 다릅니다. 세 모델 모두 ECE가 감소했으며 작을수록 좋습니다.</desc>
+<desc id="desc">고정 입력 순서를 유지하고 같은 최종 4,708쌍에서 온도 보정 전후의 동일 저자 확률 ECE를 비교했습니다. Large 커스텀 ASL은 ASL의 비대칭 focusing을 적용한 클래스별 비대칭 이진 softmax focal 변형입니다. 공식 ASL 또는 ASLSingleLabel 코드의 기본 설정을 그대로 재현한 실험과 구분합니다. 세 모델 모두 ECE가 감소했으며 작을수록 좋습니다.</desc>
 <style>text{font-family:'Noto Sans KR', 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif;font-variant-numeric:tabular-nums} .axis{fill:#64696B}</style>
 <rect x="0" y="0" width="1200" height="765" fill="#F8F3F0" rx="0" stroke-width="1"/>
 <text x="48" y="64" fill="#39272A" font-size="36" font-weight="750" text-anchor="start">확률 보정 전후의 예측 확률 오차</text>
@@ -35,7 +35,7 @@
 <text x="989" y="347" fill="#39272A" font-size="28" font-weight="700" text-anchor="start">0.0454</text>
 <rect x="375" y="362" width="205.11914621931533" height="28" fill="#7D3548" rx="5" stroke-width="1"/>
 <text x="989" y="387" fill="#39272A" font-size="28" font-weight="700" text-anchor="start">0.0248</text>
-<text x="48" y="473" fill="#39272A" font-size="26" font-weight="700" text-anchor="start">Large 커스텀 focal</text>
+<text x="48" y="473" fill="#39272A" font-size="26" font-weight="700" text-anchor="start">Large 커스텀 ASL</text>
 <rect x="375" y="438" width="479.149578084888" height="28" fill="#BA9F83" rx="5" stroke-width="1"/>
 <text x="989" y="463" fill="#39272A" font-size="28" font-weight="700" text-anchor="start">0.0578</text>
 <rect x="375" y="478" width="278.32138058539783" height="28" fill="#7D3548" rx="5" stroke-width="1"/>
@@ -44,5 +44,5 @@
 <text x="48" y="676" fill="#64696B" font-size="20" font-weight="400" text-anchor="start">ECE는 동일 너비의 10개 확률 구간에서 평균 확률과 실제 동일 저자 비율의 차이를 가중한 값입니다.</text>
 <text x="48" y="705" fill="#64696B" font-size="20" font-weight="400" text-anchor="start">보정값은 별도 1,569쌍에서 맞추고 최종 평가 전에 고정했습니다. 최종 평가에서 다시 맞추지 않았습니다.</text>
 <text x="48" y="734" fill="#64696B" font-size="20" font-weight="400" text-anchor="start">확률 보정은 정답이나 F1이 늘어나는 것을 보장하지 않습니다.</text>
-<metadata>{"project_id": "project-05", "visual_data_sha256": "457a99667cd40a23c1a6b845c48bbd58e8559d048fe8623d8db38dea62ec8c59", "generated_from_published_measurements": true}</metadata>
+<metadata>{"project_id": "project-05", "visual_data_sha256": "9fe35c6a7e349657b4a492e2122f4483bdee85cb95ab6916516b708325528af0", "generated_from_published_measurements": true}</metadata>
 </svg>

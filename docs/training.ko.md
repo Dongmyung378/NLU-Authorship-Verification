@@ -8,7 +8,7 @@ Windows와 Linux에서 모델 세 개를 각각 전체 4,708쌍으로 실행한 
 
 ## 고정한 학습 조건
 
-학습한 비교 손실은 최초에 ASL 또는 ASLoss라고 불렀던 [직접 구현 비대칭 이진 focal](./loss-terminology.ko.md)입니다. 실행기의 `custom_asl`은 호환 식별자이며 공식 ASL을 재현했다는 뜻은 아닙니다.
+학습한 비교 손실은 최초에 ASL 또는 ASLoss라고 불렀던 [직접 구현 비대칭 이진 focal](./loss-terminology.ko.md)입니다. 실행기의 `custom_asl`은 호환 식별자이며 공식 기본 설정이나 논문의 실험을 그대로 재현했다는 뜻은 아닙니다.
 
 [`configs/experiment-plan.json`](../configs/experiment-plan.json)은 전체 과제 학습 전에 실험을 선언합니다. `FacebookAI/roberta-large`의 리비전 `722cf37b1afa9454edce342e7895e588b6ff1d59`와 사전학습 safetensors SHA256 `047c85f0b96269cd62e6f732644f067004eebd95af5b5d35965ae2528f13bf38`을 고정합니다. 이진 분류 모델의 파라미터는 355,361,794개입니다. 두 손실 모두 최초 과제 체크포인트가 아닌 동일한 새 과제 초기화에서 시작합니다.
 

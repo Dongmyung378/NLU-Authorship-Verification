@@ -67,7 +67,7 @@ CE는 두 클래스의 일반적인 음의 로그 우도를 사용합니다. 직
 
 `L = mean(-(1 - p_y)^gamma_y * log(p_y))`
 
-`p_y`는 정답 클래스의 softmax 확률입니다. 서로 다른 저자 클래스에는 `gamma_0=2`, 동일 저자 클래스에는 `gamma_1=1`을 적용합니다. 혼합 정밀도로 학습하더라도 FP32 log-softmax로 손실을 계산해 수치 안정성을 확보합니다. 최초 노트북은 이 클래스별 focal 방식을 ASL 또는 ASLoss라고 부르고 로그 계산 전에 확률에 `1e-8` 하한을 적용했습니다. 현재 계산은 하한을 제거했으므로 focal 원리는 유지하지만 극단적인 확률에서는 값이 달라질 수 있습니다. 공식 다중 라벨 ASL과 공식 `ASLSingleLabel`은 모두 존재하며, 이 코드는 어느 구현과도 같지 않습니다. [손실 함수의 명칭과 비교](./loss-terminology.ko.md)에서 가중치 구성의 차이와 보존한 `custom_asl` 식별자를 설명합니다. [ASL 논문](https://openaccess.thecvf.com/content/ICCV2021/html/Ridnik_Asymmetric_Loss_for_Multi-Label_Classification_ICCV_2021_paper.html)은 배경 자료이며 그대로 재현했다는 뜻은 아닙니다.
+`p_y`는 정답 클래스의 softmax 확률입니다. 서로 다른 저자 클래스에는 `gamma_0=2`, 동일 저자 클래스에는 `gamma_1=1`을 적용합니다. 혼합 정밀도로 학습하더라도 FP32 log-softmax로 손실을 계산해 수치 안정성을 확보합니다. 최초 노트북은 이 클래스별 focal 방식을 ASL 또는 ASLoss라고 부르고 로그 계산 전에 확률에 `1e-8` 하한을 적용했습니다. 현재 계산은 하한을 제거했으므로 focal 원리는 유지하지만 극단적인 확률에서는 값이 달라질 수 있습니다. 공식 다중 라벨 ASL과 단일 라벨 `ASLSingleLabel`은 모두 존재합니다. 이 코드는 ASL의 이진 변형을 직접 구현한 것으로, 공식 기본 설정의 정확한 재현과 구분합니다. [손실 함수의 명칭과 비교](./loss-terminology.ko.md)에서 가중치 구성의 차이와 보존한 `custom_asl` 식별자를 설명합니다. [ASL 논문](https://openaccess.thecvf.com/content/ICCV2021/html/Ridnik_Asymmetric_Loss_for_Multi-Label_Classification_ICCV_2021_paper.html)은 배경 자료이며 그대로 재현했다는 뜻은 아닙니다.
 
 독립된 두 worker가 이미 배정된 T4를 하나씩 사용해 CE와 custom focal을 각각 학습합니다. 두 모델은 고정한 최대 6 epoch 안에서 같은 수의 epoch를 완료하며, 모델 선택 집합만 사용하는 공통 patience는 3입니다. 매 epoch가 끝나면 두 모델의 결과를 함께 확인하고, 어느 하나라도 개선되면 공통 대기 횟수를 초기화합니다. 둘 다 3회 연속 개선되지 않거나 상한에 도달하면 함께 종료합니다. 각 모델은 임계값 0.5에서 자신의 모델 선택 macro F1이 가장 높은 체크포인트를 저장하고, 정확한 동점에서는 먼저 저장한 체크포인트를 유지합니다. 선택된 최적 epoch는 달라도 완료한 학습 epoch 수는 같습니다. Microbatch 2와 최대 6 epoch는 두 과제 학습 전에 학습 기록만 사용한 자원 측정으로 유지했으며 검증이나 최종 평가 성능으로 선택하지 않았습니다.
 

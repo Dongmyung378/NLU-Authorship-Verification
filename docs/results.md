@@ -4,7 +4,7 @@
 
 The completed Kaggle release evaluates all 4,708 locked-holdout pairs after freezing every model, tokenizer, source file, split and calibration decision. This is a single-seed, document-disjoint experiment on the supplied corpus. Dongmyung Park and Juho Kim's original joint development period remains February to May 2026.
 
-**Naming:** custom focal is the project's custom class-dependent binary focal loss, historically named ASL or ASLoss. The compatibility identifier remains `custom_asl`; this is not an official ASL or `ASLSingleLabel` experiment. The [terminology comparison](./loss-terminology.md) explains the official variants, preserved names and numerical-stability changes. Figures and immutable reports retain the focal label.
+**Naming:** custom focal is the project's custom class-dependent binary focal loss, historically named ASL or ASLoss. The compatibility identifier remains `custom_asl`; the study trains a direct binary ASL adaptation rather than reproducing the official defaults or paper experiment. The [terminology comparison](./loss-terminology.md) explains the official variants, preserved names and numerical-stability changes. Figures and immutable reports retain the focal label.
 
 ## Classification and deployment
 
@@ -12,7 +12,7 @@ The completed Kaggle release evaluates all 4,708 locked-holdout pairs after free
 |---|---:|---:|---:|---:|---:|
 | Stylometric ensemble | 0.743335 | 0.743335 | 0.741498 | 74.1504% | 3,491 / 4,708 |
 | Large CE (deployed) | 0.807724 | 0.808149 | 0.808383 | 80.8624% | 3,807 / 4,708 |
-| Large custom binary focal (historical name: ASL) | 0.808153 | 0.816451 | 0.815170 | 81.5208% | 3,838 / 4,708 |
+| Large custom ASL (class-dependent binary focal) | 0.808153 | 0.816451 | 0.815170 | 81.5208% | 3,838 / 4,708 |
 
 ![Frozen classification, selected CE length slices and positive-class ECE on the same holdout](./figures/frozen-evaluation.png)
 
