@@ -6,6 +6,8 @@
 
 생성기는 Python 기본 라이브러리와 포함된 표시용 데이터만 사용합니다. 그래프를 다시 생성하는 것은 모델 실행이나 과학적 평가 검증이 아닙니다.
 
+그래프의 **Large 커스텀 focal**은 최초 프로젝트에서 `ASLoss`로 이름 붙인 직접 구현 손실을 사용합니다. 정답 클래스의 softmax 확률에 `-(1-p_y)^gamma_y * log(p_y)`를 적용하며, 다른 저자는 `gamma_0=2`, 동일 저자는 `gamma_1=1`입니다. **ASL은 당시 프로젝트에서 사용한 명칭이며, 공식 다중 라벨 ASL이나 단일 레이블 `ASLSingleLabel`을 그대로 구현한 것은 아닙니다.** 호환성을 위해 실행 식별자 `custom_asl`은 보존합니다. 구분의 근거는 [공식 손실 함수 구현](https://github.com/Alibaba-MIIL/ASL/blob/main/src/loss_functions/losses.py)에서 확인할 수 있습니다. 이번 수정은 명칭과 설명에 한정하며, 표시한 수치와 그래프의 도형 및 색상은 그대로 유지합니다.
+
 ```bash
 python docs/assets/portfolio/render_visuals.py --input docs/assets/portfolio/visual-data.json --output docs/assets/portfolio
 ```

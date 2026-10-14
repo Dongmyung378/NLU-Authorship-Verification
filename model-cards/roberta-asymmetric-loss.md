@@ -4,12 +4,12 @@ tags:
   - text-classification
   - authorship-verification
   - roberta-large
-  - asymmetric-loss
+  - focal-loss
   - pytorch
 repo: https://github.com/Dongmyung378/NLU-Authorship-Verification
 ---
 
-# RoBERTa-Large with Asymmetric Loss
+# RoBERTa-Large with custom binary focal (historical name: ASL)
 
 [한국어](./roberta-asymmetric-loss.ko.md) | [Project overview](../README.md)
 
@@ -29,7 +29,7 @@ This supervised binary classifier was trained to label pairs in the supplied Eng
 
 Email headers, email addresses, URLs, and redundant whitespace are removed before tokenization. The two passages are encoded as a standard RoBERTa pair and truncated with `longest_first` to a combined maximum of 512 tokens.
 
-The model replaces cross-entropy with the custom loss `-(1-p_y)^gamma_y * log(max(p_y, 1e-8))`, averaged over examples, using a two-class softmax with `gamma_neg=2` and `gamma_pos=1`. It down-weights easy examples more strongly for class 0. The `1e-8` floor is a numerical safeguard for the logarithm; the implementation does not use the published ASL's negative-probability shifting mechanism or independent multi-label sigmoid outputs. It is not an exact implementation of [the published multi-label ASL](https://openaccess.thecvf.com/content/ICCV2021/html/Ridnik_Asymmetric_Loss_for_Multi-Label_Classification_ICCV_2021_paper.html). A development-set threshold sweep selected `0.51` for inference. A causal improvement in cross-domain generalization has not been established.
+The model replaces cross-entropy with the custom loss `-(1-p_y)^gamma_y * log(max(p_y, 1e-8))`, averaged over examples, using a two-class softmax with `gamma_neg=2` and `gamma_pos=1`. It down-weights easy examples more strongly for class 0. The original notebook calls this class `ASLoss`; its implementation is a custom class-dependent binary focal loss, neither official multi-label ASL nor official `ASLSingleLabel`. Both official variants exist. The `1e-8` floor is a numerical safeguard, not ASL's negative-probability shifting mechanism. The [loss terminology comparison](../docs/loss-terminology.md) explains the official methods and how the maintained FP32 log-softmax differs at extreme probabilities. The original notebook names and paths remain historical references. A development-set threshold sweep selected `0.51` for inference. A causal improvement in cross-domain generalization has not been established.
 
 ## Training data
 

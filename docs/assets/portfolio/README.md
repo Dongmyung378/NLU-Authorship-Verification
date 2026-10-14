@@ -6,6 +6,8 @@ These Korean-labelled SVGs are the presentation assets used on the portfolio sit
 
 The renderer uses Python's standard library and the embedded display data only. Regenerating these visuals does not rerun a model or verify its scientific evaluation.
 
+The model labelled **Large custom focal** uses the original project loss named `ASLoss`: the class-dependent binary softmax focal objective `-(1-p_y)^gamma_y * log(p_y)`, with `gamma_0=2` for different authors and `gamma_1=1` for the same author. **ASL was its historical project name, not an implementation of the official multi-label ASL or `ASLSingleLabel` objective.** The runtime identifier `custom_asl` is preserved for compatibility. See the [official loss implementations](https://github.com/Alibaba-MIIL/ASL/blob/main/src/loss_functions/losses.py) for that distinction. Only terminology and explanatory text have changed; the plotted measurements, geometry and palette are unchanged.
+
 ```bash
 python docs/assets/portfolio/render_visuals.py --input docs/assets/portfolio/visual-data.json --output docs/assets/portfolio
 ```

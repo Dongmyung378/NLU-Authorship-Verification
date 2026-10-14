@@ -26,7 +26,7 @@ This release retains the original RoBERTa-Large architecture from Dongmyung Park
 
 Both workers share initialization hash `ffe7ba5e9107a846e6c9303dc914893535a441412c12fee323111b17a754acd3`, the same six recorded schedule fingerprints and optimizer recipe. Each uses a separately assigned T4. Shared epoch barriers and patience three ensure equal completed epochs; each loss keeps its own best selection checkpoint. Equal attempted schedules do not imply identical successful update counts when FP16 scaler overflow occurs.
 
-The project's original ASL implementation is the **class-dependent binary focal loss** labeled custom focal in the immutable reports. It computes `-(1-p_y)^gamma_y * log(p_y)` with `gamma_0=2` and `gamma_1=1` over two-class softmax probabilities, reducing the contribution of easy examples. The runtime and public model files preserve the `custom_asl` identifier. This implementation differs from the published multi-label sigmoid ASL with clipping, and comparing loss values of different objectives does not demonstrate improved accuracy.
+The **custom class-dependent binary focal loss**, historically called ASL or ASLoss, is labeled custom focal in the immutable reports. It computes `-(1-p_y)^gamma_y * log(p_y)` with `gamma_0=2` and `gamma_1=1` over two-class softmax probabilities. The maintained implementation uses FP32 log-softmax rather than the original notebook's explicit logarithm floor, so extreme probabilities need not produce identical values. The runtime and public model files preserve `custom_asl` for compatibility. This method is neither official multi-label ASL nor official `ASLSingleLabel`; [loss terminology](../docs/loss-terminology.md) compares all three. A smaller loss value under one objective does not demonstrate higher accuracy.
 
 ## Selection and frozen evaluation
 
@@ -35,7 +35,7 @@ Before holdout, CE's fixed calibrated pipeline scored selection macro F1 0.80119
 | Model | Raw AB F1 at 0.5 | Frozen macro F1 | Accuracy | Correct |
 |---|---:|---:|---:|---:|
 | CE, deployed | 0.807724 | 0.808383 | 80.8624% | 3,807 / 4,708 |
-| Project-specific ASL, retained comparator | 0.808153 | 0.815170 | 81.5208% | 3,838 / 4,708 |
+| Custom binary focal (historical name: ASL), retained comparator | 0.808153 | 0.815170 | 81.5208% | 3,838 / 4,708 |
 
 These results cover every locked-holdout pair, including the binary predictions underlying abstentions. The later focal advantage does not change the frozen deployment choice. Neither score is a controlled before/after comparison with the original development F1 0.8348. Detailed orientation, calibration, slices and conditional uncertainty are in the [results](../docs/results.md) and [protocol](../docs/evaluation.md).
 

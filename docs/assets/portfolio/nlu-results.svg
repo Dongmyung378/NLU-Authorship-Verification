@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="745" viewBox="0 0 1200 745" role="img" aria-labelledby="title desc">
 <title id="title">동일 저자 판별의 고정 파이프라인 비교</title>
-<desc id="desc">문서가 분리된 같은 4,708쌍에서 문체 앙상블과 RoBERTa-Large CE 및 직접 구현한 비대칭 focal을 비교합니다. 배포용 Large는 평가 전에 선택된 CE입니다.</desc>
+<desc id="desc">문서가 분리된 같은 4,708쌍에서 문체 앙상블과 RoBERTa-Large CE 및 커스텀 이진 focal을 비교합니다. 커스텀 손실은 최초 프로젝트의 ASL이라는 명칭을 바로잡은 것으로, 클래스별 softmax 정답 확률에 gamma 2와 1을 적용하며 공식 ASL 및 ASLSingleLabel과 다릅니다. 배포용 Large는 평가 전에 선택된 CE입니다.</desc>
 <style>text{font-family:'Noto Sans KR', 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif;font-variant-numeric:tabular-nums} .axis{fill:#64696B}</style>
 <rect x="0" y="0" width="1200" height="745" fill="#F8F3F0" rx="0" stroke-width="1"/>
 <text x="48" y="64" fill="#39272A" font-size="36" font-weight="750" text-anchor="start">동일 조건에서 비교한 세 모델의 판별 성능</text>
@@ -27,14 +27,14 @@
 <rect x="372" y="323" width="455.11935904776425" height="42" fill="#7D3548" rx="7" stroke-width="1"/>
 <text x="966" y="354" fill="#7D3548" font-size="33" font-weight="750" text-anchor="start">0.8084</text>
 <text x="966" y="387" fill="#64696B" font-size="21" font-weight="400" text-anchor="start">정답 3,807쌍</text>
-<text x="48" y="472" fill="#39272A" font-size="25" font-weight="700" text-anchor="start">Large 비대칭 focal</text>
-<text x="48" y="507" fill="#64696B" font-size="21" font-weight="400" text-anchor="start">직접 구현 / 보존한 비교 모델</text>
+<text x="48" y="472" fill="#39272A" font-size="25" font-weight="700" text-anchor="start">Large 커스텀 focal</text>
+<text x="48" y="507" fill="#64696B" font-size="21" font-weight="400" text-anchor="start">클래스별 비대칭 이진 focal</text>
 <rect x="372" y="445" width="458.94048366834176" height="42" fill="#2D666E" rx="7" stroke-width="1"/>
 <text x="966" y="476" fill="#2D666E" font-size="33" font-weight="750" text-anchor="start">0.8152</text>
 <text x="966" y="509" fill="#64696B" font-size="21" font-weight="400" text-anchor="start">정답 3,838쌍</text>
 <text x="1138" y="581" fill="#64696B" font-size="22" font-weight="400" text-anchor="end">Macro F1</text>
 <text x="48" y="656" fill="#64696B" font-size="20" font-weight="400" text-anchor="start">CE는 모델 선택 집합에서 정한 배포 모델입니다. 최종 평가에서 focal의 점수가 높아도 선택을 바꾸지 않았습니다.</text>
-<text x="48" y="685" fill="#64696B" font-size="20" font-weight="400" text-anchor="start">직접 구현한 비대칭 이진 focal은 최초 프로젝트에서 ASL로 불렀으며 발표된 다중 라벨 ASL과 다릅니다.</text>
+<text x="48" y="685" fill="#64696B" font-size="20" font-weight="400" text-anchor="start">최초 명칭은 ASL이며, 공식 ASL과 ASLSingleLabel의 구현과는 다릅니다.</text>
 <text x="48" y="714" fill="#64696B" font-size="20" font-weight="400" text-anchor="start">최초 개발 F1 0.8348과 평가 조건이 다르므로 통제된 전후 개선량으로 비교하지 않습니다.</text>
-<metadata>{"project_id": "project-05", "visual_data_sha256": "de27ebff609c1c1d4be7e994ffdefc059b712428ccb478228f4df03686dd4812", "generated_from_published_measurements": true}</metadata>
+<metadata>{"project_id": "project-05", "visual_data_sha256": "457a99667cd40a23c1a6b845c48bbd58e8559d048fe8623d8db38dea62ec8c59", "generated_from_published_measurements": true}</metadata>
 </svg>

@@ -1,4 +1,4 @@
-# Asymmetric Loss를 적용한 RoBERTa-Large
+# 직접 구현 비대칭 이진 focal을 적용한 RoBERTa-Large(기존 명칭: ASL)
 
 [English](./roberta-asymmetric-loss.md) | [프로젝트 개요](../README.ko.md)
 
@@ -18,7 +18,7 @@
 
 토큰화 전에 이메일 헤더, 이메일 주소, URL, 불필요한 공백을 제거합니다. 두 글을 RoBERTa의 표준 텍스트 쌍 형식으로 인코딩하고 <code>longest_first</code> 방식으로 전체 길이를 최대 512토큰까지 제한합니다.
 
-기본 교차 엔트로피 대신 두 클래스의 softmax 확률에 `-(1-p_y)^gamma_y * log(max(p_y, 1e-8))`를 적용하고 예시별 손실을 평균합니다. <code>gamma_neg=2</code>, <code>gamma_pos=1</code>을 사용해 쉬운 예시의 기여를 낮추며, 클래스 0에 더 큰 지수를 적용합니다. `1e-8` 하한은 로그 계산을 위한 수치 안정성 처리입니다. 발표된 ASL의 음성 클래스 확률 이동 방식이나 라벨별 독립 sigmoid를 사용하지 않으므로 [발표된 다중 라벨 ASL](https://openaccess.thecvf.com/content/ICCV2021/html/Ridnik_Asymmetric_Loss_for_Multi-Label_Classification_ICCV_2021_paper.html)을 그대로 구현한 손실은 아닙니다. 개발 데이터의 임계값 탐색으로 추론 임계값 <code>0.51</code>을 선택했습니다. 도메인이 바뀌었을 때 일반화 성능을 높인다는 인과 관계는 검증되지 않았습니다.
+기본 교차 엔트로피 대신 두 클래스의 softmax 확률에 `-(1-p_y)^gamma_y * log(max(p_y, 1e-8))`를 적용하고 예시별 손실을 평균합니다. <code>gamma_neg=2</code>, <code>gamma_pos=1</code>을 사용해 쉬운 예시의 기여를 낮추며, 클래스 0에 더 큰 지수를 적용합니다. 최초 노트북은 이 클래스를 `ASLoss`라고 불렀지만, 실제로는 직접 구현한 클래스별 비대칭 이진 focal 손실입니다. 공식 다중 라벨 ASL과 공식 단일 라벨 `ASLSingleLabel`은 모두 존재하며, 이 코드는 어느 구현과도 같지 않습니다. `1e-8` 하한은 로그 계산의 수치 안정성 처리이며 ASL의 음성 확률 이동이 아닙니다. [손실 함수의 명칭과 비교](../docs/loss-terminology.ko.md)에서 공식 방식과 현재 FP32 log-softmax의 차이를 설명합니다. 최초 노트북 이름과 경로는 개발 이력으로 보존합니다. 개발 데이터의 임계값 탐색으로 추론 임계값 <code>0.51</code>을 선택했습니다. 도메인이 바뀌었을 때 일반화 성능을 높인다는 인과 관계는 검증되지 않았습니다.
 
 ## 학습 데이터
 

@@ -6,7 +6,7 @@
 
 This project compares the original two model families for English passage-pair authorship verification: a stylometric XGBoost-LightGBM ensemble and RoBERTa-Large. The new pipeline adds document-disjoint data splits, matched CE versus custom binary asymmetric focal training, independent calibration, immutable evaluation and hash-verified CPU replay. It predicts different-author (`0`) or same-author (`1`) labels; it does not establish a person's identity on arbitrary new text.
 
-The model named **custom focal** in the reports is the project's original **ASL implementation**, identified as `custom_asl` in the runtime and model files. Its class-dependent binary focal loss reduces the contribution of already-correct, easy examples. The technical description distinguishes this project-specific implementation from the published ASL recipe.
+The model named **custom focal** in the reports uses the project's **custom class-dependent binary focal loss**, historically called `ASL` or `ASLoss`. Its runtime and model identifier remains `custom_asl` for compatibility. It reduces the contribution of already-correct, easy examples. It is neither the official multi-label ASL nor the official `ASLSingleLabel` implementation; both official variants exist. The [loss terminology and implementation](./docs/loss-terminology.md) explain the difference from those methods and the numerical-stability change from the original notebook.
 
 ## Current release status
 
@@ -16,7 +16,7 @@ Fresh RoBERTa-Large CE and custom focal training, the bounded train-only stylome
 |---|---:|---:|---:|
 | Stylometric XGBoost-LightGBM ensemble | 0.741498 | 74.1504% | 3,491 |
 | RoBERTa-Large CE, deployed | 0.808383 | 80.8624% | 3,807 |
-| RoBERTa-Large project-specific ASL, retained comparator | 0.815170 | 81.5208% | 3,838 |
+| RoBERTa-Large custom binary focal (historical name: ASL), retained comparator | 0.815170 | 81.5208% | 3,838 |
 
 CE was selected before holdout using the fixed calibrated pipelines on selection data. The later focal holdout advantage does not change that choice. Historical development F1 0.8348 uses different evaluation conditions and is not a before/after comparator. Calibration reduced ECE/NLL for all three models, but F1 did not improve uniformly and the 90% accepted-accuracy abstention goal was unmet.
 
@@ -85,11 +85,11 @@ The supplied 27,643 train and 5,993 development pairs are audited together. Clea
 | Calibration | 1,569 | Temperature, threshold and abstention fitting |
 | Locked holdout | 4,708 | Final evaluation after the joint freeze |
 
-Two independently assigned T4 workers train fresh pinned RoBERTa-Large with matched initialization, seed, records and epoch schedules. CE is compared with the original custom two-class softmax focal objective: `-(1-p_y)^gamma_y * log(p_y)`, with `gamma_0=2` and `gamma_1=1`, calculated in FP32. This is not the published multi-label sigmoid ASL with clipping.
+Two independently assigned T4 workers train fresh pinned RoBERTa-Large with matched initialization, seed, records and epoch schedules. CE is compared with the custom two-class softmax focal objective: `-(1-p_y)^gamma_y * log(p_y)`, with `gamma_0=2` and `gamma_1=1`, calculated using FP32 log-softmax. The original notebook used an explicit `1e-8` probability floor before its logarithm; the current stable calculation retains the focal mechanism but can differ below that floor. This study does not train either official ASL variant.
 
 A separate CPU study fits every TF-IDF transform on train only and compares four bounded XGBoost-LightGBM recipes within 120 minutes. Final ensemble weights keep both components active. A new recipe/weight must gain at least 0.002 selection macro F1 over the reference to be adopted.
 
-Raw AB loss comparison stays at threshold 0.5. Each input-order policy is chosen on selection; all three models are calibrated independently. Deployment then compares the fixed calibrated Large pipelines on stored selection logits, adopting custom ASL only with at least 0.002 macro F1 gain over calibrated CE. Raw and deployed winners are reported separately. The joint freeze precedes every heldout inference, and heldout outcomes never tune decisions.
+Raw AB loss comparison stays at threshold 0.5. Each input-order policy is chosen on selection; all three models are calibrated independently. Deployment then compares the fixed calibrated Large pipelines on stored selection logits, adopting custom focal only with at least 0.002 macro F1 gain over calibrated CE. Raw and deployed winners are reported separately. The joint freeze precedes every heldout inference, and heldout outcomes never tune decisions.
 
 The plan also declares 1,000 paired whole-document-group bootstrap draws with seed 378. Conditional 95% percentile intervals describe the frozen corpus and one trained seed, not repeated-training variation or new-author/domain generalization. Details are in the [evaluation protocol](./docs/evaluation.md).
 

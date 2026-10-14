@@ -445,10 +445,10 @@ def nlu_thumbnail(p):
 
 
 def nlu_results(p):
-    s=SVG(p,'동일 저자 판별의 고정 파이프라인 비교','문서가 분리된 같은 4,708쌍에서 문체 앙상블과 RoBERTa-Large CE 및 직접 구현한 비대칭 focal을 비교합니다. 배포용 Large는 평가 전에 선택된 CE입니다.',745)
+    s=SVG(p,'동일 저자 판별의 고정 파이프라인 비교','문서가 분리된 같은 4,708쌍에서 문체 앙상블과 RoBERTa-Large CE 및 커스텀 이진 focal을 비교합니다. 커스텀 손실은 최초 프로젝트의 ASL이라는 명칭을 바로잡은 것으로, 클래스별 softmax 정답 확률에 gamma 2와 1을 적용하며 공식 ASL 및 ASLSingleLabel과 다릅니다. 배포용 Large는 평가 전에 선택된 CE입니다.',745)
     pal=p['theme'];s.header('동일 조건에서 비교한 세 모델의 판별 성능','문서가 분리된 최종 4,708쌍. 입력 순서와 확률 보정을 포함한 고정 파이프라인의 결과입니다.')
     x0,x1=372,935;percent_grid(s,x0,x1,181,544,ticks=(0,.2,.4,.6,.8,1),max_value=1)
-    labels={'stylometric':['문체 앙상블','XGBoost + LightGBM'],'ce':['RoBERTa-Large CE','평가 전 선택한 배포용 Large'],'custom_asl':['Large 비대칭 focal','직접 구현 / 보존한 비교 모델']}
+    labels={'stylometric':['문체 앙상블','XGBoost + LightGBM'],'ce':['RoBERTa-Large CE','평가 전 선택한 배포용 Large'],'custom_asl':['Large 커스텀 focal','클래스별 비대칭 이진 focal']}
     for i,row in enumerate(p['models']):
         y=228+i*122;color=pal[{'stylometric':'stylometric','ce':'ce','custom_asl':'custom_focal'}[row['id']]]
         s.text(48,y,labels[row['id']][0],25,weight=700);s.text(48,y+35,labels[row['id']][1],21,color=s.muted)
@@ -456,18 +456,18 @@ def nlu_results(p):
         s.text(966,y+4,f"{row['macro_f1']:.4f}",33,color=color,weight=750)
         s.text(966,y+37,f"정답 {row['correct']:,}쌍",21,color=s.muted)
     s.text(1138,581,'Macro F1',22,color=s.muted,anchor='end')
-    s.footer(['CE는 모델 선택 집합에서 정한 배포 모델입니다. 최종 평가에서 focal의 점수가 높아도 선택을 바꾸지 않았습니다.', '직접 구현한 비대칭 이진 focal은 최초 프로젝트에서 ASL로 불렀으며 발표된 다중 라벨 ASL과 다릅니다.', '최초 개발 F1 0.8348과 평가 조건이 다르므로 통제된 전후 개선량으로 비교하지 않습니다.'])
+    s.footer(['CE는 모델 선택 집합에서 정한 배포 모델입니다. 최종 평가에서 focal의 점수가 높아도 선택을 바꾸지 않았습니다.', '최초 명칭은 ASL이며, 공식 ASL과 ASLSingleLabel의 구현과는 다릅니다.', '최초 개발 F1 0.8348과 평가 조건이 다르므로 통제된 전후 개선량으로 비교하지 않습니다.'])
     return s
 
 
 def nlu_calibration(p):
-    s=SVG(p,'같은 입력 순서에서의 확률 보정 전후 ECE','고정 입력 순서를 유지하고 같은 최종 4,708쌍에서 온도 보정 전후의 동일 저자 확률 ECE를 비교했습니다. 세 모델 모두 ECE가 감소했으며 작을수록 좋습니다.',765)
+    s=SVG(p,'같은 입력 순서에서의 확률 보정 전후 ECE','고정 입력 순서를 유지하고 같은 최종 4,708쌍에서 온도 보정 전후의 동일 저자 확률 ECE를 비교했습니다. Large 커스텀 focal은 최초 명칭 ASL의 클래스별 비대칭 이진 softmax focal 구현이며 공식 ASL 및 ASLSingleLabel과 다릅니다. 세 모델 모두 ECE가 감소했으며 작을수록 좋습니다.',765)
     pal=p['theme'];s.header('확률 보정 전후의 예측 확률 오차','같은 최종 4,708쌍과 고정 입력 순서에서 온도 보정 전후를 비교했습니다. ECE는 작을수록 좋습니다.')
     s.legend([('보정 전',pal['before'],185),('보정 후',pal['after'],185)],y=156)
     x0,x1=375,955;maximum=.07
     percent_grid(s,x0,x1,190,561,ticks=(0,.01,.02,.03,.04,.05,.06,.07),max_value=maximum)
     for i,row in enumerate(p['models']):
-        y=228+i*116;labels={'stylometric':'문체 앙상블','ce':'RoBERTa-Large CE','custom_asl':'Large 비대칭 focal'}
+        y=228+i*116;labels={'stylometric':'문체 앙상블','ce':'RoBERTa-Large CE','custom_asl':'Large 커스텀 focal'}
         s.text(48,y+13,labels[row['id']],26,weight=700)
         for j,role in enumerate(['before','after']):
             yy=y+j*40;v=row['ece_'+role];s.rect(x0,yy-22,v/maximum*(x1-x0),28,pal[role],5)
