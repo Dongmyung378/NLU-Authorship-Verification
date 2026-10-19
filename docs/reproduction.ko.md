@@ -139,10 +139,12 @@ Linux에서는 `.venv/bin/python -I -m unittest discover -s tests -v`를 사용�
 
 그림 생성은 선택 사항이며 별도의 Matplotlib 환경을 사용합니다. 모델 실행기는 이 패키지를 설치하지 않습니다. 완료한 릴리스 보고서가 있을 때 Windows에서 다음과 같이 실행할 수 있습니다.
 
+한국어 그림에는 설치된 한국어 폰트가 필요합니다. 생성기는 Matplotlib의 폰트 목록과 실제 파일을 확인해 Malgun Gothic, Noto Sans CJK KR, Noto Sans KR, Apple SD Gothic Neo, NanumGothic 순서로 선택합니다. 지원 폰트가 없으면 한글이 깨진 그림을 저장하지 않고 오류로 중단합니다. 현재 공개한 한국어 PNG는 Windows의 Malgun Gothic으로 생성했습니다. 다른 폰트나 Matplotlib 버전에서는 글자 배치와 PNG 바이트가 달라질 수 있으며, 같은 측정값과 도형 좌표를 사용한다는 범위와 구분합니다.
+
 ```powershell
 .\.venv\Scripts\python.exe -m venv .local/plotting-env
 .\.local\plotting-env\Scripts\python.exe -m pip install -r docs/reference-code/requirements-plotting.txt
-.\.local\plotting-env\Scripts\python.exe docs/reference-code/plot_frozen_results.py --summary reports/release-summary.json --output .local/frozen-evaluation.png
+.\.local\plotting-env\Scripts\python.exe docs/reference-code/plot_frozen_results_ko.py --summary reports/release-summary.json --output .local/frozen-evaluation.ko.png
 ```
 
 Linux에서는 `.venv/bin/python`으로 환경을 만들고 나머지 명령에 `.local/plotting-env/bin/python`을 사용합니다. 저장된 보고서만 읽어 그림을 생성하며 모델을 불러오거나 보정값과 CPU 패키지를 바꾸지 않습니다. 릴리스와 모델 평가가 먼저 완료돼야 하며 그림 생성으로 실제 평가를 대신하지 않습니다.

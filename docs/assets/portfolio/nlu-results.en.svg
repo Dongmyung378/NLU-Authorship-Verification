@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="745" viewBox="0 0 1200 745" role="img" aria-labelledby="title desc">
+<title id="title">Frozen authorship-verification pipelines</title>
+<desc id="desc">The style ensemble, RoBERTa-Large CE and custom ASL share the same document-disjoint 4,708 pairs. Custom ASL is a binary focal variant with ASL's asymmetric focusing: gamma 2 and 1 on the true-class softmax probability. This is distinct from reproducing official ASL or ASLSingleLabel defaults. Deployed Large CE was chosen before final evaluation.</desc>
+<style>text{font-family:'Noto Sans KR', 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif;font-variant-numeric:tabular-nums} .axis{fill:#64696B}</style>
+<rect x="0" y="0" width="1200" height="745" fill="#F8F3F0" rx="0" stroke-width="1" />
+<text x="48" y="64" fill="#39272A" font-size="36" font-weight="750" text-anchor="start">Three frozen models on the same evaluation</text>
+<text x="48" y="104" fill="#64696B" font-size="22" font-weight="400" text-anchor="start">Document-disjoint final 4,708 pairs, with frozen input-order and calibration policies.</text>
+<line x1="372.0" y1="181" x2="372.0" y2="544" stroke="#DDDDE0" stroke-width="1" />
+<text x="372.0" y="577" fill="#64696B" font-size="21" font-weight="400" text-anchor="middle">0</text>
+<line x1="484.6" y1="181" x2="484.6" y2="544" stroke="#DDDDE0" stroke-width="1" />
+<text x="484.6" y="577" fill="#64696B" font-size="21" font-weight="400" text-anchor="middle">0.2</text>
+<line x1="597.2" y1="181" x2="597.2" y2="544" stroke="#DDDDE0" stroke-width="1" />
+<text x="597.2" y="577" fill="#64696B" font-size="21" font-weight="400" text-anchor="middle">0.4</text>
+<line x1="709.8" y1="181" x2="709.8" y2="544" stroke="#DDDDE0" stroke-width="1" />
+<text x="709.8" y="577" fill="#64696B" font-size="21" font-weight="400" text-anchor="middle">0.6</text>
+<line x1="822.4000000000001" y1="181" x2="822.4000000000001" y2="544" stroke="#DDDDE0" stroke-width="1" />
+<text x="822.4000000000001" y="577" fill="#64696B" font-size="21" font-weight="400" text-anchor="middle">0.8</text>
+<line x1="935.0" y1="181" x2="935.0" y2="544" stroke="#DDDDE0" stroke-width="1" />
+<text x="935.0" y="577" fill="#64696B" font-size="21" font-weight="400" text-anchor="middle">1</text>
+<text x="48" y="228" fill="#39272A" font-size="25" font-weight="700" text-anchor="start">Style ensemble</text>
+<text x="48" y="263" fill="#64696B" font-size="21" font-weight="400" text-anchor="start">XGBoost + LightGBM</text>
+<rect x="372" y="201" width="417.4631790995922" height="42" fill="#BA9F83" rx="7" stroke-width="1" />
+<text x="966" y="232" fill="#BA9F83" font-size="33" font-weight="750" text-anchor="start">0.7415</text>
+<text x="966" y="265" fill="#64696B" font-size="21" font-weight="400" text-anchor="start">3,491 correct pairs</text>
+<text x="48" y="350" fill="#39272A" font-size="25" font-weight="700" text-anchor="start">RoBERTa-Large CE</text>
+<text x="48" y="385" fill="#64696B" font-size="21" font-weight="400" text-anchor="start">Deployed, preselected Large</text>
+<rect x="372" y="323" width="455.11935904776425" height="42" fill="#7D3548" rx="7" stroke-width="1" />
+<text x="966" y="354" fill="#7D3548" font-size="33" font-weight="750" text-anchor="start">0.8084</text>
+<text x="966" y="387" fill="#64696B" font-size="21" font-weight="400" text-anchor="start">3,807 correct pairs</text>
+<text x="48" y="472" fill="#39272A" font-size="25" font-weight="700" text-anchor="start">Large custom ASL</text>
+<text x="48" y="507" fill="#64696B" font-size="21" font-weight="400" text-anchor="start">Class-dependent binary focal</text>
+<rect x="372" y="445" width="458.94048366834176" height="42" fill="#2D666E" rx="7" stroke-width="1" />
+<text x="966" y="476" fill="#2D666E" font-size="33" font-weight="750" text-anchor="start">0.8152</text>
+<text x="966" y="509" fill="#64696B" font-size="21" font-weight="400" text-anchor="start">3,838 correct pairs</text>
+<text x="1138" y="581" fill="#64696B" font-size="22" font-weight="400" text-anchor="end">Macro F1</text>
+<text x="48" y="656" fill="#64696B" font-size="19" font-weight="400" text-anchor="start">Selection data chose deployed CE. A higher final focal score did not change the deployment choice.</text>
+<text x="48" y="685" fill="#64696B" font-size="19" font-weight="400" text-anchor="start">Custom ASL is an asymmetric binary focal variant, distinct from reproducing the official default code.</text>
+<text x="48" y="714" fill="#64696B" font-size="19" font-weight="400" text-anchor="start">Historical development F1 0.8348 used different conditions and is not a controlled before/after comparison.</text>
+<metadata>{"generated_from_published_measurements": true, "localization": {"data_geometry_changed": false, "illustrative_connector_refined": false, "language": "en", "measurement_values_changed": false, "source_sha256": "24989063d664721b063507065214740c350451536fe676e4d1a4208c9965f4a6", "source_svg": "docs/assets/portfolio/nlu-results.svg"}, "project_id": "project-05", "visual_data_sha256": "9fe35c6a7e349657b4a492e2122f4483bdee85cb95ab6916516b708325528af0"}</metadata>
+</svg>

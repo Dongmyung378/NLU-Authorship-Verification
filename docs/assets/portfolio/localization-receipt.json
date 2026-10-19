@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "presentation_only": true,
+  "models_or_evaluation_run": false,
+  "files": [
+    {
+      "source": "docs/assets/portfolio/nlu-thumbnail.svg",
+      "target": "docs/assets/portfolio/nlu-thumbnail.en.svg",
+      "language": "en",
+      "source_sha256": "6d513e46edcbc9637b4866bc4e49d819f34a113ba82e8ed35b490aa1fbcfc101",
+      "sha256": "07578c6efdc2f15f92522ed542310211e836f3c3c445d64df16812eeec6a7e7f",
+      "translated_elements": 10,
+      "illustrative_connector_refined": true,
+      "data_geometry_changed": false
+    },
+    {
+      "source": "docs/assets/portfolio/nlu-thumbnail.svg",
+      "target": "docs/assets/portfolio/nlu-thumbnail.ko.svg",
+      "language": "ko",
+      "source_sha256": "6d513e46edcbc9637b4866bc4e49d819f34a113ba82e8ed35b490aa1fbcfc101",
+      "sha256": "fc40f698a313d64efa7d544a99916c905afc772b80336b98e86c83ec2b57d8e0",
+      "translated_elements": 1,
+      "illustrative_connector_refined": true,
+      "data_geometry_changed": false
+    },
+    {
+      "source": "docs/assets/portfolio/nlu-results.svg",
+      "target": "docs/assets/portfolio/nlu-results.en.svg",
+      "language": "en",
+      "source_sha256": "24989063d664721b063507065214740c350451536fe676e4d1a4208c9965f4a6",
+      "sha256": "532febf84086e62f71d7b3f7960545ab76edd580a92e1406c2a5b0817477e751",
+      "translated_elements": 14,
+      "illustrative_connector_refined": false,
+      "data_geometry_changed": false
+    },
+    {
+      "source": "docs/assets/portfolio/nlu-calibration.svg",
+      "target": "docs/assets/portfolio/nlu-calibration.en.svg",
+      "language": "en",
+      "source_sha256": "cae412ab7b4cb5fd648824e064a5914dded5895d7179a6923af6538c68f871dd",
+      "sha256": "2da9ca53d4ce2fda2f8fae25a04fcf8e5b515511a11b263b35b8dba2b1062620",
+      "translated_elements": 12,
+      "illustrative_connector_refined": false,
+      "data_geometry_changed": false
+    }
+  ]
+}

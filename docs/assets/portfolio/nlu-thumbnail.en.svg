@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
+<title id="title">Authorship verification with style and context</title>
+<desc id="desc">Independent models compare style and context for English passage pairs. RoBERTa-Large CE was selected before the frozen 4,708-pair final evaluation, where its Macro F1 was 0.8084.</desc>
+<style>text{font-family:'Noto Sans KR', 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif;font-variant-numeric:tabular-nums} .axis{fill:#64696B}</style>
+<rect x="0" y="0" width="1200" height="760" fill="#F8F3F0" rx="0" stroke-width="1" />
+<text x="54" y="81" fill="#39272A" font-size="43" font-weight="750" text-anchor="start">Authorship verification: style and context</text>
+<text x="54" y="134" fill="#64696B" font-size="31" font-weight="400" text-anchor="start">Authorship verification with style and context</text>
+<rect x="56" y="186" width="332" height="292" fill="#FFFFFF" rx="20" stroke="#DDDDE0" stroke-width="1" />
+<text x="84" y="239" fill="#39272A" font-size="38" font-weight="750" text-anchor="start">Text A</text>
+<line x1="85" y1="292" x2="345" y2="292" stroke="#CEBAB6" stroke-width="5" />
+<line x1="85" y1="328" x2="311" y2="328" stroke="#CEBAB6" stroke-width="5" />
+<line x1="85" y1="364" x2="339" y2="364" stroke="#CEBAB6" stroke-width="5" />
+<line x1="85" y1="400" x2="288" y2="400" stroke="#CEBAB6" stroke-width="5" />
+<rect x="85" y="440" width="144" height="10" fill="#7D3548" rx="4" stroke-width="1" />
+<rect x="435" y="186" width="332" height="292" fill="#FFFFFF" rx="20" stroke="#DDDDE0" stroke-width="1" />
+<text x="463" y="239" fill="#39272A" font-size="38" font-weight="750" text-anchor="start">Text B</text>
+<line x1="464" y1="292" x2="689" y2="292" stroke="#CEBAB6" stroke-width="5" />
+<line x1="464" y1="328" x2="725" y2="328" stroke="#CEBAB6" stroke-width="5" />
+<line x1="464" y1="364" x2="670" y2="364" stroke="#CEBAB6" stroke-width="5" />
+<line x1="464" y1="400" x2="715" y2="400" stroke="#CEBAB6" stroke-width="5" />
+<rect x="464" y="440" width="144" height="10" fill="#2D666E" rx="4" stroke-width="1" />
+<rect x="838" y="186" width="306" height="292" fill="#FFFFFF" rx="20" stroke="#DDDDE0" stroke-width="1" />
+<text x="863" y="243" fill="#39272A" font-size="35" font-weight="750" text-anchor="start">Model families</text>
+<text x="863" y="310" fill="#2D666E" font-size="30" font-weight="700" text-anchor="start">Style ensemble</text>
+<text x="863" y="376" fill="#7D3548" font-size="27" font-weight="700" text-anchor="start">RoBERTa-Large</text>
+<rect x="56" y="527" width="1088" height="184" fill="#7D3548" rx="18" stroke-width="1" />
+<text x="84" y="578" fill="#FFFFFF" font-size="35" font-weight="750" text-anchor="start">Deployed Large CE</text>
+<text x="84" y="633" fill="#F6E8E9" font-size="30" font-weight="400" text-anchor="start">Document-disjoint evaluation: 4,708 pairs</text>
+<text x="84" y="684" fill="#F6E8E9" font-size="29" font-weight="400" text-anchor="start">Macro F1</text>
+<text x="1108" y="656" fill="#FFFFFF" font-size="82" font-weight="750" text-anchor="end">0.8084</text>
+<metadata>{"generated_from_published_measurements": true, "localization": {"data_geometry_changed": false, "illustrative_connector_refined": true, "language": "en", "measurement_values_changed": false, "source_sha256": "6d513e46edcbc9637b4866bc4e49d819f34a113ba82e8ed35b490aa1fbcfc101", "source_svg": "docs/assets/portfolio/nlu-thumbnail.svg"}, "project_id": "project-05", "visual_data_sha256": "9fe35c6a7e349657b4a492e2122f4483bdee85cb95ab6916516b708325528af0"}</metadata>
+<path fill="none" stroke="#7D3548" stroke-width="4" stroke-linejoin="round" data-illustrative-connector="true" d="M222 478V500H802V333H838" data-connection="text-a-to-model-families" /><path fill="none" stroke="#7D3548" stroke-width="4" stroke-linejoin="round" data-illustrative-connector="true" d="M601 478V500" data-connection="text-b-to-pair-junction" /><circle cx="601" cy="500" r="5" fill="#7D3548" data-illustrative-connector="true" /><path fill="none" stroke="#7D3548" stroke-width="4" stroke-linejoin="round" data-illustrative-connector="true" d="M825 325L838 333L825 341" stroke-linecap="round" /></svg>

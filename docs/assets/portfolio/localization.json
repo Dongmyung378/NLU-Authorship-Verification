@@ -1,0 +1,70 @@
+{
+  "figures": [
+    {
+      "source": "docs/assets/portfolio/nlu-thumbnail.svg",
+      "target": "docs/assets/portfolio/nlu-thumbnail.en.svg",
+      "language": "en",
+      "clarify_paired_inputs": true,
+      "translations": {
+        "문체와 문맥을 이용한 동일 저자 판별": "Authorship verification with style and context",
+        "영어 글 두 편의 문체 특징과 문맥을 독립적인 모델로 비교합니다. 고정 평가 4,708쌍에서 선택된 RoBERTa-Large CE의 Macro F1은 0.8084입니다.": "Independent models compare style and context for English passage pairs. RoBERTa-Large CE was selected before the frozen 4,708-pair final evaluation, where its Macro F1 was 0.8084.",
+        "문체와 문맥을 이용한 저자 판별": {"text": "Authorship verification: style and context", "font-size": 43},
+        "글 A": "Text A",
+        "글 B": "Text B",
+        "비교 모델": "Model families",
+        "문체 앙상블": "Style ensemble",
+        "배포용 Large CE": "Deployed Large CE",
+        "문서가 분리된 4,708쌍 평가": "Document-disjoint evaluation: 4,708 pairs"
+      }
+    },
+    {
+      "source": "docs/assets/portfolio/nlu-thumbnail.svg",
+      "target": "docs/assets/portfolio/nlu-thumbnail.ko.svg",
+      "language": "ko",
+      "clarify_paired_inputs": true,
+      "translations": {
+        "영어 글 두 편의 문체 특징과 문맥을 독립적인 모델로 비교합니다. 고정 평가 4,708쌍에서 선택된 RoBERTa-Large CE의 Macro F1은 0.8084입니다.": "영어 글 두 편을 하나의 입력 쌍으로 묶어 문체와 문맥을 독립적인 모델로 비교합니다. 최종 평가 전에 선택한 RoBERTa-Large CE의 문서 분리 최종 4,708쌍 평가 Macro F1은 0.8084입니다."
+      }
+    },
+    {
+      "source": "docs/assets/portfolio/nlu-results.svg",
+      "target": "docs/assets/portfolio/nlu-results.en.svg",
+      "language": "en",
+      "translations": {
+        "동일 저자 판별의 고정 파이프라인 비교": "Frozen authorship-verification pipelines",
+        "문서가 분리된 같은 4,708쌍에서 문체 앙상블과 RoBERTa-Large CE 및 커스텀 ASL을 비교합니다. ASL의 비대칭 focusing을 적용한 커스텀 이진 focal 변형으로, 클래스별 softmax 정답 확률에 gamma 2와 1을 적용합니다. 공식 ASL 또는 ASLSingleLabel 코드의 기본 설정을 그대로 재현한 실험과 구분합니다. 배포용 Large는 평가 전에 선택된 CE입니다.": "The style ensemble, RoBERTa-Large CE and custom ASL share the same document-disjoint 4,708 pairs. Custom ASL is a binary focal variant with ASL's asymmetric focusing: gamma 2 and 1 on the true-class softmax probability. This is distinct from reproducing official ASL or ASLSingleLabel defaults. Deployed Large CE was chosen before final evaluation.",
+        "동일 조건에서 비교한 세 모델의 판별 성능": "Three frozen models on the same evaluation",
+        "문서가 분리된 최종 4,708쌍. 입력 순서와 확률 보정을 포함한 고정 파이프라인의 결과입니다.": "Document-disjoint final 4,708 pairs, with frozen input-order and calibration policies.",
+        "문체 앙상블": "Style ensemble",
+        "정답 3,491쌍": "3,491 correct pairs",
+        "평가 전 선택한 배포용 Large": "Deployed, preselected Large",
+        "정답 3,807쌍": "3,807 correct pairs",
+        "Large 커스텀 ASL": "Large custom ASL",
+        "클래스별 비대칭 이진 focal": "Class-dependent binary focal",
+        "정답 3,838쌍": "3,838 correct pairs",
+        "CE는 모델 선택 집합에서 정한 배포 모델입니다. 최종 평가에서 focal의 점수가 높아도 선택을 바꾸지 않았습니다.": {"text": "Selection data chose deployed CE. A higher final focal score did not change the deployment choice.", "font-size": 19},
+        "커스텀 ASL은 비대칭 이진 focal 변형입니다. 공식 코드의 기본 설정을 그대로 재현한 실험과 구분합니다.": {"text": "Custom ASL is an asymmetric binary focal variant, distinct from reproducing the official default code.", "font-size": 19},
+        "최초 개발 F1 0.8348과 평가 조건이 다르므로 통제된 전후 개선량으로 비교하지 않습니다.": {"text": "Historical development F1 0.8348 used different conditions and is not a controlled before/after comparison.", "font-size": 19}
+      }
+    },
+    {
+      "source": "docs/assets/portfolio/nlu-calibration.svg",
+      "target": "docs/assets/portfolio/nlu-calibration.en.svg",
+      "language": "en",
+      "translations": {
+        "같은 입력 순서에서의 확률 보정 전후 ECE": "ECE before and after calibration at fixed input order",
+        "고정 입력 순서를 유지하고 같은 최종 4,708쌍에서 온도 보정 전후의 동일 저자 확률 ECE를 비교했습니다. Large 커스텀 ASL은 ASL의 비대칭 focusing을 적용한 클래스별 비대칭 이진 softmax focal 변형입니다. 공식 ASL 또는 ASLSingleLabel 코드의 기본 설정을 그대로 재현한 실험과 구분합니다. 세 모델 모두 ECE가 감소했으며 작을수록 좋습니다.": "Temperature calibration compares same-author probability ECE on the same final 4,708 pairs at fixed input order. Large custom ASL is a class-dependent binary softmax focal variant using ASL's asymmetric focusing, distinct from reproducing official ASL or ASLSingleLabel defaults. ECE decreased for all models; lower is better.",
+        "확률 보정 전후의 예측 확률 오차": "Probability error before and after calibration",
+        "같은 최종 4,708쌍과 고정 입력 순서에서 온도 보정 전후를 비교했습니다. ECE는 작을수록 좋습니다.": "Temperature calibration on the same final 4,708 pairs and fixed input order. Lower ECE is better.",
+        "보정 전": "Before",
+        "보정 후": "After",
+        "문체 앙상블": "Style ensemble",
+        "Large 커스텀 ASL": "Large custom ASL",
+        "동일 저자 확률 ECE": "Same-author probability ECE",
+        "ECE는 동일 너비의 10개 확률 구간에서 평균 확률과 실제 동일 저자 비율의 차이를 가중한 값입니다.": {"text": "ECE weights the gap between predicted probability and same-author frequency across 10 equal-width bins.", "font-size": 19},
+        "보정값은 별도 1,569쌍에서 맞추고 최종 평가 전에 고정했습니다. 최종 평가에서 다시 맞추지 않았습니다.": {"text": "Calibration used a separate 1,569 pairs and was frozen before final evaluation, without final-set refitting.", "font-size": 19},
+        "확률 보정은 정답이나 F1이 늘어나는 것을 보장하지 않습니다.": "Calibration does not guarantee more correct classifications or higher F1."
+      }
+    }
+  ]
+}
