@@ -6,6 +6,14 @@ The completed Kaggle release evaluates all 4,708 locked-holdout pairs after free
 
 **Naming:** custom focal is the project's custom class-dependent binary focal loss, historically named ASL or ASLoss. The compatibility identifier remains `custom_asl`; the study trains a direct binary ASL adaptation rather than reproducing the official defaults or paper experiment. The [terminology comparison](./loss-terminology.md) explains the official variants, preserved names and numerical-stability changes. Figures and immutable reports retain the focal label.
 
+## Reading the result columns
+
+AB means reading passage A before B; BA reverses that order. The author relationship should not depend on this order, so the Large pipeline can average both orders' pre-probability scores, called logits. “Raw” uses the original order before these policy choices. “Chosen-order” applies the selected order rule, and “frozen pipeline” also applies its fixed score calibration and threshold. Differences between complete pipelines therefore include more than the training loss alone.
+
+Precision asks how often a prediction of a given author-relation class is correct, while recall asks how many actual cases of that class were found. Macro F1 balances both measures within each class and averages the classes equally. Accuracy counts correct pairs. ECE compares binned same-author probabilities with observed same-author frequencies, NLL penalizes low probability on the correct label, and Brier score measures squared probability error; lower is better for these three probability measures. Temperature scaling adjusts the sharpness of probabilities, while the decision threshold determines the predicted class.
+
+Abstention withholds uncertain decisions. Coverage reports how many pairs still receive decisions, and accepted accuracy is calculated only on that subset. A bootstrap interval resamples recorded document groups and recomputes the metric; it does not retrain a model or establish performance on new authors. The training seed fixes pseudorandom starting choices, and the reported study uses one such seed.
+
 ## Classification and deployment
 
 | Model | Raw AB F1 | Chosen-order F1 | Frozen pipeline F1 | Accuracy | Correct |

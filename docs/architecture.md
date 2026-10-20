@@ -1,5 +1,7 @@
 # Architecture
 
+A user supplies two English passages and receives a same-author score, a class or an uncertain decision. The stylometric path compares measurable writing patterns with tree models, while the transformer path learns a representation of the passage pair. Calibration adjusts scores on separate labeled data, and a threshold turns a score into a decision. The diagram separates training, configuration selection, score calibration and final evaluation so the final answers cannot feed back into model choice.
+
 [한국어](./architecture.ko.md) | [Project overview](../README.md) | [Measured results](./results.md)
 
 The task is to classify two English passages as different-author (`0`) or same-author (`1`). This project was developed jointly by Dongmyung Park and Juho Kim in February to May 2026. The original stylometric ensemble and RoBERTa-Large notebooks remain historical development work. The controlled pipeline retains the RoBERTa-Large architecture, starts from pinned pretrained weights, and separates model selection, calibration and final evaluation. Both matched Large training runs and the frozen evaluation of all three models on 4,708 locked-holdout pairs are complete. The [measured results](./results.md) describe the fixed deployment decision and observed limitations.

@@ -4,13 +4,31 @@
 
 [한국어](./README.ko.md) | [Reproduction](./docs/reproduction.md) | [Architecture](./docs/architecture.md) | [Evaluation](./docs/evaluation.md) | [Training](./docs/training.md)
 
+Provide two English passages to estimate whether they were written by the same author. The output includes a same-author score and a classification, or an uncertain decision when the configured abstention rule applies. The task is to compare writing samples, not to recover an author's name.
+
 This project compares the original two model families for English passage-pair authorship verification: a stylometric XGBoost-LightGBM ensemble and RoBERTa-Large. The new pipeline adds document-disjoint data splits, matched CE versus custom binary asymmetric focal training, independent calibration, immutable evaluation and hash-verified CPU replay. It predicts different-author (`0`) or same-author (`1`) labels; it does not establish a person's identity on arbitrary new text.
+
+## How to understand the model comparison
+
+| Term used below | Meaning in this project |
+| --- | --- |
+| Stylometric ensemble | Measures vocabulary and writing-style differences between passages, then combines two tree-based classifiers, XGBoost and LightGBM. |
+| TF-IDF | Represents word or character patterns by how frequent they are in a passage and how distinctive they are in the training collection. It is fitted on training text only in the controlled experiment. |
+| RoBERTa-Large | A pretrained language model adapted to read a pair of passages and classify their author relationship. |
+| CE and custom focal | Two training objectives for the same Large architecture. CE penalizes wrong predictions; custom focal reduces the weight of easy examples differently for the two classes. |
+| Calibration and abstention | Calibration adjusts model scores using separate labeled data. A threshold converts scores into a class, while abstention can withhold a confident decision for uncertain cases. |
+| Document-disjoint splits | Passage identities and connected passage pairs stay in one data split, reducing direct document reuse between training and evaluation. This does not establish that the authors or topics are unseen. |
+| Freeze and CPU replay | A freeze records the exact model, configuration and file hashes. Replay loads those saved files and repeats inference without retraining or choosing a new model. |
+
+An epoch is one pass through the training data; a checkpoint stores the learned model at a particular point. The training set teaches model parameters, the selection set chooses configurations, and the calibration set fits score adjustments and decision rules. The holdout is evaluated after those choices are fixed. A seed controls pseudorandom training choices; this comparison uses one training seed, so later bootstrap intervals do not describe variability from repeated training.
 
 The model named **custom focal** in the reports uses the project's **custom class-dependent binary focal loss**, historically called `ASL` or `ASLoss`. Its runtime and model identifier remains `custom_asl` for compatibility. It reduces the contribution of already-correct, easy examples. It is a directly implemented binary ASL adaptation rather than an exact reproduction of the official defaults or paper experiment; both multi-label and single-label official variants exist. The [loss terminology and implementation](./docs/loss-terminology.md) explain the difference from those methods and the numerical-stability change from the original notebook.
 
 ## Current release status
 
 Fresh RoBERTa-Large CE and custom focal training, the bounded train-only stylometric study and the frozen Kaggle evaluation have completed. Both Large models completed six matched epochs and retained epoch-five checkpoints. English and Korean [measured results](./docs/results.md) report the classification, calibration, order, length and abstention outcomes.
+
+**Reading the scores:** accuracy is the fraction of correctly classified pairs. For each class, precision asks how often that prediction is correct and recall asks how many actual cases of that class were found. Macro F1 balances both measures, then averages same-author and different-author classes equally. **ECE**, **NLL** and **Brier score** examine probability quality rather than merely whether the final class is correct: ECE compares predicted same-author probabilities with observed same-author frequencies in bins; NLL penalizes low probability assigned to the true label; Brier measures squared probability error. Lower values are preferable for these probability metrics. Coverage is the proportion receiving a decision, and accepted accuracy measures correctness only within that accepted subset.
 
 | Frozen pipeline, all 4,708 pairs | Macro F1 | Accuracy | Correct |
 |---|---:|---:|---:|
