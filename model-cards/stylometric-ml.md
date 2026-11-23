@@ -9,6 +9,6 @@
 - **Decision Policy**: Threshold `tau = 0.5762`, PAN abstention half-width `delta = 0.0680`, inductive `CSLS hw = 0.35`
 - **Locked Test Performance**:
   - Closed 1:30 (`240` queries): `Top-1 64.58%`, `Top-3 84.58%`, `Macro F1 0.5359` (`imdb_reviews 78.33%`, `blogs 60.00%`)
-  - Open + Cross Domain (`9,440` pairs): `ROC AUC 0.8474`, `PAN c@1 0.7819`, `PAN Brier 0.8387`, `PAN Overall 0.8008`, `Forced Macro F1 0.7628`
+  - Open + Cross-Domain (`9,440` pairs): `ROC AUC 0.8474`, `PAN c@1 0.7819`, `PAN Brier 0.8387`, `PAN Overall 0.8008`, `Forced Macro F1 0.7628`
   - Key strengths: CPU inference `32.1 ms/pair`, zero GPU required, interpretable per-feature attribution, highest ROC AUC on `cross_genre` (`0.8019`) and `guardian_journalism` (`0.8024`).
-- **Limitations**: Lower accuracy than 24 layer DeBERTa-v3-large on ultra-short passages (`<60 words/doc`, `0.8287` vs `0.9285`) where lexical/syntactic frequencies are sparse. Not intended as forensic identity proof.
+- **Limitations**: Lower accuracy than 24-layer DeBERTa-v3-large on ultra-short passages (`<60 words/doc`, `0.8287` vs `0.9285`) where lexical/syntactic frequencies are sparse. Not intended as forensic identity proof.

@@ -21,7 +21,7 @@
 
 | 단계 | Val Closed Top-1 | Val Open ROC AUC | Val PAN Overall | 핵심 진단 및 개선 조치 |
 | :--- | :---: | :---: | :---: | :--- |
-| 기존 단일 표면 LightGBM | 48.67% | 0.7632 | 0.7336 | 표면 n gram이 동일 주제 어휘에 과적합. |
+| 기존 단일 표면 LightGBM | 48.67% | 0.7632 | 0.7336 | 표면 n-gram이 동일 주제 어휘에 과적합. |
 | 1차: 6계층 문체 이종 앙상블 | 60.00% | 0.8009 | 0.7520 | `POS-Noise`/`Distorted` 3중 뷰, 256 사칭자 `AS-Norm`, 64-Bag Koppel, Gram2Vec, NCD 통합. |
 | 2차: 온도 정렬 8전문가 + 가지치기 | 62.00% | 0.8005 | 0.7594 | 미보정 LightGBM 로짓 진폭(`±6`)으로 앙상블 가중치가 `0.005`로 붕괴한 원인 규명 → 폴드 내부 온도 보정 + Gain 0 피처 `1,702`개 제거(`6,001 → 1,500`) + 12종 교차 피처. |
 | **3차: 10전문가 + OOD 레지스터 게이트 (`d=0.068`)** | **67.33%** | **0.8378** | **0.7929** | `Guardian`(`89.6%`)·`ArXiv`(`75.4%`) 오탐 폭주의 원인이 구어체 사칭자 대비 격식체 레지스터 착시임을 확인 → 도메인 라벨 없이 `Genre-Blind CatBoost(642열)`, 교차 주제 `2.5x` LGBM, 내재적 OOD 레지스터 게이트 도입. |
@@ -48,7 +48,7 @@
 | `Step 3`: + Greedy Soup + EMA + AS-Norm + CSLS | 62.00% | **0.8098** | **0.7785** | **채택(S1 분리)**: Open PAN Overall `+0.95%p`; Closed 1:30은 원시 코사인 강제 결합을 분리해 Validation 최적 로짓 자동 선택. |
 
 ### 4단계 순수 신경망 사후 고도화 (재학습 0초)
-전체 2.5 epoch(`shuffle=True`) 학습 직후 기존 도메인은 우수했으나 제로샷 장르 2곳(`Guardian FPR 97.6%`, `ArXiv FPR 94.8%`)의 임베딩 뭉침으로 전체 Val AUC가 `0.8155`에 머물렀습니다.
+전체 2.5 epoch(`shuffle=True`) 학습 직후 기존 도메인(`news AUC 0.9447`)은 우수했으나 제로샷 장르 2곳(`Guardian FPR 97.6%`, `ArXiv FPR 94.8%`)의 임베딩 뭉침으로 전체 Val AUC가 `0.8155`에 머물렀습니다.
 1. **2차 (`02c`: Neural OOD-Manifold Gate)**: 256 사칭자 Top-10 친화도 + L2 노름 + `PCA(24)` + PyTorch 잔차 MLP → Val AUC **`0.8155 → 0.8912` (`+7.57%p`)**, 제로샷 FPR `-60~67%p` 급감.
 2. **3차 (`02e`: 중간 구문층 `L4~L6` + 중심화)**: 구문층과 최상위 의미층 괴리도 도입 → Val AUC **`0.8956`**, Closed Top-1 `76.00%`.
 3. **4차 (`02f`: 4계층 + `All-but-the-Top r=3`)**: 4개 언어 깊이에서 사칭자 상위 주제 3축 직교 제거 → Val AUC **`0.9009`**, Closed Top-1 **`77.33%`**, Locked Test **`0.9040` / `76.25%`**.
@@ -67,6 +67,6 @@
 ### L4 24GB VRAM 관리 및 최종 고도화 (`0.65/0.35` 수프 + Dual-Rank ABTT + AgreePCA)
 - **지연 스냅샷 평가(Deferred Snapshot Evaluation)**: 24층 학습 도중 옵티마이저·Prior WD 앵커가 GPU에 상주한 상태에서 검증 추론을 실행하면 `L4 22.03 GB` 한계를 초과했습니다. 스냅샷(`50%, 62.5%, 75%, 87.5%, 100%`)을 CPU 디스크에 저장하고 학습 종료 후 옵티마이저를 해제한 뒤 일괄 평가하는 구조로 OOM을 완전히 해소했습니다.
 - **최종 채택 구성 (`0.65 * step_4141 + 0.35 * step_4970` + Dual-Rank ABTT `r=3, 8` + Multi-Std `s1,s2,s3` + 대칭 합의축 PCA `e1*e2`)**:
-  - `R2` 기준선(`step_4141 + 4-Depth r=3`): Val Open AUC `0.91009`, `ArXiv 0.8998`, `Guardian 0.7642`.
+  - `R2` 기준선(`step_4141 + 4-Depth r=3`): Val Open AUC `0.91009`, PAN Overall `0.86368`, `ArXiv 0.8998`, `Guardian 0.7642`.
   - Dual-Rank ABTT(`r=3`과 `r=8`의 주제 제거 민감도 격차 `an_r8 - an_r3`), 3개 하위 깊이 토큰 표준편차(`s1/s2/s3`), 대칭 합의축 PCA(`e1 * e2`, 16d)를 추가해 Val AUC `0.91237`, `ArXiv 0.9080`으로 향상.
   - 상위 2개 스냅샷 선형 보간 수프(`0.65 / 0.35`)와 확장 귀납적 CSLS(`hw=1.15`)를 적용해 **Val Open AUC `0.91388`**, **Locked Test Open AUC `0.91393`**(Val vs Test 격차 `0.00005`), **Closed Top-1 `78.33%`**, <strong>제로샷 <code>ArXiv</code> AUC <code>0.9389</code> (<code>FPR 8.6%</code>)</strong>를 달성했습니다.

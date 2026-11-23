@@ -100,7 +100,7 @@ python verify_author.py predict --model both --check-symmetry --text-1 "First pa
 pytest -v tests/test_inference_and_demo.py
 ```
 
-Both serialized deployment artifacts (`model_01_stylometric_ml.joblib` using pure Python builtins and `model_03_deberta_v3_large.pt` using pure PyTorch tensors with zero `sklearn` pickles) are automatically verified for web API routing, exact order symmetry (`0.00e+00`), and Locked Test parity (`24/24` decisions matching original logs) via `pytest` and [GitHub Actions CI](.github/workflows/cpu-runtime.yml).
+Both serialized deployment artifacts (`model_01_stylometric_ml.joblib` using pure Python builtins and `model_03_deberta_v3_large.pt` using pure PyTorch tensors with zero `sklearn` pickles) are automatically verified for web API routing, exact order symmetry (`0.00e+00`), and Locked Test parity (`24/24` decisions matching original logs, mean probability diff `0.0011`) via `pytest` and [GitHub Actions CI](.github/workflows/cpu-runtime.yml).
 
 ---
 

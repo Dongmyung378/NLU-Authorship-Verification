@@ -2,7 +2,7 @@
 
 [한국어](./results.ko.md) | [README](../README.md)
 
-All metrics below are measured on the locked test split of `benchmark_1024` (`240` closed-set `1:30` queries / `18,000` pairs and `9,440` open-set / cross topic / zero shot pairs, zero shared authors with Train or Validation).
+All metrics below are measured on the locked test split of `benchmark_1024` (`240` closed-set `1:30` queries / `18,000` pairs and `9,440` open-set / cross-topic / zero-shot pairs, zero shared authors with Train or Validation).
 
 ---
 
