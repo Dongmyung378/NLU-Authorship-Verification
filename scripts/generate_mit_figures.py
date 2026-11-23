@@ -118,24 +118,24 @@ def write_thumbnail_svg() -> None:
 <rect x="596" y="164" width="552" height="122" rx="14" fill="{WHITE}" stroke="{RULE}" stroke-width="1.3"/>
 <rect x="596" y="164" width="8" height="122" rx="4" fill="{GRAY}"/>
 <text x="626" y="204" fill="{GRAY_DARK}" font-size="15" font-weight="700">TRACK 01 · CPU 32 ms/pair · 21.6 MB</text>
-<text x="626" y="238" fill="{INK}" font-size="25" font-weight="750">Stylometric ML (10-Expert + OOD Gate)</text>
-<text x="626" y="268" fill="{MUTED}" font-size="17">Open AUC 0.8474 · PAN 0.8008 · Closed Top-1 64.58% (교차 장르 1위)</text>
+<text x="626" y="238" fill="{INK}" font-size="25" font-weight="750">Stylometric ML (10전문가 + OOD 게이트)</text>
+<text x="626" y="268" fill="{MUTED}" font-size="17">Open AUC 0.8474 · PAN 0.8008 · Closed Top 1 64.58% (교차 장르 1위)</text>
 
 <!-- Track 02 -->
 <rect x="596" y="308" width="552" height="122" rx="14" fill="{WHITE}" stroke="{RULE}" stroke-width="1.3"/>
 <rect x="596" y="308" width="8" height="122" rx="4" fill="{SLATE}"/>
-<text x="626" y="348" fill="{SLATE}" font-size="15" font-weight="700">TRACK 02 · 186M · 4-Depth ABTT (r=3)</text>
-<text x="626" y="382" fill="{INK}" font-size="25" font-weight="750">DeBERTa-v3-base (12-Layer Siamese)</text>
-<text x="626" y="412" fill="{MUTED}" font-size="17">Open AUC 0.9040 · PAN 0.8567 · Closed Top-1 76.25%</text>
+<text x="626" y="348" fill="{SLATE}" font-size="15" font-weight="700">TRACK 02 · 186M · 4계층 ABTT (r=3)</text>
+<text x="626" y="382" fill="{INK}" font-size="25" font-weight="750">DeBERTa-v3-base (12층 샴 구조)</text>
+<text x="626" y="412" fill="{MUTED}" font-size="17">Open AUC 0.9040 · PAN 0.8567 · Closed Top 1 76.25%</text>
 
 <!-- Track 03 -->
 <rect x="596" y="452" width="552" height="126" rx="14" fill="{WHITE}" stroke="{MIT_RED}" stroke-width="2.2"/>
 <rect x="596" y="452" width="10" height="126" rx="4" fill="{MIT_RED}"/>
 <rect x="1014" y="470" width="114" height="26" rx="13" fill="{MIT_RED_SOFT}"/>
 <text x="1071" y="488" text-anchor="middle" fill="{MIT_RED_DARK}" font-size="13" font-weight="700">FINAL MODEL</text>
-<text x="626" y="490" fill="{MIT_RED}" font-size="15" font-weight="700">TRACK 03 · 437M · Soup 0.65/0.35 + Dual-ABTT</text>
-<text x="626" y="527" fill="{INK}" font-size="25" font-weight="750">DeBERTa-v3-large (24-Layer Siamese)</text>
-<text x="626" y="558" fill="{MIT_RED_DARK}" font-size="16.5" font-weight="600">Open AUC 0.9139 · PAN 0.8643 · Closed Top-1 78.33% · ArXiv 0.9389</text>
+<text x="626" y="490" fill="{MIT_RED}" font-size="15" font-weight="700">TRACK 03 · 437M · Soup 0.65/0.35 + Dual ABTT</text>
+<text x="626" y="527" fill="{INK}" font-size="25" font-weight="750">DeBERTa-v3-large (24층 샴 구조)</text>
+<text x="626" y="558" fill="{MIT_RED_DARK}" font-size="16.5" font-weight="600">Open AUC 0.9139 · PAN 0.8643 · Closed Top 1 78.33% · ArXiv 0.9389</text>
 
 <!-- Bottom MIT Red Scorecard -->
 <rect x="52" y="604" width="1096" height="118" rx="14" fill="{MIT_RED}"/>
@@ -144,13 +144,13 @@ def write_thumbnail_svg() -> None:
 <line x1="618" y1="624" x2="618" y2="702" stroke="#D98B96" stroke-width="1.2" opacity="0.55"/>
 
 <text x="782" y="654" text-anchor="end" fill="{WHITE}" font-size="37" font-weight="750">0.9139</text>
-<text x="782" y="690" text-anchor="end" fill="{MIT_RED_SOFT}" font-size="15.5">Open ROC-AUC</text>
+<text x="782" y="690" text-anchor="end" fill="{MIT_RED_SOFT}" font-size="15.5">Open ROC AUC</text>
 
 <text x="950" y="654" text-anchor="end" fill="{WHITE}" font-size="37" font-weight="750">0.8643</text>
 <text x="950" y="690" text-anchor="end" fill="{MIT_RED_SOFT}" font-size="15.5">PAN Overall</text>
 
 <text x="1118" y="654" text-anchor="end" fill="{WHITE}" font-size="37" font-weight="750">78.33%</text>
-<text x="1118" y="690" text-anchor="end" fill="{MIT_RED_SOFT}" font-size="15.5">Closed 1:30 Top-1</text>
+<text x="1118" y="690" text-anchor="end" fill="{MIT_RED_SOFT}" font-size="15.5">Closed 1:30 Top 1</text>
 </svg>
 '''
     (FIG_PORTFOLIO / "nlu-thumbnail.svg").write_text(svg, encoding="utf-8")
@@ -167,8 +167,8 @@ def build_3way_benchmark_fig() -> None:
     fig.patch.set_facecolor(PAPER)
 
     metrics = [
-        ("Closed 1:30\nTop-1", "Test_Closed_Top1"),
-        ("Open\nROC-AUC", "Test_Open_ROC_AUC"),
+        ("Closed 1:30\nTop 1", "Test_Closed_Top1"),
+        ("Open\nROC AUC", "Test_Open_ROC_AUC"),
         ("Open\nPAN Overall", "Test_Open_PAN_Overall"),
         ("Open\nForced F1", "Test_Open_Forced_F1"),
     ]
@@ -193,7 +193,7 @@ def build_3way_benchmark_fig() -> None:
     ax1.set_ylim(0.50, 1.02)
     ax1.set_yticks(np.arange(0.50, 1.01, 0.10))
     ax1.grid(axis="y", linestyle="-", alpha=0.8)
-    ax1.set_title("Final Locked Test 3-Track Comparison", fontsize=12.5, fontweight="bold", loc="left", pad=22)
+    ax1.set_title("Final Locked Test: 3 Track Comparison", fontsize=12.5, fontweight="bold", loc="left", pad=22)
     ax1.text(0.0, 1.02, "Exact McNemar (S2, n=9,440): Large vs Base p=0.037  |  Large vs ML p=1.0e-36",
              transform=ax1.transAxes, fontsize=8.8, color=MUTED)
     ax1.legend(loc="upper left", frameon=True, facecolor=WHITE, edgecolor=RULE, fontsize=9)
@@ -214,7 +214,7 @@ def build_3way_benchmark_fig() -> None:
     ax2.set_ylim(-0.01, 1.02)
     ax2.set_xlabel("False Positive Rate", fontsize=10)
     ax2.set_ylabel("True Positive Rate", fontsize=10)
-    ax2.set_title("Scenario 2 ROC Curves (9,440 Unseen-Author Pairs)", fontsize=12.5, fontweight="bold", loc="left", pad=12)
+    ax2.set_title("Scenario 2 ROC Curves (9,440 Unseen Author Pairs)", fontsize=12.5, fontweight="bold", loc="left", pad=12)
     ax2.legend(loc="lower right", frameon=True, facecolor=WHITE, edgecolor=RULE, fontsize=9)
 
     fig.tight_layout(pad=2.0)
@@ -243,9 +243,9 @@ def build_progression_and_fpr_fig() -> None:
     x_base = [0.0, 1.2, 2.1, 3.0, 4.0]
     x_large = [0.0, 1.4, 2.25, 3.0, 4.0]
 
-    ax1.plot(x_ml, vals_ml, marker="o", ms=6.5, lw=2.0, ls="--", color=GRAY, label="01. Stylometric ML (Legacy → OOD-Register Gate)")
-    ax1.plot(x_base, vals_base, marker="s", ms=6.5, lw=2.1, color=SLATE, label="02. DeBERTa-v3-base (2D Cal → 4-Depth ABTT)")
-    ax1.plot(x_large, vals_large, marker="D", ms=7.2, lw=2.8, color=MIT_RED, label="03. DeBERTa-v3-large (R1 → Dual-ABTT + Soup)")
+    ax1.plot(x_ml, vals_ml, marker="o", ms=6.5, lw=2.0, ls="--", color=GRAY, label="01. Stylometric ML (Legacy → OOD Register Gate)")
+    ax1.plot(x_base, vals_base, marker="s", ms=6.5, lw=2.1, color=SLATE, label="02. DeBERTa-v3-base (2D Cal → 4 Depth ABTT)")
+    ax1.plot(x_large, vals_large, marker="D", ms=7.2, lw=2.8, color=MIT_RED, label="03. DeBERTa-v3-large (R1 → Dual ABTT + Soup)")
 
     # Key milestone labels (clean, non-overlapping)
     annots = [
@@ -264,12 +264,12 @@ def build_progression_and_fpr_fig() -> None:
 
     style_ax(ax1)
     ax1.set_xticks([0.0, 1.3, 3.0, 4.0])
-    ax1.set_xticklabels(["Initial\nBaseline", "OOD Gate /\n4-Depth", "Final\nValidation", "Locked\nTest"], fontsize=9.5, color=INK)
+    ax1.set_xticklabels(["Initial\nBaseline", "OOD Gate /\n4 Depth", "Final\nValidation", "Locked\nTest"], fontsize=9.5, color=INK)
     ax1.set_xlim(-0.25, 4.55)
     ax1.set_ylim(0.73, 0.945)
     ax1.grid(axis="y", linestyle="-", alpha=0.8)
-    ax1.set_ylabel("Open-Set ROC-AUC", fontsize=10)
-    ax1.set_title("Iterative Open-Set ROC-AUC Progression", fontsize=12.5, fontweight="bold", loc="left", pad=12)
+    ax1.set_ylabel("Open Set ROC AUC", fontsize=10)
+    ax1.set_title("Iterative Open Set ROC AUC Progression", fontsize=12.5, fontweight="bold", loc="left", pad=12)
     ax1.legend(loc="lower right", frameon=True, facecolor=WHITE, edgecolor=RULE, fontsize=8.3)
 
     # Right: Zero-Shot FPR collapse (Before OOD Gate vs After OOD Gate on Locked Test)
@@ -304,7 +304,7 @@ def build_progression_and_fpr_fig() -> None:
     ax2.set_xlim(0, 112)
     ax2.grid(axis="x", linestyle="-", alpha=0.8)
     ax2.set_xlabel("False Positive Rate (%) (Lower is Better)", fontsize=10)
-    ax2.set_title("Zero-Shot Genre FPR Collapse via OOD Gating", fontsize=12.5, fontweight="bold", loc="left", pad=12)
+    ax2.set_title("Zero Shot Genre FPR Collapse via OOD Gating", fontsize=12.5, fontweight="bold", loc="left", pad=12)
     from matplotlib.patches import Patch
     legend_handles = [
         Patch(facecolor="#D5CECD", label="Before OOD Gate (Val R1/R2)"),
@@ -347,19 +347,19 @@ def build_domain_length_fig() -> None:
 
     style_ax(ax1)
     ax1.set_xticks(xb)
-    ax1.set_xticklabels(["Ultra-Short\n(<60w, n=4,058)", "Short\n(60-180w, n=2,226)", "Medium\n(180-350w, n=3,156)"], fontsize=9.2, color=INK)
+    ax1.set_xticklabels(["Ultra Short\n(<60w, n=4,058)", "Short\n(60~180w, n=2,226)", "Medium\n(180~350w, n=3,156)"], fontsize=9.2, color=INK)
     ax1.set_ylim(0.72, 1.00)
     ax1.grid(axis="y", linestyle="-", alpha=0.8)
-    ax1.set_ylabel("ROC-AUC", fontsize=10)
-    ax1.set_title("ROC-AUC by Passage Length (DL +9.98%p on <60w)", fontsize=12, fontweight="bold", loc="left", pad=12)
+    ax1.set_ylabel("ROC AUC", fontsize=10)
+    ax1.set_title("ROC AUC by Passage Length (DL +9.98%p on <60w)", fontsize=12, fontweight="bold", loc="left", pad=12)
     ax1.legend(loc="upper right", frameon=True, facecolor=WHITE, edgecolor=RULE, fontsize=8.5)
 
     # Right: Evaluation Stratum (ordered cleanly)
     stratum_labels = {
-        "open_unseen_author_same_topic": "Unseen Author\nSame-Topic (5,840)",
-        "cross_topic": "Cross-Topic\nSame Author (2,158)",
-        "zero_shot_unseen_genre": "Zero-Shot Genre\nArXiv (880)",
-        "cross_genre": "Cross-Genre\nGuardian etc. (562)",
+        "open_unseen_author_same_topic": "Unseen Author\nSame Topic (5,840)",
+        "cross_topic": "Cross Topic\nSame Author (2,158)",
+        "zero_shot_unseen_genre": "Zero Shot Genre\nArXiv (880)",
+        "cross_genre": "Cross Genre\nGuardian etc. (562)",
     }
     order = ["open_unseen_author_same_topic", "cross_topic", "zero_shot_unseen_genre", "cross_genre"]
     st_ord = st_df.set_index("Eval_Stratum").loc[order].reset_index()
@@ -381,8 +381,8 @@ def build_domain_length_fig() -> None:
     ax2.invert_yaxis()
     ax2.set_xlim(0.60, 1.02)
     ax2.grid(axis="x", linestyle="-", alpha=0.8)
-    ax2.set_xlabel("ROC-AUC", fontsize=10)
-    ax2.set_title("Stratum Complementarity: DL on ArXiv vs ML on Cross-Genre", fontsize=12, fontweight="bold", loc="left", pad=12)
+    ax2.set_xlabel("ROC AUC", fontsize=10)
+    ax2.set_title("Stratum Complementarity: DL on ArXiv vs ML on Cross Genre", fontsize=12, fontweight="bold", loc="left", pad=12)
     ax2.legend(loc="lower right", frameon=True, facecolor=WHITE, edgecolor=RULE, fontsize=8.5)
 
     fig.tight_layout(pad=2.0)
@@ -404,12 +404,12 @@ def build_og_image() -> None:
     ax.add_patch(plt.Rectangle((0.65, 0.55), 10.7, 1.55, facecolor=MIT_RED, edgecolor="none"))
     ax.text(0.65, 5.45, "NLU AUTHORSHIP VERIFICATION", fontsize=13, fontweight="bold", color=MIT_RED)
     ax.text(0.65, 4.65, "동일 저자 판별: 순수 문체학 ML vs DeBERTa-v3", fontsize=28, fontweight="bold", color=INK)
-    ax.text(0.65, 4.02, "양방향 저자 격리 9,440쌍 · 1:30 닫힌 집합 240쿼리 · 4계층 Dual-Rank ABTT OOD 보정", fontsize=14.5, color=MUTED)
+    ax.text(0.65, 4.02, "양방향 저자 격리 9,440쌍 · 1:30 닫힌 집합 240쿼리 · 4계층 Dual Rank ABTT OOD 보정", fontsize=14.5, color=MUTED)
 
     cards = [
         ("01. Stylometric ML", "AUC 0.8474 · CPU 32ms", GRAY, 0.65),
-        ("02. DeBERTa-v3-base", "AUC 0.9040 · 4D-ABTT", SLATE, 4.30),
-        ("03. DeBERTa-v3-large", "AUC 0.9139 · Dual-ABTT", MIT_RED, 7.95),
+        ("02. DeBERTa-v3-base", "AUC 0.9040 · 4D ABTT", SLATE, 4.30),
+        ("03. DeBERTa-v3-large", "AUC 0.9139 · Dual ABTT", MIT_RED, 7.95),
     ]
     for title, sub, col, x0 in cards:
         ax.add_patch(plt.Rectangle((x0, 2.45), 3.4, 1.15, facecolor=WHITE, edgecolor=col, linewidth=2.0 if col == MIT_RED else 1.2))
@@ -418,7 +418,7 @@ def build_og_image() -> None:
         ax.text(x0 + 0.28, 2.74, sub, fontsize=11.5, color=col if col == MIT_RED else MUTED)
 
     ax.text(1.0, 1.48, "Final Locked Test: DeBERTa-v3-large (437M)", fontsize=15, fontweight="bold", color=WHITE)
-    ax.text(1.0, 0.94, "Open ROC-AUC 0.9139  |  PAN Overall 0.8643  |  Closed 1:30 Top-1 78.33%  |  Zero-Shot ArXiv 0.9389", fontsize=12.5, color=MIT_RED_SOFT)
+    ax.text(1.0, 0.94, "Open ROC AUC 0.9139  |  PAN Overall 0.8643  |  Closed 1:30 Top 1 78.33%  |  Zero Shot ArXiv 0.9389", fontsize=12.5, color=MIT_RED_SOFT)
 
     fig.savefig(OG_PORTFOLIO, dpi=100, format="jpeg", pil_kwargs={"quality": 92})
     plt.close(fig)

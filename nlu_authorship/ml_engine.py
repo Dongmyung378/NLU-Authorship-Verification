@@ -729,7 +729,7 @@ class StylometricMLEngine:
 
         return {
             "model_id": "ml",
-            "model_name": "01. Stylometric ML (10-Expert + OOD Gate)",
+            "model_name": "01. Stylometric ML (10 Expert + OOD Gate)",
             "probability": round(prob, 6),
             "verdict": verdict,
             "forced_verdict": "same_author" if prob >= self.tau else "different_author",

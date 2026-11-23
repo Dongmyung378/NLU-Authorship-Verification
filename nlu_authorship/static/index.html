@@ -393,7 +393,7 @@
       <div>
         <p class="eyebrow">NLU Authorship Verification · Live Local Inference</p>
         <h1 data-ko="동일 저자 판별 데모 (ML vs DeBERTa-v3-large)" data-en="Authorship Verification Demo (ML vs DeBERTa-v3-large)">동일 저자 판별 데모 (ML vs DeBERTa-v3-large)</h1>
-        <p class="subtitle" data-ko="영어 글 두 편을 입력하고 전통 문체학 ML 또는 24층 DeBERTa-v3-large 모델로 동일 저자 여부를 비교 검증합니다." data-en="Compare two English passages using either the 6-Layer Stylometric ML pipeline or 24-Layer DeBERTa-v3-large.">영어 글 두 편을 입력하고 전통 문체학 ML 또는 24층 DeBERTa-v3-large 모델로 동일 저자 여부를 비교 검증합니다.</p>
+        <p class="subtitle" data-ko="영어 글 두 편을 입력하고 전통 문체학 ML 또는 24층 DeBERTa-v3-large 모델로 동일 저자 여부를 비교 검증합니다." data-en="Compare two English passages using either the 6 Layer Stylometric ML pipeline or 24 Layer DeBERTa-v3-large.">영어 글 두 편을 입력하고 전통 문체학 ML 또는 24층 DeBERTa-v3-large 모델로 동일 저자 여부를 비교 검증합니다.</p>
       </div>
       <div class="lang-toggle">
         <button id="lang-ko" class="active" type="button">한국어</button>
@@ -407,15 +407,15 @@
         <div class="model-tabs">
           <button class="model-btn" data-mode="ml" type="button">
             <strong><span id="dot-ml" class="status-dot"></span>01. Stylometric ML</strong>
-            <span data-ko="순수 ML · CPU ~32ms · 교차장르 강점" data-en="Pure ML · CPU ~32ms · Cross-Genre">순수 ML · CPU ~32ms · 교차장르 강점</span>
+            <span data-ko="순수 ML · CPU ~32ms · 교차장르 강점" data-en="Pure ML · CPU ~32ms · Cross Genre">순수 ML · CPU ~32ms · 교차장르 강점</span>
           </button>
           <button class="model-btn" data-mode="dl" type="button">
             <strong><span id="dot-dl" class="status-dot"></span>03. DeBERTa-v3-large</strong>
-            <span data-ko="437M · Dual-ABTT · Open AUC 0.9139" data-en="437M · Dual-ABTT · Open AUC 0.9139">437M · Dual-ABTT · Open AUC 0.9139</span>
+            <span data-ko="437M · Dual ABTT · Open AUC 0.9139" data-en="437M · Dual ABTT · Open AUC 0.9139">437M · Dual ABTT · Open AUC 0.9139</span>
           </button>
           <button class="model-btn active" data-mode="both" type="button">
             <strong>ML vs DL Compare</strong>
-            <span data-ko="두 모델 동시 비교 및 신호 대조" data-en="Side-by-side comparison">두 모델 동시 비교 및 신호 대조</span>
+            <span data-ko="두 모델 동시 비교 및 신호 대조" data-en="Side by side comparison">두 모델 동시 비교 및 신호 대조</span>
           </button>
         </div>
       </div>
@@ -545,19 +545,19 @@
 
       const sigEntries = isDl ? [
         ['Raw Backbone Prob', res.signals.raw_backbone_prob.toFixed(4)],
-        ['Dual-ABTT (r=8) Sim', res.signals.abtt_r8_sim.toFixed(4)],
-        ['Band 1 Lexical (L2-6)', res.signals.band1_lexical_sim.toFixed(4)],
-        ['Band 2 Syntax (L8-12)', res.signals.band2_syntax_sim.toFixed(4)],
-        ['Band 3 Discourse (L14-18)', res.signals.band3_discourse_sim.toFixed(4)],
-        ['Band 4 Semantic (L22-24)', res.signals.band4_semantic_sim.toFixed(4)],
-        ['Impostor Top-10 Aff.', res.signals.impostor_top10_affinity.toFixed(4)],
+        ['Dual ABTT (r=8) Sim', res.signals.abtt_r8_sim.toFixed(4)],
+        ['Band 1 Lexical (L2~L6)', res.signals.band1_lexical_sim.toFixed(4)],
+        ['Band 2 Syntax (L8~L12)', res.signals.band2_syntax_sim.toFixed(4)],
+        ['Band 3 Discourse (L14~L18)', res.signals.band3_discourse_sim.toFixed(4)],
+        ['Band 4 Semantic (L22~L24)', res.signals.band4_semantic_sim.toFixed(4)],
+        ['Impostor Top 10 Aff.', res.signals.impostor_top10_affinity.toFixed(4)],
         ['Token Lengths (A / B)', `${res.signals.tokens_a} / ${res.signals.tokens_b}`],
       ] : [
-        ['POS-Noise 40k SVM', res.signals.pos_noise_svm_prob.toFixed(4)],
+        ['POS Noise 40k SVM', res.signals.pos_noise_svm_prob.toFixed(4)],
         ['Surface 60k SVM', res.signals.surface_svm_prob.toFixed(4)],
-        ['Genre-Blind CatBoost', res.signals.genre_blind_prob.toFixed(4)],
+        ['Genre Blind CatBoost', res.signals.genre_blind_prob.toFixed(4)],
         ['Cohort Mutual Rank', res.signals.cohort_mutual_rank.toFixed(4)],
-        ['Cohort AS-Norm', res.signals.cohort_as_norm.toFixed(4)],
+        ['Cohort AS Norm', res.signals.cohort_as_norm.toFixed(4)],
         ['Compression Sim (CBC)', res.signals.compression_sim.toFixed(4)],
         ["Burrows' Delta", res.signals.burrows_delta.toFixed(4)],
         ['Word Lengths (A / B)', `${res.signals.words_a} / ${res.signals.words_b}`],
@@ -577,12 +577,12 @@
             <span class="prob-num">${pct}%</span>
             <span class="thresh-info">τ=${res.tau.toFixed(4)} · abstain ±${res.delta.toFixed(4)}</span>
           </div>
-          <div class="gauge-wrap" title="Same-author probability with PAN abstention zone">
+          <div class="gauge-wrap" title="Same author probability with PAN abstention zone">
             <div class="gauge-fill" style="width:${pct}%"></div>
             <div class="gauge-abstain" style="left:${low}%;width:${wid}%"></div>
             <div class="gauge-tau" style="left:${tauPct}%"></div>
           </div>
-          <p class="signal-title">${isDl ? '4-Depth & Dual-Rank ABTT Signals' : '6-Layer Stylometric Signals'}</p>
+          <p class="signal-title">${isDl ? '4 Depth & Dual Rank ABTT Signals' : '6 Layer Stylometric Signals'}</p>
           <div class="signal-list">${sigHtml}</div>
         </article>
       `;

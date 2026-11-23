@@ -4,19 +4,19 @@
 
 Compare two English passages (`<= 512` tokens each, `1,024`-token combined budget) to estimate whether they were written by the same author. The system outputs a calibrated same-author probability, a classification or PAN abstention (`uncertain`) decision, exact order-symmetry verification (`|P(A, B) - P(B, A)| = 0.00`), and per-feature or per-depth diagnostic signals.
 
-This benchmark evaluates **three strictly separated tracks** (zero cross-paradigm feature or prediction blending) under a **dual-author-disjoint split** (`0` shared authors across Train, Validation, and Locked Test) spanning 9 domains, same-topic hard negatives, cross-topic pairs, and zero-shot unseen genres:
+This benchmark evaluates **three strictly separated tracks** (zero cross-paradigm feature or prediction blending) under a **dual author disjoint split** (`0` shared authors across Train, Validation, and Locked Test) spanning 9 domains, same-topic hard negatives, cross topic pairs, and zero shot unseen genres:
 
 1. **Track 01 (`01_stylometric_ml`)**: 6-layer stylometric feature engineering (`6,001` dims) + 10-expert GBDT/CatBoost/Linear ensemble + intrinsic OOD-register gated meta-calibrator (`21.63 MB`, CPU `32.1 ms/pair`).
-2. **Track 02 (`02_deberta_v3_base`)**: 12-layer symmetric Siamese `microsoft/deberta-v3-base` (`185.97M`) + Greedy Model Soup + 4-depth `All-but-the-Top (r=3)` residual OOD gate.
-3. **Track 03 (`03_deberta_v3_large`)**: 24-layer symmetric Siamese `microsoft/deberta-v3-large` (`436.64M`) + LLRD/Prior-WD + interpolated checkpoint soup (`0.65 / 0.35`) + 4-depth Multi-Std + Dual-Rank `All-but-the-Top (r=3, 8)` + symmetric agreement PCA (`e1 * e2`) + 5-seed residual OOD gate.
+2. **Track 02 (`02_deberta_v3_base`)**: 12 layer symmetric Siamese `microsoft/deberta-v3-base` (`185.97M`) + Greedy Model Soup + 4 depth `All but the Top (r=3)` residual OOD gate.
+3. **Track 03 (`03_deberta_v3_large`)**: 24 layer symmetric Siamese `microsoft/deberta-v3-large` (`436.64M`) + LLRD/Prior WD + interpolated checkpoint soup (`0.65 / 0.35`) + 4 depth Multi Std + Dual-Rank `All but the Top (r=3, 8)` + symmetric agreement PCA (`e1 * e2`) + 5-seed residual OOD gate.
 
 ---
 
 ## Final Locked Test Summary
 
-All thresholds (`tau`, `delta`, and inductive `CSLS` hubness weight `hw`) were selected strictly on Validation and evaluated once on the locked test split (`240` closed-set `1:30` queries / `18,000` pairs; `9,440` open-set, cross-topic, and zero-shot pairs).
+All thresholds (`tau`, `delta`, and inductive `CSLS` hubness weight `hw`) were selected strictly on Validation and evaluated once on the locked test split (`240` closed-set `1:30` queries / `18,000` pairs; `9,440` open-set, cross topic, and zero shot pairs).
 
-| Track | Closed 1:30 Top-1 | Closed 1:30 Top-3 | Closed Macro-F1 | Open ROC-AUC | PAN c@1 | PAN F_0.5u | PAN Brier | PAN Overall | Forced Macro-F1 | Latency / Size |
+| Track | Closed 1:30 Top 1 | Closed 1:30 Top 3 | Closed Macro F1 | Open ROC AUC | PAN c@1 | PAN F_0.5u | PAN Brier | PAN Overall | Forced Macro F1 | Latency / Size |
 | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
 | `01. Stylometric ML` | 64.58% | 84.58% | 0.5359 | 0.8474 | 0.7819 | 0.7823 | 0.8387 | 0.8008 | 0.7628 | 32.1 ms (CPU) · 21.6 MB |
 | `02. DeBERTa-v3-base` | 76.25% | **91.25%** | 0.6363 | 0.9040 | 0.8443 | 0.8414 | 0.8724 | 0.8567 | 0.8196 | 186.0M params |
@@ -27,42 +27,42 @@ All thresholds (`tau`, `delta`, and inductive `CSLS` hubness weight `hw`) were s
 - `Large vs Base` (Scenario 2, 9,440 pairs): `n10 = 601` vs `n01 = 530`, `p = 0.03735`, `Delta Acc +0.75% [+0.08%, +1.45%]`, `Delta AUC +0.99% [+0.63%, +1.37%]`.
 - `Large vs ML` (Scenario 1, 240 queries): `n10 = 53` vs `n01 = 20`, `p = 1.42e-04`, `Delta Acc +13.75% [+7.08%, +20.83%]`.
 
-![Final Locked Test 3-Track Comparison](./docs/figures/benchmark_3way_comparison.png)
+![Final Locked Test 3 Track Comparison](./docs/figures/benchmark_3way_comparison.png)
 
 ---
 
 ## Why These Models and Techniques Were Chosen
 
-Every modeling decision followed measured failure diagnostics on the dual-author-disjoint validation split rather than arbitrary hyperparameter sweeps. Full decision logs and rejected hypotheses are documented in [Design Decisions & Progression](./docs/methodology-and-decisions.md).
+Every modeling decision followed measured failure diagnostics on the dual author disjoint validation split rather than arbitrary hyperparameter sweeps. Full decision logs and rejected hypotheses are documented in [Design Decisions & Progression](./docs/methodology-and-decisions.md).
 
 ### 1. Why Dual-Author-Disjoint Benchmark (`benchmark_1024`)
-Earlier development splits allowed the same passage or author to appear in both training and evaluation, inflating scores through topic and identity memorization. We rebuilt the benchmark with strict zero-author overlap across Train (`84,860` pairs), Validation (`8,540` open pairs + `150` closed `1:30` queries), and Locked Test (`9,440` open pairs + `240` closed `1:30` queries), explicitly adding `60%` same-topic negative traps and two completely unseen genres (`arxiv_research`, `guardian_journalism`). Every out-of-fold meta-learner uses **5-bucket dual-author-disjoint OOF** (`bucket(a1) != k and bucket(a2) != k`) so neither author leaks across folds.
+Earlier development splits allowed the same passage or author to appear in both training and evaluation, inflating scores through topic and identity memorization. We rebuilt the benchmark with strict zero-author overlap across Train (`84,860` pairs), Validation (`8,540` open pairs + `150` closed `1:30` queries), and Locked Test (`9,440` open pairs + `240` closed `1:30` queries), explicitly adding `60%` same-topic negative traps and two completely unseen genres (`arxiv_research`, `guardian_journalism`). Every out of fold meta-learner uses **5 bucket dual author disjoint OOF** (`bucket(a1) != k and bucket(a2) != k`) so neither author leaks across folds.
 
-### 2. Why 6-Layer Stylometry + Intrinsic OOD-Register Gate (Track 01)
-- **Topic-shortcut suppression**: Raw lexical TF-IDF fails on same-topic impostors. Decomposing text into three views (`Surface`, `POS-Noise` with content words masked by POS+suffix, and `Distorted` rhythm) plus `256`-impostor `AS-Norm` and `64-Bag Koppel` win rates raised Validation Open AUC from `0.7632` (legacy single LightGBM) to `0.8009`.
-- **Per-model temperature alignment and pruning (Round 2)**: Uncalibrated LightGBM logits (`±6`) were suppressed by `LogLoss` optimization against narrower CatBoost/Linear logits (`±2.5`). Aligning logit scales inside each fold restored balanced ensemble weights, and pruning `1,702` zero-gain columns (`6,001 -> 1,500`) reduced variance.
-- **Fixing zero-shot register illusion without domain labels (Round 3)**: Diagnostic error charts revealed `89.6%` (`Guardian`) and `75.4%` (`ArXiv`) false positive rates because formal/academic pairs looked mutually closer than the informal impostor cohort. Adding a **Genre-Blind Pure Delta CatBoost** (`642` pure-difference columns, zero surface vocabulary) and an **intrinsic OOD-Register Gate** (reading impostor affinity, formality indices, and Genre-Blind vs Surface disagreement) cut Test FPR to **`25.7%`** on both domains and lifted Locked Test `ROC-AUC` to **`0.8474`** (`PAN Overall 0.8008`).
+### 2. Why 6 Layer Stylometry + Intrinsic OOD Register Gate (Track 01)
+- **Topic-shortcut suppression**: Raw lexical TF IDF fails on same-topic impostors. Decomposing text into three views (`Surface`, `POS Noise` with content words masked by POS+suffix, and `Distorted` rhythm) plus `256`-impostor `AS Norm` and `64 Bag Koppel` win rates raised Validation Open AUC from `0.7632` (legacy single LightGBM) to `0.8009`.
+- **Per-model temperature alignment and pruning (Round 2)**: Uncalibrated LightGBM logits (`±6`) were suppressed by `LogLoss` optimization against narrower CatBoost/Linear logits (`±2.5`). Aligning logit scales inside each fold restored balanced ensemble weights, and pruning `1,702` zero-gain columns (`6,001 → 1,500`) reduced variance.
+- **Fixing zero shot register illusion without domain labels (Round 3)**: Diagnostic error charts revealed `89.6%` (`Guardian`) and `75.4%` (`ArXiv`) false positive rates because formal/academic pairs looked mutually closer than the informal impostor cohort. Adding a **Genre Blind Pure Delta CatBoost** (`642` pure difference columns, zero surface vocabulary) and an **intrinsic OOD Register Gate** (reading impostor affinity, formality indices, and Genre Blind vs Surface disagreement) cut Test FPR to **`25.7%`** on both domains and lifted Locked Test `ROC AUC` to **`0.8474`** (`PAN Overall 0.8008`).
 
-### 3. Why Symmetric Siamese DeBERTa-v3 + Dual-Rank ABTT OOD Calibration (Tracks 02 & 03)
+### 3. Why Symmetric Siamese DeBERTa-v3 + Dual Rank ABTT OOD Calibration (Tracks 02 & 03)
 - **Backbone choice**: `DeBERTa-v3` disentangled relative-position attention preserves syntactic and punctuation spacing habits better than absolute-position encoders while keeping an exact order-invariant Siamese formulation (`u+v`, `|u-v|`, `u*v`, `(u-v)^2`, `cos`).
 - **Root-causing `transformers 5.x` FP16 underflow**: Initial `DeBERTa-v3` runs stalled at `loss = 0.6965`. Inspecting dtypes showed `transformers 5.x` loads DeBERTa-v3's `float16` Hub weights directly in FP16, causing `AdamW` updates (`1.6e-5`) to underflow below FP16 machine epsilon. Forcing FP32 master weights (`AutoModel.from_pretrained(...).float()`) immediately restored convergence.
 - **Controlled 4-step ablation (Base) & 4-way HP Probe (Large)**:
-  - **Adopted**: Top-50% learnable layer pooling (`L7-L12` / `L13-L24`), Attentive Statistics Pooling (`ASP`), 5-branch Multi-Sample Dropout, `15%` mid-sentence proper-noun masking, `shuffle=True`, and on 24-layer Large `LLRD (gamma=0.94868) + Prior-WD (0.01) + Pure Label-Smoothed BCE` (which outperformed uniform LR by `+3.70%p` Val Composite in the 10% probe).
-  - **Rejected**: Domain-sorted `shuffle=False` batches (caused sequential domain forgetting, `-1.56%p` Val AUC) and auxiliary `CoSENT` ranking loss (underperformed pure label-smoothed BCE).
-- **4-Depth Linguistic Hierarchy + Dual-Rank `All-but-the-Top` (`r=3, 8`) + Interpolated Soup (`0.65 / 0.35`)**:
+  - **Adopted**: Top-50% learnable layer pooling (`L7-L12` / `L13~L24`), Attentive Statistics Pooling (`ASP`), 5 branch Multi-Sample Dropout, `15%` mid-sentence proper-noun masking, `shuffle=True`, and on 24 layer Large `LLRD (gamma=0.94868) + Prior WD (0.01) + Pure Label Smoothed BCE` (which outperformed uniform LR by `+3.70%p` Val Composite in the 10% probe).
+  - **Rejected**: Domain-sorted `shuffle=False` batches (caused sequential domain forgetting, `-1.56%p` Val AUC) and auxiliary `CoSENT` ranking loss (underperformed pure label smoothed BCE).
+- **4 Depth Linguistic Hierarchy + Dual-Rank `All but the Top` (`r=3, 8`) + Interpolated Soup (`0.65 / 0.35`)**:
   - Raw DeBERTa embeddings suffered the same OOD clustering on unseen genres (`Base` Val FPR `97.6%` / `94.8%`; `Large` R1 Val FPR `97.1%` / `90.7%`).
-  - Extracting 4 linguistic depths (`L2-6` lexical/punctuation, `L8-12` syntax, `L14-18` discourse mean+std, `L22-24` semantic), orthogonally removing top-3 and top-8 SVD topic directions fitted strictly on 256 frozen training impostors (`All-but-the-Top`), adding symmetric agreement PCA (`e1 * e2`, 16d), and linearly interpolating the top two checkpoints (`0.65 * step_4141 + 0.35 * step_4970`) collapsed `Large` `ArXiv` Test FPR to **`8.6%`** (`ROC-AUC 0.9389`) and raised overall Locked Test `ROC-AUC` from `0.8239` (R1) to **`0.9139`**.
+  - Extracting 4 linguistic depths (`L2~L6` lexical/punctuation, `L8~L12` syntax, `L14~L18` discourse mean+std, `L22~L24` semantic), orthogonally removing top-3 and top-8 SVD topic directions fitted strictly on 256 frozen training impostors (`All but the Top`), adding symmetric agreement PCA (`e1 * e2`, 16d), and linearly interpolating the top two checkpoints (`0.65 * step_4141 + 0.35 * step_4970`) collapsed `Large` `ArXiv` Test FPR to **`8.6%`** (`ROC AUC 0.9389`) and raised overall Locked Test `ROC AUC` from `0.8239` (R1) to **`0.9139`**.
 
-![Iterative Progression and Zero-Shot FPR Collapse](./docs/figures/improvement_progression.png)
+![Iterative Progression and Zero Shot FPR Collapse](./docs/figures/improvement_progression.png)
 
 ---
 
 ## Paradigm Complementarity: Where DL Wins vs Where ML Holds an Edge
 
 Rather than a simple hierarchy, strict head-to-head evaluation exposes complementary operating regimes:
-- **Ultra-short passages (`<60 words/doc`, 4,058 pairs)**: Surface statistics become sparse, so `DeBERTa-v3-large` leads `Stylometric ML` by **`+9.98%p` ROC-AUC** (`0.9285` vs `0.8287`).
-- **Zero-shot academic text (`arxiv_research`, 880 pairs)**: Scaling to 24 layers with Dual-Rank ABTT lifted `Large` from `Base`'s `0.9093` to **`0.9389`**, overtaking `Stylometric ML` (`0.9336`).
-- **Cross-genre journalism (`guardian_journalism` / `cross_genre`, 562 pairs)**: When editorial conventions diverge sharply across columns and reviews, explicit `POS-Noise` and function-word delta features allow `Stylometric ML` (`0.8019`) to outperform neural encoders (`0.7344`).
+- **Ultra-short passages (`<60 words/doc`, 4,058 pairs)**: Surface statistics become sparse, so `DeBERTa-v3-large` leads `Stylometric ML` by **`+9.98%p` ROC AUC** (`0.9285` vs `0.8287`).
+- **Zero-shot academic text (`arxiv_research`, 880 pairs)**: Scaling to 24 layers with Dual Rank ABTT lifted `Large` from `Base`'s `0.9093` to **`0.9389`**, overtaking `Stylometric ML` (`0.9336`).
+- **Cross-genre journalism (`guardian_journalism` / `cross_genre`, 562 pairs)**: When editorial conventions diverge sharply across columns and reviews, explicit `POS Noise` and function word delta features allow `Stylometric ML` (`0.8019`) to outperform neural encoders (`0.7344`).
 
 ![Passage Length and Stratum Complementarity](./docs/figures/domain_length_complementarity.png)
 

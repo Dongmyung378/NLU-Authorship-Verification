@@ -4,11 +4,11 @@
 
 영어 글 두 편(문서당 최대 `512` 토큰, 쌍 합산 `1,024` 토큰 예산)을 입력받아 동일 저자 여부를 추정하는 자연어 이해 프로젝트입니다. 보정된 동일 저자 확률, 분류 또는 PAN 판정 보류(`uncertain`), 순서 불변 대칭성(`|P(A, B) - P(B, A)| = 0.00`), 그리고 모델별 근거 신호(문체 지표 또는 4계층 언어 깊이 유사도)를 함께 제공합니다.
 
-전통 문체학과 딥러닝의 실질적인 차이와 상호보완성을 검증하기 위해 **Train · Validation · Locked Test 간 저자 교집합 0명(Dual-Author Disjoint)** 벤치마크 위에서 **피처·예측값을 일절 혼합하지 않은 3개 독립 트랙**을 비교했습니다.
+전통 문체학과 딥러닝의 실질적인 차이와 상호보완성을 검증하기 위해 **Train · Validation · Locked Test 간 저자 교집합 0명(Dual Author Disjoint)** 벤치마크 위에서 **피처·예측값을 일절 혼합하지 않은 3개 독립 트랙**을 비교했습니다.
 
 1. **Track 01 (`01_stylometric_ml`)**: 6계층 문체 특징(`6,001`차원) + 10종 다중 스케일/디바이어싱 전문가(`LightGBM`·`CatBoost`·`Linear`) + 내재적 OOD 레지스터 게이트 메타 보정기 (`21.63 MB`, CPU `32.1 ms/pair`).
-2. **Track 02 (`02_deberta_v3_base`)**: 12층 대칭 샴 `microsoft/deberta-v3-base` (`185.97M`) + Greedy Model Soup + 4계층 `All-but-the-Top (r=3)` 잔차 OOD 게이트.
-3. **Track 03 (`03_deberta_v3_large`)**: 24층 대칭 샴 `microsoft/deberta-v3-large` (`436.64M`) + LLRD·Prior-WD + 체크포인트 보간 수프(`0.65 / 0.35`) + 4계층 Multi-Std + Dual-Rank `All-but-the-Top (r=3, 8)` + 대칭 합의축 PCA(`e1 * e2`) + 5-Seed 잔차 OOD 게이트.
+2. **Track 02 (`02_deberta_v3_base`)**: 12층 대칭 샴 `microsoft/deberta-v3-base` (`185.97M`) + Greedy Model Soup + 4계층 `All but the Top (r=3)` 잔차 OOD 게이트.
+3. **Track 03 (`03_deberta_v3_large`)**: 24층 대칭 샴 `microsoft/deberta-v3-large` (`436.64M`) + LLRD·Prior WD + 체크포인트 보간 수프(`0.65 / 0.35`) + 4계층 Multi Std + Dual-Rank `All but the Top (r=3, 8)` + 대칭 합의축 PCA(`e1 * e2`) + 5 Seed 잔차 OOD 게이트.
 
 ---
 
@@ -16,7 +16,7 @@
 
 모든 임계값(`tau`, `delta`, 귀납적 `CSLS` 가중치 `hw`)은 Validation에서 고정한 뒤 Locked Test(`1:30` 닫힌 집합 `240` 쿼리 / `18,000`쌍, 오픈셋·교차 주제·제로샷 장르 `9,440`쌍)를 단 1회 평가했습니다.
 
-| 트랙 | Closed 1:30 Top-1 | Closed 1:30 Top-3 | Closed Macro-F1 | Open ROC-AUC | PAN c@1 | PAN F_0.5u | PAN Brier | PAN Overall | Forced Macro-F1 | 속도 / 크기 |
+| 트랙 | Closed 1:30 Top 1 | Closed 1:30 Top 3 | Closed Macro F1 | Open ROC AUC | PAN c@1 | PAN F_0.5u | PAN Brier | PAN Overall | Forced Macro F1 | 속도 / 크기 |
 | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
 | `01. Stylometric ML` | 64.58% | 84.58% | 0.5359 | 0.8474 | 0.7819 | 0.7823 | 0.8387 | 0.8008 | 0.7628 | 32.1 ms (CPU) · 21.6 MB |
 | `02. DeBERTa-v3-base` | 76.25% | **91.25%** | 0.6363 | 0.9040 | 0.8443 | 0.8414 | 0.8724 | 0.8567 | 0.8196 | 186.0M params |
@@ -36,32 +36,32 @@
 모든 구조 변경은 직관이나 단순 격자 탐색이 아니라 Validation 오차 진단에서 확인된 구조적 병목을 겨냥해 도입했고, 실측에서 불리한 가설은 기각했습니다. 상세 근거는 [설계 판단과 개선 과정](./docs/methodology-and-decisions.ko.md)에 정리했습니다.
 
 ### 1. 벤치마크 재설계 (`benchmark_1024`)
-초기 개발 분할에서는 같은 글이나 저자가 학습과 평가에 중복 포함되어 주제·문서 암기로 성능이 과대평가되는 한계가 있었습니다. 이를 해소하기 위해 9개 도메인에서 Train(`84,860`쌍), Validation(`8,540` 오픈쌍 + `150` 닫힌 쿼리), Locked Test(`9,440` 오픈쌍 + `240` 닫힌 쿼리) 간 **저자 중복 0명**을 강제하고, `60%` 동일 주제 오답 함정과 완전 미학습 제로샷 장르(`arxiv_research`, `guardian_journalism`)를 배치했습니다. 모든 OOF 보정기는 한쪽 저자만 분리하는 `GroupKFold` 대신 `(bucket(a1) != k) & (bucket(a2) != k)` **5-Bucket 양방향 저자 배제 OOF**를 적용했습니다.
+초기 개발 분할에서는 같은 글이나 저자가 학습과 평가에 중복 포함되어 주제·문서 암기로 성능이 과대평가되는 한계가 있었습니다. 이를 해소하기 위해 9개 도메인에서 Train(`84,860`쌍), Validation(`8,540` 오픈쌍 + `150` 닫힌 쿼리), Locked Test(`9,440` 오픈쌍 + `240` 닫힌 쿼리) 간 **저자 중복 0명**을 강제하고, `60%` 동일 주제 오답 함정과 완전 미학습 제로샷 장르(`arxiv_research`, `guardian_journalism`)를 배치했습니다. 모든 OOF 보정기는 한쪽 저자만 분리하는 `GroupKFold` 대신 `(bucket(a1) != k) & (bucket(a2) != k)` **5 Bucket 양방향 저자 배제 OOF**를 적용했습니다.
 
 ### 2. Track 01: 왜 6계층 문체 특징 + 내재적 OOD 레지스터 게이트인가
-- **주제 어휘 지름길 억제**: 단순 표면 TF-IDF는 같은 주제를 다룬 다른 저자에 쉽게 속습니다. 원문을 3중 뷰(`Surface` 원문 / `POS-Noise` 내용어 마스킹 / `Distorted` 리듬)로 분해하고 256 사칭자 `AS-Norm` 및 `64-Bag Koppel` 승률을 결합해 Val Open AUC를 `0.7632`(기존 단일 LGBM)에서 `0.8009`로 끌어올렸습니다.
-- **로짓 진폭 정렬과 노이즈 가지치기 (Round 2)**: 미보정 LightGBM 로짓(`±6`)이 CatBoost·선형 모델(`±2.5`)과 진폭이 달라 앙상블 가중치가 0으로 붕괴하는 현상을 폴드 내부 온도 보정으로 해결했고, Gain이 0인 `1,702`개 열을 제거(`6,001 -> 1,500`)했습니다.
-- **제로샷 레지스터 착시 교정 (Round 3)**: `Guardian`(`FPR 89.6%`)과 `ArXiv`(`FPR 75.4%`)에서 격식체·학술 문서 쌍이 구어체 사칭자 코호트보다 서로 비슷해 보여 오탐이 치솟는 원인을 규명했습니다. 도메인 라벨 없이 표면 어휘를 제거한 <strong>Genre-Blind Pure Delta CatBoost(<code>642</code>열)</strong>와 사칭자 친화도·격식도·모델 불일치도를 읽는 **OOD 레지스터 게이트**를 도입해 Test FPR을 두 도메인 모두 <strong><code>25.7%</code></strong>로 낮추고 `ROC-AUC 0.8474` (`PAN Overall 0.8008`)를 달성했습니다.
+- **주제 어휘 지름길 억제**: 단순 표면 TF IDF는 같은 주제를 다룬 다른 저자에 쉽게 속습니다. 원문을 3중 뷰(`Surface` 원문 / `POS Noise` 내용어 마스킹 / `Distorted` 리듬)로 분해하고 256 사칭자 `AS Norm` 및 `64 Bag Koppel` 승률을 결합해 Val Open AUC를 `0.7632`(기존 단일 LGBM)에서 `0.8009`로 끌어올렸습니다.
+- **로짓 진폭 정렬과 노이즈 가지치기 (Round 2)**: 미보정 LightGBM 로짓(`±6`)이 CatBoost·선형 모델(`±2.5`)과 진폭이 달라 앙상블 가중치가 0으로 붕괴하는 현상을 폴드 내부 온도 보정으로 해결했고, Gain이 0인 `1,702`개 열을 제거(`6,001 → 1,500`)했습니다.
+- **제로샷 레지스터 착시 교정 (Round 3)**: `Guardian`(`FPR 89.6%`)과 `ArXiv`(`FPR 75.4%`)에서 격식체·학술 문서 쌍이 구어체 사칭자 코호트보다 서로 비슷해 보여 오탐이 치솟는 원인을 규명했습니다. 도메인 라벨 없이 표면 어휘를 제거한 <strong>Genre Blind Pure Delta CatBoost(<code>642</code>열)</strong>와 사칭자 친화도·격식도·모델 불일치도를 읽는 **OOD 레지스터 게이트**를 도입해 Test FPR을 두 도메인 모두 <strong><code>25.7%</code></strong>로 낮추고 `ROC AUC 0.8474` (`PAN Overall 0.8008`)를 달성했습니다.
 
-### 3. Tracks 02 & 03: 왜 대칭 샴 DeBERTa-v3 + Dual-Rank ABTT 보정인가
+### 3. Tracks 02 & 03: 왜 대칭 샴 DeBERTa-v3 + Dual Rank ABTT 보정인가
 - **백본 선택**: `DeBERTa-v3`의 분리형 상대 위치 어텐션은 문장 호흡·구두점 간격·구문 리듬을 절대 위치 인코더보다 정밀하게 보존하며, `(u+v)/2`, `|u-v|`, `u*v`, `(u-v)^2`, `cos` 대칭 결합으로 순서 오차 `0.00`을 보장합니다.
 - **`transformers 5.x` FP16 언더플로 원인 규명**: 초기 `DeBERTa-v3` 학습이 `loss = 0.6965`에 정체된 원인을 추적해 `transformers 5.x`가 Hub의 `float16` 가중치를 그대로 FP16으로 적재해 `AdamW(1.6e-5)` 갱신이 매 스텝 0으로 반올림 소멸함을 밝혔고, `.float()` FP32 마스터 가중치 강제로 수렴을 복구했습니다.
-- **통제 절제 실험(Base)과 4-Way HP 프로브(Large)**:
-  - **채택**: 상위 50% 학습 가능 층 가중 풀링(`L7-12` / `L13-24`), 어텐션 통계 풀링(`ASP`), 5-branch MSD, 문중 고유명사 15% 마스킹, `shuffle=True`, 24층 Large에서의 `LLRD(gamma=0.94868) + Prior-WD(0.01) + Pure Label-Smoothed BCE`(10% 프로브에서 균일 학습률 대비 Composite `+3.70%p`).
+- **통제 절제 실험(Base)과 4 Way HP 프로브(Large)**:
+  - **채택**: 상위 50% 학습 가능 층 가중 풀링(`L7~L12` / `L13~L24`), 어텐션 통계 풀링(`ASP`), 5 branch MSD, 문중 고유명사 15% 마스킹, `shuffle=True`, 24층 Large에서의 `LLRD(gamma=0.94868) + Prior WD(0.01) + Pure Label Smoothed BCE`(10% 프로브에서 균일 학습률 대비 Composite `+3.70%p`).
   - **기각**: 도메인순 정렬 `shuffle=False`(앞 도메인 망각으로 Val AUC `-1.56%p`) 및 보조 `CoSENT` 순위 손실(순수 BCE 대비 열세).
-- **4계층 언어 깊이 + Dual-Rank `All-but-the-Top (r=3, 8)` + 보간 수프(`0.65 / 0.35`)**:
-  - 제로샷 장르에서 신경망 임베딩이 OOD 클러스터로 뭉치며 오탐률이 `97%`까지 치솟는 문제를 해결하기 위해, 24개 층에서 4개 언어 깊이(`L2-6` 어휘·구두점, `L8-12` 구문, `L14-18` 담화 평균+표준편차, `L22-24` 의미)를 추출하고 256개 고정 학습 사칭자의 상위 3축·8축 주제 성분을 직교 제거(`Dual-Rank ABTT`)했습니다.
-  - 여기에 대칭 합의축 PCA(`e1 * e2`, 16d)와 상위 두 스냅샷 선형 보간 수프(`0.65 * step_4141 + 0.35 * step_4970`)를 결합해 `ArXiv` Test FPR을 `90.7% -> 8.6%`(`ROC-AUC 0.9389`)로 낮추고 최종 Locked Test `ROC-AUC 0.9139`를 기록했습니다.
+- **4계층 언어 깊이 + Dual-Rank `All but the Top (r=3, 8)` + 보간 수프(`0.65 / 0.35`)**:
+  - 제로샷 장르에서 신경망 임베딩이 OOD 클러스터로 뭉치며 오탐률이 `97%`까지 치솟는 문제를 해결하기 위해, 24개 층에서 4개 언어 깊이(`L2~L6` 어휘·구두점, `L8~L12` 구문, `L14~L18` 담화 평균+표준편차, `L22~L24` 의미)를 추출하고 256개 고정 학습 사칭자의 상위 3축·8축 주제 성분을 직교 제거(`Dual Rank ABTT`)했습니다.
+  - 여기에 대칭 합의축 PCA(`e1 * e2`, 16d)와 상위 두 스냅샷 선형 보간 수프(`0.65 * step_4141 + 0.35 * step_4970`)를 결합해 `ArXiv` Test FPR을 `90.7% → 8.6%`(`ROC AUC 0.9389`)로 낮추고 최종 Locked Test `ROC AUC 0.9139`를 기록했습니다.
 
-![단계별 ROC-AUC 개선과 제로샷 FPR 감소](./docs/figures/improvement_progression.png)
+![단계별 ROC AUC 개선과 제로샷 FPR 감소](./docs/figures/improvement_progression.png)
 
 ---
 
 ## 패러다임 상호보완성: 딥러닝과 문체학 ML의 영역 차이
 
 - **초단문 (`60단어 미만`, 4,058쌍)**: 빈도 통계가 희소해지는 구간에서 `DeBERTa-v3-large`(`0.9285`)가 `Stylometric ML`(`0.8287`)을 **`+9.98%p`** 앞섭니다.
-- **제로샷 학술 논문 (`arxiv_research`, 880쌍)**: 24층 확장과 Dual-Rank ABTT로 `Large`가 `Base`(`0.9093`)를 넘어 <strong><code>0.9389</code></strong>를 기록하며 `ML`(`0.9336`)까지 역전했습니다.
-- **교차 장르 저널리즘 (`cross_genre` / `guardian_journalism`, 562쌍)**: 칼럼·사설·서평 간 편집 양식이 크게 바뀌는 구간에서는 명시적 `POS-Noise`와 기능어 편차 비중이 큰 `Stylometric ML`(`0.8019`)이 딥러닝(`0.7344`)보다 높은 판별력을 유지합니다.
+- **제로샷 학술 논문 (`arxiv_research`, 880쌍)**: 24층 확장과 Dual Rank ABTT로 `Large`가 `Base`(`0.9093`)를 넘어 <strong><code>0.9389</code></strong>를 기록하며 `ML`(`0.9336`)까지 역전했습니다.
+- **교차 장르 저널리즘 (`cross_genre` / `guardian_journalism`, 562쌍)**: 칼럼·사설·서평 간 편집 양식이 크게 바뀌는 구간에서는 명시적 `POS Noise`와 기능어 편차 비중이 큰 `Stylometric ML`(`0.8019`)이 딥러닝(`0.7344`)보다 높은 판별력을 유지합니다.
 
 ![문서 길이와 평가 계층별 ML vs DL 상호보완성](./docs/figures/domain_length_complementarity.png)
 

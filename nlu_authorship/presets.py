@@ -24,7 +24,7 @@ DEMO_PRESETS = [
     },
     {
         "id": "arxiv_same",
-        "title_en": "Zero-Shot ArXiv Physics (Same Author)",
+        "title_en": "Zero Shot ArXiv Physics (Same Author)",
         "title_ko": "제로샷 ArXiv 논문 초록 (동일 저자)",
         "domain": "arxiv_research",
         "stratum": "zero_shot_unseen_genre",
@@ -53,7 +53,7 @@ DEMO_PRESETS = [
     },
     {
         "id": "news_diff",
-        "title_en": "Ultra-Short News Snippets (Different Authors)",
+        "title_en": "Ultra Short News Snippets (Different Authors)",
         "title_ko": "초단문 뉴스 헤드라인 (다른 저자)",
         "domain": "news",
         "stratum": "open_unseen_author_same_topic",
@@ -67,7 +67,7 @@ DEMO_PRESETS = [
     },
     {
         "id": "guardian_diff",
-        "title_en": "Cross-Genre Guardian Politics (Different Authors)",
+        "title_en": "Cross Genre Guardian Politics (Different Authors)",
         "title_ko": "교차 장르 Guardian 칼럼·서평 (다른 저자)",
         "domain": "guardian_journalism",
         "stratum": "cross_genre",

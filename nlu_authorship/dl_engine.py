@@ -243,7 +243,7 @@ class DebertaLargeEngine:
 
         return {
             "model_id": "dl",
-            "model_name": "03. DeBERTa-v3-large (Dual-ABTT + Soup)",
+            "model_name": "03. DeBERTa-v3-large (Dual ABTT + Soup)",
             "probability": round(float(prob), 6),
             "verdict": verdict,
             "forced_verdict": "same_author" if prob >= self.tau else "different_author",
