@@ -34,7 +34,7 @@ All thresholds (`tau`, `delta`, and inductive `CSLS` hubness weight `hw`) were s
 ### Paradigm Complementarity: Where DL Wins vs Where ML Holds an Edge
 - **Ultra-short passages (`<60 words/doc`, 4,058 pairs)**: Surface statistics become sparse, so `DeBERTa-v3-large` leads `Stylometric ML` by **`+9.98%p` ROC AUC** (`0.9285` vs `0.8287`).
 - **Zero-shot academic text (`arxiv_research`, 880 pairs)**: Scaling to 24 layers with Dual-Rank ABTT lifted `Large` from `Base`'s `0.9093` to **`0.9389`**, overtaking `Stylometric ML` (`0.9336`).
-- **Cross-genre journalism (`guardian_journalism` / `cross_genre`, 562 pairs)**: When editorial conventions diverge sharply across columns and reviews, explicit `POS-Noise` and function-word delta features allow `Stylometric ML` (`0.8019`) to outperform neural encoders (`0.7344`).
+- **Cross-genre journalism (`cross_genre` stratum, 562 pairs)**: When editorial conventions diverge sharply across columns and reviews (`guardian_journalism` full domain 1,440 pairs: `0.8024` vs `0.7513`), explicit `POS-Noise` and function-word delta features allow `Stylometric ML` (`0.8019`) to outperform neural encoders (`0.7344`).
 
 ![Passage Length and Stratum Complementarity](docs/figures/domain_length_complementarity.png)
 

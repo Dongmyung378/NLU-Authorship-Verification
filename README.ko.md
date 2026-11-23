@@ -34,7 +34,7 @@
 ### 패러다임 상호보완성: 딥러닝과 문체학 ML의 영역 차이
 - **초단문 (`60단어 미만`, 4,058쌍)**: 빈도 통계가 희소해지는 구간에서 `DeBERTa-v3-large`(`0.9285`)가 `Stylometric ML`(`0.8287`)을 **`+9.98%p`** 앞섭니다.
 - **제로샷 학술 논문 (`arxiv_research`, 880쌍)**: 24층 확장과 Dual-Rank ABTT로 `Large`가 `Base`(`0.9093`)를 넘어 <strong><code>0.9389</code></strong>를 기록하며 `ML`(`0.9336`)까지 역전했습니다.
-- **교차 장르 저널리즘 (`cross_genre` / `guardian_journalism`, 562쌍)**: 칼럼·사설·서평 간 편집 양식이 크게 바뀌는 구간에서는 명시적 `POS-Noise`와 기능어 편차 비중이 큰 `Stylometric ML`(`0.8019`)이 딥러닝(`0.7344`)보다 높은 판별력을 유지합니다.
+- **교차 장르 저널리즘 (`cross_genre` 계층, 562쌍)**: 칼럼·사설·서평 간 편집 양식이 크게 바뀌는 구간에서는(`guardian_journalism` 전체 1,440쌍에서도 `0.8024` vs `0.7513`) 명시적 `POS-Noise`와 기능어 편차 비중이 큰 `Stylometric ML`(`0.8019`)이 딥러닝(`0.7344`)보다 높은 판별력을 유지합니다.
 
 ![문서 길이와 평가 계층별 ML vs DL 상호보완성](docs/figures/domain_length_complementarity.ko.png)
 
