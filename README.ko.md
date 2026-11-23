@@ -33,7 +33,7 @@
 
 ### 패러다임 상호보완성: 딥러닝과 문체학 ML의 영역 차이
 - **초단문 (`60단어 미만`, 4,058쌍)**: 빈도 통계가 희소해지는 구간에서 `DeBERTa-v3-large`(`0.9285`)가 `Stylometric ML`(`0.8287`)을 **`+9.98%p`** 앞섭니다.
-- **제로샷 학술 논문 (`arxiv_research`, 880쌍)**: 24층 확장과 Dual-Rank ABTT로 `Large`가 `Base`(`0.9093`)를 넘어 **`0.9389`**를 기록하며 `ML`(`0.9336`)까지 역전했습니다.
+- **제로샷 학술 논문 (`arxiv_research`, 880쌍)**: 24층 확장과 Dual-Rank ABTT로 `Large`가 `Base`(`0.9093`)를 넘어 <strong><code>0.9389</code></strong>를 기록하며 `ML`(`0.9336`)까지 역전했습니다.
 - **교차 장르 저널리즘 (`cross_genre` / `guardian_journalism`, 562쌍)**: 칼럼·사설·서평 간 편집 양식이 크게 바뀌는 구간에서는 명시적 `POS-Noise`와 기능어 편차 비중이 큰 `Stylometric ML`(`0.8019`)이 딥러닝(`0.7344`)보다 높은 판별력을 유지합니다.
 
 ![문서 길이와 평가 계층별 ML vs DL 상호보완성](docs/figures/domain_length_complementarity.ko.png)
@@ -50,7 +50,7 @@
 ### 2. Track 01: 6계층 문체 특징 + 내재적 OOD 레지스터 게이트
 - **주제 어휘 지름길 억제**: 단순 표면 `TF-IDF`는 같은 주제를 다룬 다른 저자에 쉽게 속습니다. 원문을 3중 뷰(`Surface` 원문 / `POS-Noise` 내용어 마스킹 / `Distorted` 리듬)로 분해하고 256 사칭자 `AS-Norm` 및 `64-Bag Koppel` 승률을 결합해 Val Open AUC를 `0.7632`(기존 단일 LGBM)에서 `0.8009`로 끌어올렸습니다.
 - **로짓 진폭 정렬과 노이즈 가지치기 (Round 2)**: 미보정 LightGBM 로짓(`±6`)이 CatBoost·선형 모델(`±2.5`)과 진폭이 달라 앙상블 가중치가 0으로 붕괴하는 현상을 폴드 내부 온도 보정으로 해결했고, Gain이 0인 `1,702`개 열을 제거(`6,001 → 1,500`)했습니다.
-- **제로샷 레지스터 착시 교정 (Round 3)**: `Guardian`(`FPR 89.6%`)과 `ArXiv`(`FPR 75.4%`)에서 격식체·학술 문서 쌍이 구어체 사칭자 코호트보다 서로 비슷해 보여 오탐이 치솟는 원인을 규명했습니다. 도메인 라벨 없이 표면 어휘를 제거한 **Genre-Blind Pure Delta CatBoost(`642`열)**와 사칭자 친화도·격식도·모델 불일치도를 읽는 **OOD 레지스터 게이트**를 도입해 Test FPR을 두 도메인 모두 **`25.7%`**로 낮추고 `ROC AUC 0.8474` (`PAN Overall 0.8008`)를 달성했습니다.
+- **제로샷 레지스터 착시 교정 (Round 3)**: `Guardian`(`FPR 89.6%`)과 `ArXiv`(`FPR 75.4%`)에서 격식체·학술 문서 쌍이 구어체 사칭자 코호트보다 서로 비슷해 보여 오탐이 치솟는 원인을 규명했습니다. 도메인 라벨 없이 표면 어휘를 제거한 <strong>Genre-Blind Pure Delta CatBoost(<code>642</code>열)</strong>와 사칭자 친화도·격식도·모델 불일치도를 읽는 **OOD 레지스터 게이트**를 도입해 Test FPR을 두 도메인 모두 <strong><code>25.7%</code></strong>로 낮추고 `ROC AUC 0.8474` (`PAN Overall 0.8008`)를 달성했습니다.
 
 ### 3. Tracks 02 & 03: 대칭 샴 DeBERTa-v3 + Dual-Rank ABTT 보정
 - **백본 선택**: `DeBERTa-v3`의 분리형 상대 위치 어텐션은 문장 호흡·구두점 간격·구문 리듬을 절대 위치 인코더보다 정밀하게 보존하며, `(u+v)/2`, `|u-v|`, `u*v`, `(u-v)^2`, `cos` 대칭 결합으로 순서 오차 `0.00`을 보장합니다.
