@@ -1,142 +1,120 @@
-# Authorship Verification
+# 동일 저자 판별: 순수 문체학 ML vs DeBERTa-v3
 
-**Dongmyung Park과 Juho Kim이 2026년 2월부터 5월까지 공동 개발한 NLP 프로젝트입니다.**
+[English](./README.md) | [시스템 구조](./docs/architecture.ko.md) | [설계 판단과 개선 과정](./docs/methodology-and-decisions.ko.md) | [전체 실험 결과](./docs/results.ko.md) | [재현 및 데모 실행](./docs/reproduction.ko.md)
 
-[English](./README.md) | [재현 가이드](./docs/reproduction.ko.md) | [구조](./docs/architecture.ko.md) | [평가 규칙](./docs/evaluation.ko.md) | [학습](./docs/training.ko.md)
+영어 글 두 편(문서당 최대 `512` 토큰, 쌍 합산 `1,024` 토큰 예산)을 입력받아 동일 저자 여부를 추정하는 자연어 이해 프로젝트입니다. 보정된 동일 저자 확률, 분류 또는 PAN 판정 보류(`uncertain`), 순서 불변 대칭성(`|P(A, B) - P(B, A)| = 0.00`), 그리고 모델별 근거 신호(문체 지표 또는 4계층 언어 깊이 유사도)를 함께 제공합니다.
 
-영어 글 두 편을 입력하면 같은 저자가 썼는지 추정합니다. 동일 저자 점수와 분류 결과를 제공하며, 설정한 판정 보류 규칙에 해당하면 불확실하다고 표시합니다. 글의 작성자가 같은지 비교하는 과제이며 작성자의 이름을 찾아내는 기능은 아닙니다.
+전통 문체학과 딥러닝의 실질적인 차이와 상호보완성을 검증하기 위해 **Train · Validation · Locked Test 간 저자 교집합 0명(Dual-Author Disjoint)** 벤치마크 위에서 **피처·예측값을 일절 혼합하지 않은 3개 독립 트랙**을 비교했습니다.
 
-영어 글 쌍의 저자 동일성을 확인하기 위해 최초의 두 모델 계열인 문체 기반 XGBoost-LightGBM 앙상블과 RoBERTa-Large를 비교합니다. 새로운 실행 체계는 문서가 분리된 데이터, 조건을 맞춘 CE와 직접 구현한 이진 비대칭 focal 학습, 독립 보정, 변경하지 않는 평가와 해시를 확인한 CPU 재검증을 제공합니다. 서로 다른 저자(`0`) 또는 동일 저자(`1`) 라벨을 예측하며 임의의 새로운 글에서 사람의 신원을 입증하는 도구는 아닙니다.
+1. **Track 01 (`01_stylometric_ml`)** — 6계층 문체 특징(`6,001`차원) + 10종 다중 스케일/디바이어싱 전문가(`LightGBM`·`CatBoost`·`Linear`) + 내재적 OOD 레지스터 게이트 메타 보정기 (`21.63 MB`, CPU `32.1 ms/pair`).
+2. **Track 02 (`02_deberta_v3_base`)** — 12층 대칭 샴 `microsoft/deberta-v3-base` (`185.97M`) + Greedy Model Soup + 4계층 `All-but-the-Top (r=3)` 잔차 OOD 게이트.
+3. **Track 03 (`03_deberta_v3_large`)** — 24층 대칭 샴 `microsoft/deberta-v3-large` (`436.64M`) + LLRD·Prior-WD + 체크포인트 보간 수프(`0.65 / 0.35`) + 4계층 Multi-Std + Dual-Rank `All-but-the-Top (r=3, 8)` + 대칭 합의축 PCA(`e1 * e2`) + 5-Seed 잔차 OOD 게이트.
 
-## 모델 비교를 이해하기 위한 안내
+---
 
-| 아래에 등장하는 용어 | 이 프로젝트에서의 의미 |
-| --- | --- |
-| 문체 앙상블 | 두 글의 어휘와 문체 차이를 수치로 표현한 뒤, 트리 기반 분류기인 XGBoost와 LightGBM의 예측을 합칩니다. |
-| TF-IDF | 단어나 문자 패턴이 글 안에서 얼마나 자주 등장하고 학습 문서 전체에서는 얼마나 구별되는지를 수치로 표현합니다. 통제 실험에서는 학습 글만 사용해 계산 기준을 맞춥니다. |
-| RoBERTa-Large | 미리 언어를 학습한 모델을 두 글의 저자 관계를 분류하는 과제에 맞게 추가 학습한 모델입니다. |
-| CE와 custom focal | 같은 Large 구조를 학습시키는 두 목적 함수입니다. CE는 잘못된 예측에 불이익을 주고, custom focal은 쉬운 사례의 비중을 두 클래스에서 서로 다르게 낮춥니다. |
-| 확률 보정과 판정 보류 | 보정은 별도 정답 데이터로 모델 점수를 조정하는 과정입니다. 임계값으로 점수를 분류 결과로 바꾸며, 불확실한 경우에는 판정을 보류할 수 있습니다. |
-| 문서가 분리된 집합 | 같은 문서와 그 문서로 연결된 글 쌍을 한 집합에 묶어 학습과 평가에서 문서가 직접 재사용되는 것을 줄입니다. 저자나 주제까지 처음 보는 조건이라는 뜻은 아닙니다. |
-| 동결과 CPU 재검증 | 동결은 모델, 설정과 파일 해시를 기록하는 절차입니다. 재검증은 그 파일을 그대로 불러와 학습이나 모델 재선택 없이 추론을 반복합니다. |
+## Final Locked Test 요약
 
-에포크는 학습 데이터를 한 차례 학습하는 단위이고, 체크포인트는 특정 시점의 학습 결과를 저장한 모델입니다. 학습 집합은 모델의 가중치를 배우는 데, 모델 선택 집합은 설정을 고르는 데, 보정 집합은 점수와 판정 기준을 맞추는 데 사용합니다. 최종 평가 집합은 이 선택들을 고정한 뒤 측정합니다. 시드는 학습의 의사 난수 선택을 정하는 시작값이며, 이번 비교는 학습 시드 한 번을 사용했습니다. 따라서 뒤의 bootstrap 구간은 반복 학습에 따른 변동을 뜻하지 않습니다.
+모든 임계값(`tau`, `delta`, 귀납적 `CSLS` 가중치 `hw`)은 Validation에서 고정한 뒤 Locked Test(`1:30` 닫힌 집합 `240` 쿼리 / `18,000`쌍, 오픈셋·교차 주제·제로샷 장르 `9,440`쌍)를 단 1회 평가했습니다.
 
-보고서의 **custom focal은 최초 프로젝트에서 ASL 또는 ASLoss라고 부른 직접 구현 비대칭 이진 focal 손실**입니다. 실행기와 모델 파일의 식별자는 호환성을 위해 `custom_asl`로 유지합니다. 이미 잘 맞히는 쉬운 사례의 학습 비중을 클래스별로 다르게 줄이는 방식입니다. 공식 다중 라벨 ASL과 단일 라벨 `ASLSingleLabel`은 모두 존재합니다. 이 프로젝트는 ASL의 이진 변형을 직접 구현했으며, 공식 기본 설정이나 논문의 실험을 그대로 재현한 것은 아닙니다. [손실 함수의 명칭과 구현](./docs/loss-terminology.ko.md)에서 공식 방식과의 차이와 최초 노트북 대비 수치 안정성 처리를 설명합니다.
+| 트랙 | Closed 1:30 Top-1 | Closed 1:30 Top-3 | Closed Macro-F1 | Open ROC-AUC | PAN c@1 | PAN F_0.5u | PAN Brier | PAN Overall | Forced Macro-F1 | 속도 / 크기 |
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| `01. Stylometric ML` | 64.58% | 84.58% | 0.5359 | 0.8474 | 0.7819 | 0.7823 | 0.8387 | 0.8008 | 0.7628 | 32.1 ms (CPU) · 21.6 MB |
+| `02. DeBERTa-v3-base` | 76.25% | **91.25%** | 0.6363 | 0.9040 | 0.8443 | 0.8414 | 0.8724 | 0.8567 | 0.8196 | 186.0M params |
+| **`03. DeBERTa-v3-large`** | **78.33%** | **91.25%** | **0.6547** | **0.9139** | **0.8556** | **0.8461** | **0.8779** | **0.8643** | **0.8271** | 32.5 ms (L4) · 860.3 MB |
 
-## 현재 릴리스 상태
+**쌍대 통계적 유의성 검정 (Exact McNemar + Paired Bootstrap 95% CI):**
+- `Large vs ML` (Scenario 2, 9,440쌍): `n10 = 1,450` vs `n01 = 846`, `p = 1.01e-36`, 정확도 차 `+6.40% [+5.40%, +7.38%]`, AUC 차 `+6.65% [+5.90%, +7.39%]`.
+- `Large vs Base` (Scenario 2, 9,440쌍): `n10 = 601` vs `n01 = 530`, `p = 0.03735`, 정확도 차 `+0.75% [+0.08%, +1.45%]`, AUC 차 `+0.99% [+0.63%, +1.37%]`.
+- `Large vs ML` (Scenario 1, 240쿼리): `n10 = 53` vs `n01 = 20`, `p = 1.42e-04`, 정확도 차 `+13.75% [+7.08%, +20.83%]`.
 
-새 RoBERTa-Large CE와 custom focal 학습, 학습 데이터만 사용한 제한된 문체 실험과 Kaggle 고정 평가를 완료했습니다. Large 두 개 모두 같은 6 epoch를 완료하고 5 epoch 체크포인트를 저장했습니다. 영어와 한국어 [실측 결과](./docs/results.ko.md)에 분류, 확률 보정, 입력 순서, 길이와 판정 보류 결과를 정리했습니다.
+![Final Locked Test 3대 트랙 비교](./docs/figures/benchmark_3way_comparison.png)
 
-**점수를 읽는 방법:** 정확도는 글 쌍을 맞게 분류한 비율입니다. 정밀도는 특정 클래스로 예측한 것 중 맞힌 비율이고, 재현율은 실제 그 클래스인 사례 중 찾아낸 비율입니다. Macro F1은 두 지표를 함께 평가한 뒤 동일 저자와 다른 저자 클래스를 같은 비중으로 평균합니다. **ECE**, **NLL**과 **Brier 점수**는 분류 정답 여부와 별개로 확률의 품질을 봅니다. ECE는 확률 구간별 예측 동일 저자 확률과 실제 동일 저자 비율의 차이를 보고, NLL은 실제 정답에 낮은 확률을 줄수록 불이익을 주며, Brier는 예측 확률 오차의 제곱을 평가합니다. 이 확률 지표들은 낮을수록 좋습니다. 답변 제공률은 전체 중 판정한 비율이고, 판정한 사례의 정확도는 그 일부에서만 계산한 정답률입니다.
+---
 
-| 최종 4,708쌍 전체의 고정 파이프라인 | Macro F1 | 정확도 | 정답 |
-|---|---:|---:|---:|
-| 문체 XGBoost-LightGBM 앙상블 | 0.741498 | 74.1504% | 3,491 |
-| RoBERTa-Large CE, 배포용 | 0.808383 | 80.8624% | 3,807 |
-| RoBERTa-Large 커스텀 ASL(클래스별 비대칭 이진 focal), 보존한 비교 모델 | 0.815170 | 81.5208% | 3,838 |
+## 모델·기법 선택 이유와 단계별 개선 과정
 
-CE는 최종 평가 전에 보정값을 고정한 파이프라인을 선택 집합에서 비교해 결정했습니다. 이후 관찰한 focal의 최종 우위로 선택을 바꾸지 않았습니다. 최초 개발 F1 0.8348과는 평가 조건이 달라 통제된 전후 비교가 아닙니다. 보정으로 세 모델의 ECE와 NLL은 줄었지만 모든 F1이 오른 것은 아니며, 판정한 사례 정확도 90% 목표에는 미달했습니다.
+모든 구조 변경은 직관이나 단순 격자 탐색이 아니라 Validation 오차 진단에서 확인된 구조적 병목을 겨냥해 도입했고, 실측에서 불리한 가설은 기각했습니다. 상세 근거는 [설계 판단과 개선 과정](./docs/methodology-and-decisions.ko.md)에 정리했습니다.
 
-[전체 고정 기록](./reports/evaluation-freeze.json)과 원본 순서의 예측을 소스, 데이터와 모델 파일 명세에 대조해 확인했습니다. 같은 실행 및 설정 파일 35개로 Windows 11에서 구현 검사 109/109, Ubuntu 24.04 WSL2에서 109/109를 통과했습니다. 모델 세 개 모두 두 환경에서 4,708쌍 전체 추론을 완료했으며, 여섯 번의 이진 분류, 판정 보류, F1과 정확도가 모두 일치했습니다. 문체 모델은 두 환경에서 정해 둔 비교 허용 오차도 충족했습니다. Large 두 개는 GPU 참조 확률값의 사전 허용 오차 `1e-5`를 넘었습니다. Windows와 Linux의 보정 확률 최대 차이는 CE가 각각 `1.79e-5`, `8.81e-6`, custom focal이 `1.80e-4`, `1.10e-4`였습니다. Linux CE의 보정 확률은 기준 안에 있었지만 원래 입력 순서의 확률 차이는 기준을 넘었습니다. 허용 오차, 참조나 보정값을 바꾸지 않고 엄격한 검증 실패로 보존했습니다. 같은 조건의 CPU 실행 비용 측정도 완료해 [CPU 요약](./reports/cpu-reproduction.json)과 [실측 결과](./docs/results.ko.md)에 연결했으며, 모델 공개와 전체 비로그인 다운로드 검증은 별도로 완료했습니다. 두 로컬 환경은 같은 물리적 컴퓨터를 사용하므로 독립된 외부 검증으로 표현하지 않습니다.
+### 1. 벤치마크 재설계 (`benchmark_1024`)
+초기 개발 분할에서는 같은 글이나 저자가 학습과 평가에 중복 포함되어 주제·문서 암기로 성능이 과대평가되는 한계가 있었습니다. 이를 해소하기 위해 9개 도메인에서 Train(`84,860`쌍), Validation(`8,540` 오픈쌍 + `150` 닫힌 쿼리), Locked Test(`9,440` 오픈쌍 + `240` 닫힌 쿼리) 간 **저자 중복 0명**을 강제하고, `60%` 동일 주제 오답 함정과 완전 미학습 제로샷 장르(`arxiv_research`, `guardian_journalism`)를 배치했습니다. 모든 OOF 보정기는 한쪽 저자만 분리하는 `GroupKFold` 대신 `(bucket(a1) != k) & (bucket(a2) != k)` **5-Bucket 양방향 저자 배제 OOF**를 적용했습니다.
 
-대응 학습은 실제 경과 6.3959시간, 배정 worker 합산 12.7758시간이 걸렸고, 고정 평가까지의 전체 wrapper는 실제 경과 7.5475시간입니다. 대응 학습 9시간과 전체 커널 10시간 상한을 지켰습니다. 앞선 시간 측정 가중치는 모두 폐기했으며 제한된 비교 후 GPU 품질 실험을 더 진행하지 않았습니다. 자체 배정 시간 범위와 계정의 할당량 조회는 구분하고, 공식 T4x2 사용량 배수를 검증했다고 주장하지 않습니다.
+### 2. Track 01: 왜 6계층 문체 특징 + 내재적 OOD 레지스터 게이트인가
+- **주제 어휘 지름길 억제**: 단순 표면 TF-IDF는 같은 주제를 다룬 다른 저자에 쉽게 속습니다. 원문을 3중 뷰(`Surface` 원문 / `POS-Noise` 내용어 마스킹 / `Distorted` 리듬)로 분해하고 256 사칭자 `AS-Norm` 및 `64-Bag Koppel` 승률을 결합해 Val Open AUC를 `0.7632`(기존 단일 LGBM)에서 `0.8009`로 끌어올렸습니다.
+- **로짓 진폭 정렬과 노이즈 가지치기 (Round 2)**: 미보정 LightGBM 로짓(`±6`)이 CatBoost·선형 모델(`±2.5`)과 진폭이 달라 앙상블 가중치가 0으로 붕괴하는 현상을 폴드 내부 온도 보정으로 해결했고, Gain이 0인 `1,702`개 열을 제거(`6,001 -> 1,500`)했습니다.
+- **제로샷 레지스터 착시 교정 (Round 3)**: `Guardian`(`FPR 89.6%`)과 `ArXiv`(`FPR 75.4%`)에서 격식체·학술 문서 쌍이 구어체 사칭자 코호트보다 서로 비슷해 보여 오탐이 치솟는 원인을 규명했습니다. 도메인 라벨 없이 표면 어휘를 제거한 <strong>Genre-Blind Pure Delta CatBoost(<code>642</code>열)</strong>와 사칭자 친화도·격식도·모델 불일치도를 읽는 **OOD 레지스터 게이트**를 도입해 Test FPR을 두 도메인 모두 <strong><code>25.7%</code></strong>로 낮추고 `ROC-AUC 0.8474` (`PAN Overall 0.8008`)를 달성했습니다.
 
-## CPU 실행
+### 3. Tracks 02 & 03: 왜 대칭 샴 DeBERTa-v3 + Dual-Rank ABTT 보정인가
+- **백본 선택**: `DeBERTa-v3`의 분리형 상대 위치 어텐션은 문장 호흡·구두점 간격·구문 리듬을 절대 위치 인코더보다 정밀하게 보존하며, `(u+v)/2`, `|u-v|`, `u*v`, `(u-v)^2`, `cos` 대칭 결합으로 순서 오차 `0.00`을 보장합니다.
+- **`transformers 5.x` FP16 언더플로 원인 규명**: 초기 `DeBERTa-v3` 학습이 `loss = 0.6965`에 정체된 원인을 추적해 `transformers 5.x`가 Hub의 `float16` 가중치를 그대로 FP16으로 적재해 `AdamW(1.6e-5)` 갱신이 매 스텝 0으로 반올림 소멸함을 밝혔고, `.float()` FP32 마스터 가중치 강제로 수렴을 복구했습니다.
+- **통제 절제 실험(Base)과 4-Way HP 프로브(Large)**:
+  - **채택**: 상위 50% 학습 가능 층 가중 풀링(`L7-12` / `L13-24`), 어텐션 통계 풀링(`ASP`), 5-branch MSD, 문중 고유명사 15% 마스킹, `shuffle=True`, 24층 Large에서의 `LLRD(gamma=0.94868) + Prior-WD(0.01) + Pure Label-Smoothed BCE`(10% 프로브에서 균일 학습률 대비 Composite `+3.70%p`).
+  - **기각**: 도메인순 정렬 `shuffle=False`(앞 도메인 망각으로 Val AUC `-1.56%p`) 및 보조 `CoSENT` 순위 손실(순수 BCE 대비 열세).
+- **4계층 언어 깊이 + Dual-Rank `All-but-the-Top (r=3, 8)` + 보간 수프(`0.65 / 0.35`)**:
+  - 제로샷 장르에서 신경망 임베딩이 OOD 클러스터로 뭉치며 오탐률이 `97%`까지 치솟는 문제를 해결하기 위해, 24개 층에서 4개 언어 깊이(`L2-6` 어휘·구두점, `L8-12` 구문, `L14-18` 담화 평균+표준편차, `L22-24` 의미)를 추출하고 256개 고정 학습 사칭자의 상위 3축·8축 주제 성분을 직교 제거(`Dual-Rank ABTT`)했습니다.
+  - 여기에 대칭 합의축 PCA(`e1 * e2`, 16d)와 상위 두 스냅샷 선형 보간 수프(`0.65 * step_4141 + 0.35 * step_4970`)를 결합해 `ArXiv` Test FPR을 `90.7% -> 8.6%`(`ROC-AUC 0.9389`)로 낮추고 최종 Locked Test `ROC-AUC 0.9139`를 기록했습니다.
 
-자동 모델 다운로드는 [공개 Kaggle 데이터셋의 버전 1 raw 파일](https://www.kaggle.com/datasets/dongmyungpark/nlu-authorship-frozen-large-20261012)을 사용합니다. 기존 공개 CLI로 로그인 없이 파일 21개, 총 2,856,189,574바이트를 내려받아 고정한 크기와 SHA256이 모두 일치하는지 확인했습니다. 별도 [다운로드 검증](./reports/model-download-verification.json)은 파일 전달을 확인한 기록이며 저장 모델 추론을 다시 수행했다는 의미는 아닙니다. 저장소 최상위 폴더에서 Windows PowerShell로 실행합니다.
+![단계별 ROC-AUC 개선과 제로샷 FPR 감소](./docs/figures/improvement_progression.png)
 
-```powershell
-.\launch-nlu.bat doctor
-.\launch-nlu.bat verify-data
-.\launch-nlu.bat download
-.\launch-nlu.bat download --verify-only
-.\launch-nlu.bat predict
-```
+---
 
-Linux에서는 같은 명령 앞에 `sh ./launch-nlu.sh`를 사용합니다. 실행기는 프로젝트 내부에 격리된 Python 3.12 환경을 만들고 고정 CPU 패키지를 설치하며 로컬 GPU를 숨깁니다. Docker나 API key는 필요하지 않습니다. 최초 구성과 모델 다운로드에는 인터넷이 필요하고, 이후 추론은 로컬 가중치와 토크나이저를 사용합니다.
+## 패러다임 상호보완성: 딥러닝과 문체학 ML의 영역 차이
 
-기본 모델은 CPU 문체 앙상블입니다. 선택적으로 Large를 사용하면 독립적으로 맞춘 보정값을 적용해 모델 선택 집합에서 결정한 파이프라인을 실행합니다.
+- **초단문 (`60단어 미만`, 4,058쌍)**: 빈도 통계가 희소해지는 구간에서 `DeBERTa-v3-large`(`0.9285`)가 `Stylometric ML`(`0.8287`)을 **`+9.98%p`** 앞섭니다.
+- **제로샷 학술 논문 (`arxiv_research`, 880쌍)**: 24층 확장과 Dual-Rank ABTT로 `Large`가 `Base`(`0.9093`)를 넘어 <strong><code>0.9389</code></strong>를 기록하며 `ML`(`0.9336`)까지 역전했습니다.
+- **교차 장르 저널리즘 (`cross_genre` / `guardian_journalism`, 562쌍)**: 칼럼·사설·서평 간 편집 양식이 크게 바뀌는 구간에서는 명시적 `POS-Noise`와 기능어 편차 비중이 큰 `Stylometric ML`(`0.8019`)이 딥러닝(`0.7344`)보다 높은 판별력을 유지합니다.
 
-```powershell
-.\launch-nlu.bat download --model transformer
-.\launch-nlu.bat predict --model transformer --text-file-1 passage-a.txt --text-file-2 passage-b.txt
-```
+![문서 길이와 평가 계층별 ML vs DL 상호보완성](./docs/figures/domain_length_complementarity.png)
 
-검증한 릴리스 명세 [reports/artifact-download.json](./reports/artifact-download.json)은 모델 파일만 포함한 공개 Kaggle 데이터셋 버전 1의 비로그인 raw 주소와 모든 체크포인트, 토크나이저, 변환기 및 설정의 바이트 수와 SHA256을 고정합니다. 원격 파일은 `kind=file`로 원래 `models/ce/`, `models/custom_asl/`, `models/stylometric/` 실행 경로에 직접 연결합니다. 전체 비로그인 HTTP 200/해시 확인과 CLI verify-only 검사를 완료했습니다. 아래의 최초 Drive 파일은 새 릴리스의 파일 목록이나 평가 고정 기록을 대신할 수 없습니다.
+---
 
-자동 다운로드 및 검증 CLI는 기존 버전 1 raw 파일의 주소와 SHA256을 계속 고정합니다. [전체 ZIP 다운로드](https://www.kaggle.com/api/v1/datasets/download/dongmyungpark/nlu-authorship-frozen-large-20261012?datasetVersionNumber=2)는 동일한 고정 모델 파일 21개를 다시 묶은 데이터셋 버전 2에서 제공합니다. 다운로드한 ZIP의 파일 크기와 SHA256은 별도 [압축 파일 검증 기록](./reports/model-archive-verification.json)에서 확인할 수 있습니다. 모델과 평가 결과는 변경하지 않았습니다. 전체 ZIP은 Kaggle의 평면 파일 이름을 유지합니다. 원래 모델 실행 경로에 설치할 때는 이 안내의 자동 다운로드 명령을 사용합니다.
+## 인터랙티브 라이브 데모 (ML / DL 모델 선택기)
 
-모델 ZIP을 별도로 전달받은 경우에는 `models/모델명/` 구조를 같은 강화 버전 소스의 `artifacts/runtime`에 해제합니다. 실행기가 예측이나 평가 전에 설치한 파일을 전체 고정 기록에 대조하며 직접 설치에는 자동 다운로드 명세가 필요하지 않습니다. 검증을 완료한 공개 전달 경로는 위 자동 다운로드입니다.
+로컬 웹 데모에서 영어 글 두 편을 입력하고 **`01. Stylometric ML`**, **`03. DeBERTa-v3-large`**, 또는 **`ML vs DL 동시 비교`** 모드를 선택해 실시간으로 판별할 수 있습니다. `A ↔ B 순서 바꾸기`로 대칭성(`0.00`)을 직접 검증하고, Locked Test 실전 프리셋 4종과 모델별 근거 신호(문체 지표 / 4계층 ABTT 유사도)를 바로 확인할 수 있습니다.
 
-`doctor`는 패키지, 환경 격리와 작은 CPU tensor 연산을 확인하고, `verify-data`는 CSV 해시와 문서 분리를 확인합니다. 어느 명령도 실제 모델 정확도를 측정하지 않습니다. 예측은 클래스, 보정된 동일 저자 점수와 판정 보류 시 `uncertain`을 구분합니다. 입력 제한과 전체 옵션은 [CPU 실행 가이드](./docs/runtime.ko.md)에 있습니다.
+![실시간 동일 저자 판별 웹 데모 화면](./docs/figures/demo_ui_live.png)
 
-## 고정한 최종 평가 재현
-
-릴리스 파일이 준비된 뒤 아직 없는 출력 폴더를 지정합니다.
-
-```powershell
-.\launch-nlu.bat evaluate --model stylometric --model-name stylometric --model-dir artifacts/runtime/models/stylometric --output .local/replay-stylometric --batch-size 4 --threads 4
-```
-
-두 Large 체크포인트는 다음과 같이 검사합니다.
+### 빠른 실행
 
 ```powershell
-.\launch-nlu.bat download --model ce
-.\launch-nlu.bat download --model custom_asl
-.\launch-nlu.bat evaluate --model transformer --model-name ce --model-dir artifacts/runtime/models/ce --output .local/replay-ce --batch-size 4 --threads 4
-.\launch-nlu.bat evaluate --model transformer --model-name custom_asl --model-dir artifacts/runtime/models/custom_asl --output .local/replay-custom-asl --batch-size 4 --threads 4
+# 1. 의존성 설치
+pip install -r requirements.txt
+
+# 2. Google Drive에서 공개 모델 가중치 다운로드 (ML 21.6 MB / DL 860.3 MB)
+python verify_author.py download --model ml
+python verify_author.py download --model dl
+
+# 3. 로컬 인터랙티브 웹 데모 실행 (http://127.0.0.1:8000)
+.\launch-nlu.bat demo
+# Linux / macOS:
+sh ./launch-nlu.sh demo
+
+# 4. 명령줄(CLI)에서 바로 판별
+python verify_author.py predict --model both --check-symmetry --text-1 "First passage..." --text-2 "Second passage..."
 ```
 
-위 전체 재검증 예시는 배치 4와 CPU 스레드 4를 명시합니다. 새 모델의 성능 결과를 확인하기 전에 기존 모델의 작은 시간 측정으로 정한 실행 설정이며, 모델 선택이나 보정값을 바꾸지 않습니다. CLI 기본값은 배치 8과 스레드 1을 유지합니다. 최종 모델의 실제 CPU 실행 비용은 [실측 결과](./docs/results.ko.md)에 제시하며, 별도 속도 비교는 배치 1과 스레드 1을 사용했습니다.
+배포용 가중치 2종(`model_01_stylometric_ml.joblib` 순수 Python 내장 타입, `model_03_deberta_v3_large.pt` 순수 텐서)은 `pytest tests/test_inference_and_demo.py`로 대칭성과 Locked Test 예측 정합성을 자동 검증합니다.
 
-기본 평가는 최종 글 쌍 4,708개 전체를 실행합니다. 소스, 데이터, 모델과 보정의 연결을 확인하고 다시 맞추지 않은 상태로 지표, 혼동행렬과 원본 순서의 예측을 저장합니다. 배포용으로 하나를 고르더라도 Large FP32 체크포인트 두 개를 유지합니다. 작은 예측이나 테스트 통과는 전체 저장 모델 재검증을 대신하지 않습니다. 같은 컴퓨터의 운영체제 두 개는 같은 호스트의 별도 환경으로 보고하며 독립된 외부 컴퓨터라고 표현하지 않습니다.
+---
 
-## 조건을 통제한 실험
+## Google Drive 공개 아카이브 및 Colab 학습 링크
 
-제공된 학습 글 쌍 27,643개와 개발 글 쌍 5,993개를 함께 검사합니다. 전처리 후 빈 문서를 포함한 86행과 라벨이 일치하는 중복 글 쌍 2,162행을 제외해 31,388쌍을 유지합니다. 문서 동일성으로 연결한 그룹 전체를 한 집합에 배정합니다.
+- **전체 공개 폴더**: [Google Drive — NLU 아카이브](https://drive.google.com/drive/folders/1ij9ZwlLtimS26bAE9B_D5zL3raAKJody)
+- **벤치마크 데이터셋**: [benchmark_1024.zip (61.2 MB)](https://drive.google.com/file/d/1Y9xfMRskEUZPYw9f5jdiM6ws9L-Cwdr8/view)
+- **Track 01 (`Stylometric ML`)**: [train_01_stylometric_ml.ipynb (Colab)](https://colab.research.google.com/drive/1jAuZKPe7mcuL9jB9SAIQmGr-jQ-CdjtJ) · [model_01_stylometric_ml.joblib](https://drive.google.com/file/d/1q9T8zLYmnhLqPWT9He8wiqIjA0kvCR1M/view) · [results_01_stylometric_ml.zip](https://drive.google.com/file/d/1ZW4ib1SdDZPzGV1DHB3nREv8Mp7x-VfE/view)
+- **Track 02 (`DeBERTa-v3-base`)**: [train_02_deberta_v3_base.ipynb (Colab)](https://colab.research.google.com/drive/1U6Fv97IcC061XdJlVYWM79D9YSOsD9Bk) · [results_02_deberta_v3_base.zip](https://drive.google.com/file/d/1WjbhPHpdcCVGA8w0fQAyoDd7zMjnDmGO/view)
+- **Track 03 (`DeBERTa-v3-large`)**: [train_03_deberta_v3_large.ipynb (Colab)](https://colab.research.google.com/drive/1ROS0vdfbpZupVoM38Dz41eDB1tCAGjWL) · [model_03_deberta_v3_large.pt](https://drive.google.com/file/d/1r19ezaf0Q_nn3qVS43m4nDhAs5jfGkve/view) · [results_03_deberta_v3_large.zip](https://drive.google.com/file/d/15D12EdLfD1oeR-xfAcaM24OvRS9Vs3w-/view)
 
-| 역할 | 글 쌍 수 | 용도 |
-|---|---:|---|
-| 학습 | 21,972 | 과제 학습과 학습 집합만의 TF-IDF |
-| 모델 선택 | 3,139 | 체크포인트, 특징 및 가중치, 배포 정책 |
-| 보정 | 1,569 | Temperature, 분류 및 판정 보류 임계값 |
-| 최종 평가 | 4,708 | 함께 고정한 뒤 최종 평가 |
-
-배정된 T4를 하나씩 사용하는 독립 worker 두 개가 같은 초기화, seed, 기록과 epoch 순서로 고정한 새 RoBERTa-Large를 학습합니다. CE와 직접 구현한 두 클래스 softmax focal 목적함수 `-(1-p_y)^gamma_y * log(p_y)`를 비교하며, `gamma_0=2`, `gamma_1=1`과 FP32 log-softmax를 사용합니다. 최초 노트북은 로그 계산 전에 확률에 `1e-8` 하한을 적용했습니다. 현재의 안정적인 계산은 focal 원리를 유지하지만 하한보다 작은 확률에서는 값이 달라질 수 있습니다. 이 실험은 ASL의 이진 변형을 직접 구현해 학습했으며, 공식 기본 설정이나 논문의 실험을 그대로 재현했다고 주장하지 않습니다.
-
-별도 CPU 실험은 모든 TF-IDF를 학습 집합에서만 맞추고 120분 안에 제한한 XGBoost-LightGBM 설정 4개를 비교합니다. 최종 앙상블은 두 구성 모델을 모두 사용하며, 새 설정이나 가중치를 채택하려면 기준보다 모델 선택 macro F1이 0.002 이상 증가해야 합니다.
-
-원시 AB 손실 비교는 임계값 0.5를 유지합니다. 모델 선택 집합에서 각 입력 순서를 고르고 세 모델을 독립적으로 보정합니다. 배포 결정은 저장한 모델 선택 logits에 고정 보정값을 적용한 Large 파이프라인끼리 비교하며, custom focal이 보정된 CE보다 macro F1을 0.002 이상 높일 때만 채택합니다. 원시 비교와 배포용 선택 모델을 구분해 보고합니다. 모든 최종 추론 전에 함께 고정하고 최종 결과로 판정 기준을 조정하지 않습니다.
-
-계획에는 seed 378의 대응 문서 그룹 bootstrap 1,000회도 있습니다. 조건부 95% percentile 구간은 고정 데이터와 학습 seed 한 번에 관한 것이며 반복 학습의 변동이나 새 저자 및 도메인의 일반화를 뜻하지 않습니다. 상세 규칙은 [평가 문서](./docs/evaluation.ko.md)에 있습니다.
-
-## 최초 개발 기록
-
-2026년 2월부터 5월까지의 노트북, 포스터, 예측과 모델 카드는 공동 개발자 정보를 유지합니다. 아래 수치는 최초 개발 집합의 결과이며 새 고정 평가와 구분합니다.
-
-| 최초 모델 | 당시 보고한 개발 macro F1 | 최초 파일 다운로드 |
-|---|---:|---|
-| [문체 앙상블](./model-cards/stylometric-ensemble.ko.md) | 0.7702 | [최초 앙상블과 변환기 Drive](https://drive.google.com/drive/folders/1mF0bMpzfs3XODpQA2Hd7H_JvXLk5AGgp?usp=sharing) |
-| [RoBERTa-Large 직접 구현 비대칭 focal](./model-cards/roberta-asymmetric-loss.ko.md) | 0.8348 | [최초 체크포인트와 토크나이저 Drive](https://drive.google.com/drive/folders/1Ty9-EpOLAgzvTWPuqrHBTbehmZZuDs3V?usp=sharing) |
-
-개발 글 쌍 5,993개 중 630개는 학습 글 쌍과 완전히 같습니다. 이 완전 중복을 포함한 총 2,738개의 개발 글 쌍에는 학습에 이미 있는 문서가 하나 이상 포함됩니다. 그중 1,658쌍은 한 문서, 1,080쌍은 두 문서를 재사용합니다. 최초 문체 노트북은 학습과 개발 글을 합쳐 TF-IDF를 맞추므로 개발 글이 어휘와 IDF에 영향을 줍니다. 체크포인트, 앙상블 가중치와 임계값도 개발 집합에서 골랐습니다. 따라서 최초 점수와 새 최종 평가 점수의 차이는 조건을 통제한 전후 개선량이 아닙니다. 새로운 규칙은 문서 그룹을 분리하고 TF-IDF를 학습 집합에서만 맞춥니다.
-
-[최초 노트북](./notebooks/)과 [포스터 미리보기](./docs/authorship-verification-poster-preview.png)([PDF](./docs/authorship-verification-poster.pdf?raw=1))는 공동 개발 기록입니다. 도메인 변화에 따른 과적합 감소는 독립된 도메인 분리 평가로 검증하지 않았습니다. `test.csv` 5,985쌍과 `live.csv` 20쌍에는 라벨이 없어 측정한 정확도를 제공하지 않습니다.
+---
 
 ## 저장소 구성
 
 ```text
-nlu_authorship/             데이터, 모델, 학습, 보정과 고정 평가
-configs/                   사전에 선언한 실험 계획
-reports/                   분리 명세, 실제 검사와 릴리스 증거
-scripts/                   격리 구성, 다운로드, Kaggle 패키징과 보고
-launch-nlu.bat / .sh        공개 CPU 실행 명령
-docs/                      영어 기본 및 한국어 가이드와 최초 포스터
-model-cards/               최초 개발 모델로 명시한 문서
-notebooks/                 공동 개발한 최초 학습과 데모 노트북
-results/                   최초의 라벨 없는 예측
-artifacts/                 Git에서 제외한 다운로드 모델
+nlu_authorship/          ML·DL 독립 추론 엔진, Google Drive 다운로더, 로컬 웹 데모 서버
+notebooks/colab/         단일 실행 재현용 최종 학습 노트북 3종 (01 ML, 02 Base, 03 Large)
+scripts/                 벤치마크 빌더, 무결성 검증, 노트북 생성기, MIT Red 차트 렌더러
+docs/                    영문·국문 구조, 설계 판단, 실험 결과, 재현 안내 문서 및 차트
+model-cards/             Track 01 (Stylometric ML) 및 Track 03 (DeBERTa-v3-large) 모델 카드
+reports/                 검증된 요약 JSON 및 3대 모델 통계 비교 CSV
+tests/                   단위·웹 API·순서 대칭성·Locked Test 정합성 테스트
+verify_author.py         CLI 및 웹 데모 실행기 (launch-nlu.bat / launch-nlu.sh 지원)
 ```
-
-저자 ID와 도메인 라벨이 없습니다. 확인한 범위는 제공된 데이터의 문서 분리이며, 과거 데이터 사용과 측정하지 않은 의미 유사 문서는 한계로 남습니다. Transformer는 두 글 합계 512토큰 이후를 자르며 짧거나 익숙하지 않은 글은 불안정할 수 있습니다.

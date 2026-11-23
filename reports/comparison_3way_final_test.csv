@@ -1,0 +1,4 @@
+Track,Test_Closed_Top1,Test_Closed_Top3,Test_Closed_MacroF1,Test_Open_ROC_AUC,Test_Open_PAN_c@1,Test_Open_PAN_F05u,Test_Open_PAN_Brier,Test_Open_PAN_Overall,Test_Open_Forced_F1,Test_Open_Answered_Acc,Test_Open_Abstain_Pct
+01. Stylometric ML,0.64583,0.84583,0.53586,0.8474,0.78192,0.78225,0.83867,0.80082,0.7628,0.79795,14.17
+02. DeBERTa-v3-base,0.7625,0.9125,0.63633,0.90399,0.84428,0.84144,0.87237,0.85669,0.81958,0.86124,14.04
+03. DeBERTa-v3-large,0.78333,0.9125,0.65473,0.91393,0.85556,0.84611,0.87789,0.8643,0.82711,0.87566,15.15

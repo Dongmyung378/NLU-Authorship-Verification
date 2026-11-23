@@ -1,0 +1,65 @@
+{
+  "verified_on": "microsoft/deberta-v3-base",
+  "use_arch_and_entity": true,
+  "use_priorwd_llrd_cosent": false,
+  "use_soup_ema_asnorm": true,
+  "base_num_layers": 12,
+  "large_num_layers": 24,
+  "base_top_k_layers": 6,
+  "large_top_k_layers": 12,
+  "base_llrd_gamma": 0.9,
+  "large_llrd_gamma_scaled": 0.94868,
+  "entity_mask_prob": 0.15,
+  "label_smoothing": 0.02,
+  "default_cosent_weight": 0.3,
+  "ablation_table": [
+    {
+      "Step": "Step 0: Vanilla Siamese Baseline",
+      "Decision": "BASELINE",
+      "Val_Composite": 0.7355,
+      "Val_Closed_Top1": 0.67333,
+      "Val_Closed_MacroF1": 0.56,
+      "Val_Open_ROC_AUC": 0.8005,
+      "Val_Open_PAN_c@1": 0.74649,
+      "Val_Open_PAN_Brier": 0.8011,
+      "Val_Open_PAN_Overall": 0.76897,
+      "Time_Min": 40.73
+    },
+    {
+      "Step": "Step 1: + 6-Layer + ASP + MSD + EntityMask",
+      "Decision": "DROP",
+      "Val_Composite": 0.73367,
+      "Val_Closed_Top1": 0.66667,
+      "Val_Closed_MacroF1": 0.56393,
+      "Val_Open_ROC_AUC": 0.80827,
+      "Val_Open_PAN_c@1": 0.74485,
+      "Val_Open_PAN_Brier": 0.80215,
+      "Val_Open_PAN_Overall": 0.76974,
+      "Time_Min": 41.38
+    },
+    {
+      "Step": "Step 2: + PriorWD + LLRD + CoSENT Loss",
+      "Decision": "DROP",
+      "Val_Composite": 0.70292,
+      "Val_Closed_Top1": 0.60667,
+      "Val_Closed_MacroF1": 0.4923,
+      "Val_Open_ROC_AUC": 0.79274,
+      "Val_Open_PAN_c@1": 0.72728,
+      "Val_Open_PAN_Brier": 0.7958,
+      "Val_Open_PAN_Overall": 0.75474,
+      "Time_Min": 38.03
+    },
+    {
+      "Step": "Step 3: + Greedy Soup + EMA + AS-Norm + CSLS",
+      "Decision": "DROP",
+      "Val_Composite": 0.723,
+      "Val_Closed_Top1": 0.62,
+      "Val_Closed_MacroF1": 0.5125,
+      "Val_Open_ROC_AUC": 0.8098,
+      "Val_Open_PAN_c@1": 0.7616,
+      "Val_Open_PAN_Brier": 0.8218,
+      "Val_Open_PAN_Overall": 0.77846,
+      "Time_Min": 48.53
+    }
+  ]
+}

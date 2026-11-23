@@ -1,0 +1,8 @@
+Model,Val_Closed_Top1_Acc,Val_Closed_Macro_F1,Val_Open_ROC_AUC,Val_Open_PAN_c@1,Val_Open_PAN_Brier,Val_Open_PAN_Overall
+7. 2025 v2 Heterogeneous Ensemble (OOF Cal),0.6,0.51917,0.80089,0.7137,0.81749,0.75197
+10. [Multi-Scale R1+R2] 8-Expert Super-Ensemble (Abstain d*=0.054),0.62,0.53333,0.8005,0.73479,0.81656,0.75939
+R3_GenreBlind_PureDelta_CB (Surface 0% 단독),0.56,0.45417,0.79768,0.71838,0.81063,0.75367
+R3_CrossTopic_Weighted_LGBM (단독),0.64,0.56389,0.79415,0.71347,0.80339,0.74696
+11. [Round 3] 10-Expert Static TempCal (Abstain d*=0.058),0.64,0.545,0.80509,0.73962,0.81931,0.76322
+"12. [Round 3] OOD-Register Gated Meta (Forced, 0% Abstain)",0.67333,0.58194,0.83781,0.75398,0.83405,0.78646
+13. [Round 3 Final] OOD-Register Gated Meta (Abstain d*=0.068),0.67333,0.58194,0.83781,0.77404,0.83438,0.79285

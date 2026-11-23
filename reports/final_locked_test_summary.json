@@ -1,0 +1,54 @@
+{
+  "track": "01_stylometric_ml_round3_ood_gated",
+  "selected_model": "13. [Round 3 Final] OOD-Register Gated 10-Expert Meta-Ensemble",
+  "closed_set_matching": {
+    "agg_mode": "inductive_csls",
+    "csls_hub_weight": 0.35
+  },
+  "open_thresholds": {
+    "tau": 0.5762,
+    "delta": 0.068
+  },
+  "validation_reference": {
+    "closed_top1_acc": 0.67333,
+    "closed_macro_f1": 0.58194,
+    "open_roc_auc": 0.83781,
+    "open_pan_c_at_1": 0.77404,
+    "open_pan_brier": 0.83438,
+    "open_pan_overall": 0.79285
+  },
+  "scenario_1_closed_set_test": {
+    "agg_mode": "inductive_csls",
+    "overall_top1_acc": 0.64583,
+    "overall_top3_acc": 0.84583,
+    "overall_macro_f1": 0.53586,
+    "domain_mean_top1_acc": 0.5875,
+    "domain_mean_macro_f1": 0.53586
+  },
+  "scenario_2_open_cross_test_forced": {
+    "tau": 0.5762,
+    "delta": 0.0,
+    "abstain_pct": 0.0,
+    "roc_auc": 0.8474,
+    "pan_c_at_1": 0.76314,
+    "pan_f_05u": 0.77201,
+    "pan_brier": 0.83843,
+    "brier_mse": 0.16157,
+    "pan_overall": 0.79496,
+    "forced_macro_f1": 0.7628,
+    "answered_acc": 0.76314
+  },
+  "scenario_2_open_cross_test_abstention": {
+    "tau": 0.5762,
+    "delta": 0.068,
+    "abstain_pct": 14.17,
+    "roc_auc": 0.8474,
+    "pan_c_at_1": 0.78192,
+    "pan_f_05u": 0.78225,
+    "pan_brier": 0.83867,
+    "brier_mse": 0.16133,
+    "pan_overall": 0.80082,
+    "forced_macro_f1": 0.7628,
+    "answered_acc": 0.79795
+  }
+}

@@ -1,0 +1,4 @@
+Candidate,Closed_Top1,Closed_Top3,Open_AUC,PAN_c@1,PAN_Brier,PAN_Overall,Forced_F1,Guardian_AUC,ArXiv_AUC,Composite,Mode
+0. R2 Baseline: step_4141 + 4-Depth(r=3),0.78,0.92,0.91009,0.8539,0.87669,0.86368,0.8308,0.7642,0.8998,0.83439,r4_gate_logit(hw=0.85)
+1. R4-A: step_4141 + DualABTT(r=3&8) + MultiStd + AgreePCA,0.77333,0.93333,0.91237,0.85631,0.87818,0.86528,0.83161,0.7615,0.908,0.8331,r4_gate_logit(hw=0.85)
+2. R4-B (Final): Soup(0.65*4141+0.35*4970) + DualABTT + MultiStd + AgreePCA,0.76667,0.92,0.91388,0.85729,0.87844,0.86656,0.83424,0.7712,0.9085,0.8316,r4_gate_logit(hw=1.0)

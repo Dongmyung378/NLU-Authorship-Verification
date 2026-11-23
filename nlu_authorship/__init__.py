@@ -1,2 +1,4 @@
-"""Document-disjoint authorship verification with auditable CPU inference."""
-__version__ = '2.0.0'
+"""Authorship verification inference engines and interactive demo."""
+from __future__ import annotations
+
+__version__ = "2.0.0"

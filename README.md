@@ -1,142 +1,123 @@
-# Authorship Verification
+# Authorship Verification: Stylometric ML vs DeBERTa-v3
 
-**A joint NLP project by Dongmyung Park and Juho Kim, developed in February to May 2026.**
+[한국어](./README.ko.md) | [Architecture](./docs/architecture.md) | [Design Decisions & Progression](./docs/methodology-and-decisions.md) | [Results](./docs/results.md) | [Reproduction & Demo](./docs/reproduction.md)
 
-[한국어](./README.ko.md) | [Reproduction](./docs/reproduction.md) | [Architecture](./docs/architecture.md) | [Evaluation](./docs/evaluation.md) | [Training](./docs/training.md)
+Compare two English passages (`<= 512` tokens each, `1,024`-token combined budget) to estimate whether they were written by the same author. The system outputs a calibrated same-author probability, a classification or PAN abstention (`uncertain`) decision, exact order-symmetry verification (`|P(A, B) - P(B, A)| = 0.00`), and per-feature or per-depth diagnostic signals.
 
-Provide two English passages to estimate whether they were written by the same author. The output includes a same-author score and a classification, or an uncertain decision when the configured abstention rule applies. The task is to compare writing samples, not to recover an author's name.
+This benchmark evaluates **three strictly separated tracks** (zero cross-paradigm feature or prediction blending) under a **dual-author-disjoint split** (`0` shared authors across Train, Validation, and Locked Test) spanning 9 domains, same-topic hard negatives, cross-topic pairs, and zero-shot unseen genres:
 
-This project compares the original two model families for English passage-pair authorship verification: a stylometric XGBoost-LightGBM ensemble and RoBERTa-Large. The new pipeline adds document-disjoint data splits, matched CE versus custom binary asymmetric focal training, independent calibration, immutable evaluation and hash-verified CPU replay. It predicts different-author (`0`) or same-author (`1`) labels; it does not establish a person's identity on arbitrary new text.
+1. **Track 01 (`01_stylometric_ml`)** — 6-layer stylometric feature engineering (`6,001` dims) + 10-expert GBDT/CatBoost/Linear ensemble + intrinsic OOD-register gated meta-calibrator (`21.63 MB`, CPU `32.1 ms/pair`).
+2. **Track 02 (`02_deberta_v3_base`)** — 12-layer symmetric Siamese `microsoft/deberta-v3-base` (`185.97M`) + Greedy Model Soup + 4-depth `All-but-the-Top (r=3)` residual OOD gate.
+3. **Track 03 (`03_deberta_v3_large`)** — 24-layer symmetric Siamese `microsoft/deberta-v3-large` (`436.64M`) + LLRD/Prior-WD + interpolated checkpoint soup (`0.65 / 0.35`) + 4-depth Multi-Std + Dual-Rank `All-but-the-Top (r=3, 8)` + symmetric agreement PCA (`e1 * e2`) + 5-seed residual OOD gate.
 
-## How to understand the model comparison
+---
 
-| Term used below | Meaning in this project |
-| --- | --- |
-| Stylometric ensemble | Measures vocabulary and writing-style differences between passages, then combines two tree-based classifiers, XGBoost and LightGBM. |
-| TF-IDF | Represents word or character patterns by how frequent they are in a passage and how distinctive they are in the training collection. It is fitted on training text only in the controlled experiment. |
-| RoBERTa-Large | A pretrained language model adapted to read a pair of passages and classify their author relationship. |
-| CE and custom focal | Two training objectives for the same Large architecture. CE penalizes wrong predictions; custom focal reduces the weight of easy examples differently for the two classes. |
-| Calibration and abstention | Calibration adjusts model scores using separate labeled data. A threshold converts scores into a class, while abstention can withhold a confident decision for uncertain cases. |
-| Document-disjoint splits | Passage identities and connected passage pairs stay in one data split, reducing direct document reuse between training and evaluation. This does not establish that the authors or topics are unseen. |
-| Freeze and CPU replay | A freeze records the exact model, configuration and file hashes. Replay loads those saved files and repeats inference without retraining or choosing a new model. |
+## Final Locked Test Summary
 
-An epoch is one pass through the training data; a checkpoint stores the learned model at a particular point. The training set teaches model parameters, the selection set chooses configurations, and the calibration set fits score adjustments and decision rules. The holdout is evaluated after those choices are fixed. A seed controls pseudorandom training choices; this comparison uses one training seed, so later bootstrap intervals do not describe variability from repeated training.
+All thresholds (`tau`, `delta`, and inductive `CSLS` hubness weight `hw`) were selected strictly on Validation and evaluated once on the locked test split (`240` closed-set `1:30` queries / `18,000` pairs; `9,440` open-set, cross-topic, and zero-shot pairs).
 
-The model named **custom focal** in the reports uses the project's **custom class-dependent binary focal loss**, historically called `ASL` or `ASLoss`. Its runtime and model identifier remains `custom_asl` for compatibility. It reduces the contribution of already-correct, easy examples. It is a directly implemented binary ASL adaptation rather than an exact reproduction of the official defaults or paper experiment; both multi-label and single-label official variants exist. The [loss terminology and implementation](./docs/loss-terminology.md) explain the difference from those methods and the numerical-stability change from the original notebook.
+| Track | Closed 1:30 Top-1 | Closed 1:30 Top-3 | Closed Macro-F1 | Open ROC-AUC | PAN c@1 | PAN F_0.5u | PAN Brier | PAN Overall | Forced Macro-F1 | Latency / Size |
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| `01. Stylometric ML` | 64.58% | 84.58% | 0.5359 | 0.8474 | 0.7819 | 0.7823 | 0.8387 | 0.8008 | 0.7628 | 32.1 ms (CPU) · 21.6 MB |
+| `02. DeBERTa-v3-base` | 76.25% | **91.25%** | 0.6363 | 0.9040 | 0.8443 | 0.8414 | 0.8724 | 0.8567 | 0.8196 | 186.0M params |
+| **`03. DeBERTa-v3-large`** | **78.33%** | **91.25%** | **0.6547** | **0.9139** | **0.8556** | **0.8461** | **0.8779** | **0.8643** | **0.8271** | 32.5 ms (L4) · 860.3 MB |
 
-## Current release status
+**Pairwise Statistical Significance (Locked Test, Exact McNemar + Paired Bootstrap 95% CI):**
+- `Large vs ML` (Scenario 2, 9,440 pairs): `n10 = 1,450` vs `n01 = 846`, `p = 1.01e-36`, `Delta Acc +6.40% [+5.40%, +7.38%]`, `Delta AUC +6.65% [+5.90%, +7.39%]`.
+- `Large vs Base` (Scenario 2, 9,440 pairs): `n10 = 601` vs `n01 = 530`, `p = 0.03735`, `Delta Acc +0.75% [+0.08%, +1.45%]`, `Delta AUC +0.99% [+0.63%, +1.37%]`.
+- `Large vs ML` (Scenario 1, 240 queries): `n10 = 53` vs `n01 = 20`, `p = 1.42e-04`, `Delta Acc +13.75% [+7.08%, +20.83%]`.
 
-Fresh RoBERTa-Large CE and custom focal training, the bounded train-only stylometric study and the frozen Kaggle evaluation have completed. Both Large models completed six matched epochs and retained epoch-five checkpoints. English and Korean [measured results](./docs/results.md) report the classification, calibration, order, length and abstention outcomes.
+![Final Locked Test 3-Track Comparison](./docs/figures/benchmark_3way_comparison.png)
 
-**Reading the scores:** accuracy is the fraction of correctly classified pairs. For each class, precision asks how often that prediction is correct and recall asks how many actual cases of that class were found. Macro F1 balances both measures, then averages same-author and different-author classes equally. **ECE**, **NLL** and **Brier score** examine probability quality rather than merely whether the final class is correct: ECE compares predicted same-author probabilities with observed same-author frequencies in bins; NLL penalizes low probability assigned to the true label; Brier measures squared probability error. Lower values are preferable for these probability metrics. Coverage is the proportion receiving a decision, and accepted accuracy measures correctness only within that accepted subset.
+---
 
-| Frozen pipeline, all 4,708 pairs | Macro F1 | Accuracy | Correct |
-|---|---:|---:|---:|
-| Stylometric XGBoost-LightGBM ensemble | 0.741498 | 74.1504% | 3,491 |
-| RoBERTa-Large CE, deployed | 0.808383 | 80.8624% | 3,807 |
-| RoBERTa-Large custom ASL (class-dependent binary focal), retained comparator | 0.815170 | 81.5208% | 3,838 |
+## Why These Models and Techniques Were Chosen
 
-CE was selected before holdout using the fixed calibrated pipelines on selection data. The later focal holdout advantage does not change that choice. Historical development F1 0.8348 uses different evaluation conditions and is not a before/after comparator. Calibration reduced ECE/NLL for all three models, but F1 did not improve uniformly and the 90% accepted-accuracy abstention goal was unmet.
+Every modeling decision followed measured failure diagnostics on the dual-author-disjoint validation split rather than arbitrary hyperparameter sweeps. Full decision logs and rejected hypotheses are documented in [Design Decisions & Progression](./docs/methodology-and-decisions.md).
 
-The [joint freeze](./reports/evaluation-freeze.json) and ordered predictions were validated against source/data/model inventories. Implementation checks passed 109/109 on Windows 11 and 109/109 on Ubuntu 24.04 WSL2 with the same 35 executable/config files. All three saved models completed every one of the 4,708 pairs in both environments. All six runs matched binary predictions, abstention decisions, F1 and accuracy exactly. Stylometric replay passed the fixed comparison tolerances in both environments. Both Large models failed the predeclared GPU-reference probability tolerance of `1e-5`; maximum calibrated differences were `1.79e-5` and `8.81e-6` for CE on Windows and Linux, and `1.80e-4` and `1.10e-4` for custom focal. Linux CE passed the calibrated-probability check but failed the raw-probability check. The strict failures are preserved without changing the tolerance, reference or calibration. Matched CPU resource measurements have completed and are linked from the [CPU summary](./reports/cpu-reproduction.json) and [measured results](./docs/results.md); public model publication and full anonymous download verification have completed separately. The local environments share one physical host and are not independent external review.
+### 1. Why Dual-Author-Disjoint Benchmark (`benchmark_1024`)
+Earlier development splits allowed the same passage or author to appear in both training and evaluation, inflating scores through topic and identity memorization. We rebuilt the benchmark with strict zero-author overlap across Train (`84,860` pairs), Validation (`8,540` open pairs + `150` closed `1:30` queries), and Locked Test (`9,440` open pairs + `240` closed `1:30` queries), explicitly adding `60%` same-topic negative traps and two completely unseen genres (`arxiv_research`, `guardian_journalism`). Every out-of-fold meta-learner uses **5-bucket dual-author-disjoint OOF** (`bucket(a1) != k and bucket(a2) != k`) so neither author leaks across folds.
 
-Actual paired training took 6.3959 wall hours, with 12.7758 summed assigned-worker hours. The full wrapper through frozen evaluation took 7.5475 wall hours. The nine-hour paired and ten-hour complete-kernel limits were respected. Earlier timing probes discarded all updated weights; no further GPU quality experiment was launched after the bounded comparison. Local assigned-device scope and account quota readings are distinct, and no official T4x2 billing multiplier is asserted.
+### 2. Why 6-Layer Stylometry + Intrinsic OOD-Register Gate (Track 01)
+- **Topic-shortcut suppression**: Raw lexical TF-IDF fails on same-topic impostors. Decomposing text into three views (`Surface`, `POS-Noise` with content words masked by POS+suffix, and `Distorted` rhythm) plus `256`-impostor `AS-Norm` and `64-Bag Koppel` win rates raised Validation Open AUC from `0.7632` (legacy single LightGBM) to `0.8009`.
+- **Per-model temperature alignment and pruning (Round 2)**: Uncalibrated LightGBM logits (`±6`) were suppressed by `LogLoss` optimization against narrower CatBoost/Linear logits (`±2.5`). Aligning logit scales inside each fold restored balanced ensemble weights, and pruning `1,702` zero-gain columns (`6,001 -> 1,500`) reduced variance.
+- **Fixing zero-shot register illusion without domain labels (Round 3)**: Diagnostic error charts revealed `89.6%` (`Guardian`) and `75.4%` (`ArXiv`) false positive rates because formal/academic pairs looked mutually closer than the informal impostor cohort. Adding a **Genre-Blind Pure Delta CatBoost** (`642` pure-difference columns, zero surface vocabulary) and an **intrinsic OOD-Register Gate** (reading impostor affinity, formality indices, and Genre-Blind vs Surface disagreement) cut Test FPR to **`25.7%`** on both domains and lifted Locked Test `ROC-AUC` to **`0.8474`** (`PAN Overall 0.8008`).
 
-## Run the CPU interface
+### 3. Why Symmetric Siamese DeBERTa-v3 + Dual-Rank ABTT OOD Calibration (Tracks 02 & 03)
+- **Backbone choice**: `DeBERTa-v3` disentangled relative-position attention preserves syntactic and punctuation spacing habits better than absolute-position encoders while keeping an exact order-invariant Siamese formulation (`u+v`, `|u-v|`, `u*v`, `(u-v)^2`, `cos`).
+- **Root-causing `transformers 5.x` FP16 underflow**: Initial `DeBERTa-v3` runs stalled at `loss = 0.6965`. Inspecting dtypes showed `transformers 5.x` loads DeBERTa-v3's `float16` Hub weights directly in FP16, causing `AdamW` updates (`1.6e-5`) to underflow below FP16 machine epsilon. Forcing FP32 master weights (`AutoModel.from_pretrained(...).float()`) immediately restored convergence.
+- **Controlled 4-step ablation (Base) & 4-way HP Probe (Large)**:
+  - **Adopted**: Top-50% learnable layer pooling (`L7-L12` / `L13-L24`), Attentive Statistics Pooling (`ASP`), 5-branch Multi-Sample Dropout, `15%` mid-sentence proper-noun masking, `shuffle=True`, and on 24-layer Large `LLRD (gamma=0.94868) + Prior-WD (0.01) + Pure Label-Smoothed BCE` (which outperformed uniform LR by `+3.70%p` Val Composite in the 10% probe).
+  - **Rejected**: Domain-sorted `shuffle=False` batches (caused sequential domain forgetting, `-1.56%p` Val AUC) and auxiliary `CoSENT` ranking loss (underperformed pure label-smoothed BCE).
+- **4-Depth Linguistic Hierarchy + Dual-Rank `All-but-the-Top` (`r=3, 8`) + Interpolated Soup (`0.65 / 0.35`)**:
+  - Raw DeBERTa embeddings suffered the same OOD clustering on unseen genres (`Base` Val FPR `97.6%` / `94.8%`; `Large` R1 Val FPR `97.1%` / `90.7%`).
+  - Extracting 4 linguistic depths (`L2-6` lexical/punctuation, `L8-12` syntax, `L14-18` discourse mean+std, `L22-24` semantic), orthogonally removing top-3 and top-8 SVD topic directions fitted strictly on 256 frozen training impostors (`All-but-the-Top`), adding symmetric agreement PCA (`e1 * e2`, 16d), and linearly interpolating the top two checkpoints (`0.65 * step_4141 + 0.35 * step_4970`) collapsed `Large` `ArXiv` Test FPR to **`8.6%`** (`ROC-AUC 0.9389`) and raised overall Locked Test `ROC-AUC` from `0.8239` (R1) to **`0.9139`**.
 
-Automatic model download uses [version-1 raw files in the public Kaggle dataset](https://www.kaggle.com/datasets/dongmyungpark/nlu-authorship-frozen-large-20261012). All 21 files, totaling 2,856,189,574 bytes, were downloaded anonymously through the unchanged public CLI and matched their frozen byte counts and SHA256 hashes. The separate [download verification](./reports/model-download-verification.json) establishes artifact delivery, not another saved-model inference run. From the repository root in Windows PowerShell:
+![Iterative Progression and Zero-Shot FPR Collapse](./docs/figures/improvement_progression.png)
 
-```powershell
-.\launch-nlu.bat doctor
-.\launch-nlu.bat verify-data
-.\launch-nlu.bat download
-.\launch-nlu.bat download --verify-only
-.\launch-nlu.bat predict
-```
+---
 
-Linux uses `sh ./launch-nlu.sh` with the same commands. Launchers create an isolated project-local Python 3.12 environment, install pinned CPU packages and hide local GPUs. Docker and API keys are unnecessary. Initial setup and model download require Internet; saved-model inference uses local weights and tokenizer files.
+## Paradigm Complementarity: Where DL Wins vs Where ML Holds an Edge
 
-The default model is the CPU stylometric ensemble. Optional Large inference uses the pipeline chosen on selection data with independently calibration-fitted parameters:
+Rather than a simple hierarchy, strict head-to-head evaluation exposes complementary operating regimes:
+- **Ultra-short passages (`<60 words/doc`, 4,058 pairs)**: Surface statistics become sparse, so `DeBERTa-v3-large` leads `Stylometric ML` by **`+9.98%p` ROC-AUC** (`0.9285` vs `0.8287`).
+- **Zero-shot academic text (`arxiv_research`, 880 pairs)**: Scaling to 24 layers with Dual-Rank ABTT lifted `Large` from `Base`'s `0.9093` to **`0.9389`**, overtaking `Stylometric ML` (`0.9336`).
+- **Cross-genre journalism (`guardian_journalism` / `cross_genre`, 562 pairs)**: When editorial conventions diverge sharply across columns and reviews, explicit `POS-Noise` and function-word delta features allow `Stylometric ML` (`0.8019`) to outperform neural encoders (`0.7344`).
 
-```powershell
-.\launch-nlu.bat download --model transformer
-.\launch-nlu.bat predict --model transformer --text-file-1 passage-a.txt --text-file-2 passage-b.txt
-```
+![Passage Length and Stratum Complementarity](./docs/figures/domain_length_complementarity.png)
 
-The verified release descriptor, [reports/artifact-download.json](./reports/artifact-download.json), pins anonymous version-1 raw URLs, byte counts and SHA256 for every checkpoint, tokenizer, transform and configuration file. Flat remote files map directly to the original `models/ce/`, `models/custom_asl/` and `models/stylometric/` runtime paths using `kind=file`. Full anonymous HTTP 200/hash verification and the CLI verify-only check completed successfully. The historical Drive files below cannot substitute for this new release's inventories and freeze.
+---
 
-The automatic download and verification CLI continues to pin the existing version-1 raw-file URLs and SHA256 hashes. The [complete ZIP download](https://www.kaggle.com/api/v1/datasets/download/dongmyungpark/nlu-authorship-frozen-large-20261012?datasetVersionNumber=2) is provided by dataset version 2, which repackages the same 21 frozen model files. The separate [archive verification](./reports/model-archive-verification.json) records the downloaded ZIP's byte counts and SHA256 hashes. Models and evaluation results are unchanged. The complete ZIP preserves Kaggle's flat filenames. To install files under `artifacts/runtime/models/<model-name>/`, use the automatic download commands in this guide.
+## Interactive Live Demo (ML / DL Model Selector)
 
-If model-only ZIPs are supplied separately, extract their `models/<model-name>/` contents into `artifacts/runtime` in this matching source checkout. The runtime verifies installed bytes against the joint freeze before prediction or evaluation; the automatic-download descriptor is unnecessary for a manual installation. The public automatic route above is the verified release distribution.
+Run the local MIT Red web interface to compare any two English passages using **Track 01 (`Stylometric ML`)**, **Track 03 (`DeBERTa-v3-large`)**, or **Side-by-Side Comparison**, complete with live order-symmetry verification (`Swap A <-> B`), PAN abstention gauge, curated Locked Test presets, and per-feature / per-depth signal breakdowns.
 
-`doctor` verifies dependencies, environment isolation and a small CPU tensor operation. `verify-data` checks source CSV hashes and document isolation. Neither command measures real model accuracy. Prediction output distinguishes the class, calibrated same-author score and an optional `uncertain` decision after abstention. See the [CPU runtime guide](./docs/runtime.md) for input limits and all options.
+![Live Interactive Authorship Verification Web UI](./docs/figures/demo_ui_live.png)
 
-## Replay the frozen final evaluation
-
-Once the release artifacts are available, use a fresh output directory:
-
-```powershell
-.\launch-nlu.bat evaluate --model stylometric --model-name stylometric --model-dir artifacts/runtime/models/stylometric --output .local/replay-stylometric --batch-size 4 --threads 4
-```
-
-For both Large checkpoints:
+### Quickstart
 
 ```powershell
-.\launch-nlu.bat download --model ce
-.\launch-nlu.bat download --model custom_asl
-.\launch-nlu.bat evaluate --model transformer --model-name ce --model-dir artifacts/runtime/models/ce --output .local/replay-ce --batch-size 4 --threads 4
-.\launch-nlu.bat evaluate --model transformer --model-name custom_asl --model-dir artifacts/runtime/models/custom_asl --output .local/replay-custom-asl --batch-size 4 --threads 4
+# 1. Install dependencies
+pip install -r requirements.txt
+
+# 2. Download public model checkpoints from Google Drive (ml: 21.6 MB, dl: 860.3 MB)
+python verify_author.py download --model ml
+python verify_author.py download --model dl
+
+# 3. Launch the local interactive Web UI (http://127.0.0.1:8000)
+.\launch-nlu.bat demo
+# Linux / macOS:
+sh ./launch-nlu.sh demo
+
+# 4. Or run directly from the CLI
+python verify_author.py predict --model both --check-symmetry --text-1 "First passage..." --text-2 "Second passage..."
 ```
 
-These full-replay examples explicitly use batch size 4 and four CPU threads. The setting was chosen from a small historical-model timing probe for practical CPU execution, before new-model quality outputs; it does not select a model or alter calibration. CLI defaults remain batch size 8 and one thread. Actual final-model CPU costs are reported in the [measured results](./docs/results.md); the separate benchmark uses batch size 1 and one thread.
+Both serialized deployment artifacts (`model_01_stylometric_ml.joblib` using pure Python builtins and `model_03_deberta_v3_large.pt` using pure PyTorch tensors with zero `sklearn` pickles) are independently verified against the locked test CSVs via `pytest tests/test_inference_and_demo.py`.
 
-The default evaluation covers all 4,708 locked-holdout pairs. It verifies source, data, model and calibration bindings, then saves metrics, confusion and ordered predictions without refitting. Both Large FP32 checkpoints are retained even when only one is selected for deployment. A small prediction or unit-test pass does not replace full saved-model replay. Clean operating systems on the same physical computer are reported as separate environments on the same host, not independent external hosts.
+---
 
-## Controlled experiment
+## Public Google Drive Archive & One-Click Colab Reproduction
 
-The supplied 27,643 train and 5,993 development pairs are audited together. Cleanup excludes 86 empty-document rows and removes 2,162 consistent duplicate pairs, retaining 31,388 pairs. Connected components of shared document identity remain wholly inside one split:
+All datasets, single-pass reproducible training notebooks, evaluation bundles, technical reports, and deployment checkpoints are publicly shared on Google Drive:
 
-| Role | Pairs | Use |
-|---|---:|---|
-| Train | 21,972 | Task fitting and train-only TF-IDF |
-| Selection | 3,139 | Checkpoints, feature/weight choices and deployment policy |
-| Calibration | 1,569 | Temperature, threshold and abstention fitting |
-| Locked holdout | 4,708 | Final evaluation after the joint freeze |
+- **Full Archive Folder**: [Google Drive — NLU Archive](https://drive.google.com/drive/folders/1ij9ZwlLtimS26bAE9B_D5zL3raAKJody)
+- **Benchmark Dataset**: [benchmark_1024.zip (61.2 MB)](https://drive.google.com/file/d/1Y9xfMRskEUZPYw9f5jdiM6ws9L-Cwdr8/view)
+- **Track 01 (`Stylometric ML`)**: [train_01_stylometric_ml.ipynb (Colab)](https://colab.research.google.com/drive/1jAuZKPe7mcuL9jB9SAIQmGr-jQ-CdjtJ) · [model_01_stylometric_ml.joblib](https://drive.google.com/file/d/1q9T8zLYmnhLqPWT9He8wiqIjA0kvCR1M/view) · [results_01_stylometric_ml.zip](https://drive.google.com/file/d/1ZW4ib1SdDZPzGV1DHB3nREv8Mp7x-VfE/view)
+- **Track 02 (`DeBERTa-v3-base`)**: [train_02_deberta_v3_base.ipynb (Colab)](https://colab.research.google.com/drive/1U6Fv97IcC061XdJlVYWM79D9YSOsD9Bk) · [results_02_deberta_v3_base.zip](https://drive.google.com/file/d/1WjbhPHpdcCVGA8w0fQAyoDd7zMjnDmGO/view)
+- **Track 03 (`DeBERTa-v3-large`)**: [train_03_deberta_v3_large.ipynb (Colab)](https://colab.research.google.com/drive/1ROS0vdfbpZupVoM38Dz41eDB1tCAGjWL) · [model_03_deberta_v3_large.pt](https://drive.google.com/file/d/1r19ezaf0Q_nn3qVS43m4nDhAs5jfGkve/view) · [results_03_deberta_v3_large.zip](https://drive.google.com/file/d/15D12EdLfD1oeR-xfAcaM24OvRS9Vs3w-/view)
 
-Two independently assigned T4 workers train fresh pinned RoBERTa-Large with matched initialization, seed, records and epoch schedules. CE is compared with the custom two-class softmax focal objective: `-(1-p_y)^gamma_y * log(p_y)`, with `gamma_0=2` and `gamma_1=1`, calculated using FP32 log-softmax. The original notebook used an explicit `1e-8` probability floor before its logarithm; the current stable calculation retains the focal mechanism but can differ below that floor. This study trains the direct binary ASL adaptation, not an exact reproduction of the official default recipe or paper experiment.
+---
 
-A separate CPU study fits every TF-IDF transform on train only and compares four bounded XGBoost-LightGBM recipes within 120 minutes. Final ensemble weights keep both components active. A new recipe/weight must gain at least 0.002 selection macro F1 over the reference to be adopted.
-
-Raw AB loss comparison stays at threshold 0.5. Each input-order policy is chosen on selection; all three models are calibrated independently. Deployment then compares the fixed calibrated Large pipelines on stored selection logits, adopting custom focal only with at least 0.002 macro F1 gain over calibrated CE. Raw and deployed winners are reported separately. The joint freeze precedes every heldout inference, and heldout outcomes never tune decisions.
-
-The plan also declares 1,000 paired whole-document-group bootstrap draws with seed 378. Conditional 95% percentile intervals describe the frozen corpus and one trained seed, not repeated-training variation or new-author/domain generalization. Details are in the [evaluation protocol](./docs/evaluation.md).
-
-## Historical development work
-
-The original February to May 2026 notebooks, poster, saved predictions and model cards remain available with joint credit. These results use the original development split and are separate from the new frozen evaluation:
-
-| Historical model | Reported development macro F1 | Historical artifact download |
-|---|---:|---|
-| [Stylometric ensemble](./model-cards/stylometric-ensemble.md) | 0.7702 | [Original ensemble and vectorizers on Drive](https://drive.google.com/drive/folders/1mF0bMpzfs3XODpQA2Hd7H_JvXLk5AGgp?usp=sharing) |
-| [RoBERTa-Large custom asymmetric focal](./model-cards/roberta-asymmetric-loss.md) | 0.8348 | [Original checkpoint and tokenizer on Drive](https://drive.google.com/drive/folders/1Ty9-EpOLAgzvTWPuqrHBTbehmZZuDs3V?usp=sharing) |
-
-The 5,993 development pairs include 630 exact training-pair duplicates. In total, 2,738 development pairs contain at least one document already present in train, including those duplicate pairs: 1,658 reuse one and 1,080 reuse both. The original stylometric notebook fits TF-IDF on combined train and development text, so development passages affect vocabulary and IDF. Development also selects checkpoints, ensemble weights and thresholds. The historical scores and new holdout results therefore cannot establish a controlled before-and-after gain. The new split separates document components and fits TF-IDF on train only.
-
-[Original notebooks](./notebooks/) and [poster preview](./docs/authorship-verification-poster-preview.png) ([PDF](./docs/authorship-verification-poster.pdf?raw=1)) document the joint work. Claims about reduced cross-domain overfitting are not verified by an independent domain-separated evaluation. The 5,985-pair `test.csv` and 20-pair `live.csv` are unlabeled inference inputs and provide no measured accuracy.
-
-## Repository layout
+## Repository Layout
 
 ```text
-nlu_authorship/             Data, models, training, calibration and frozen evaluation
-configs/                   Predeclared experiment plan
-reports/                   Split manifest, frozen measurements and reproduction evidence
-scripts/                   Isolated setup, downloads, Kaggle packaging and reporting
-launch-nlu.bat / .sh        Public CPU entrypoints
-docs/                      English guides with Korean partners and historical poster
-model-cards/               Clearly labeled original development artifacts
-notebooks/                 Original joint training and demo notebooks
-results/                   Historical unlabeled predictions
-artifacts/                 Downloaded runtime models, excluded from Git
+nlu_authorship/          Standalone ML & DL inference engines, Google Drive fetcher, and Web Demo server
+notebooks/colab/         Clean single-pass training notebooks (01 ML, 02 DeBERTa-base, 03 DeBERTa-large)
+scripts/                 Benchmark builder, integrity checker, notebook generators, and figure renderer
+docs/                    Bilingual architecture, design decisions, results, reproduction guides, and figures
+model-cards/             Bilingual model cards for Track 01 (Stylometric ML) and Track 03 (DeBERTa-v3-large)
+reports/                 Verified summary JSONs and 3-way statistical comparison CSVs
+tests/                   Unit, web API, order-symmetry, and locked-test parity tests
+verify_author.py         CLI & Web Demo entrypoint (also via launch-nlu.bat / launch-nlu.sh)
 ```
-
-Author IDs and domain labels are absent. The documented scope is document separation in this supplied corpus; historical corpus exposure and unmeasured semantic near duplicates remain limitations. Long transformer inputs are truncated to 512 combined tokens, and short or unfamiliar passages may be unreliable.

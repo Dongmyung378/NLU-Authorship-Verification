@@ -1,0 +1,7 @@
+Task,Comparison,A_wins_n10,B_wins_n01,McNemar_p,Significant_0.05,Delta_Acc_Point,Delta_Acc_CI95,Delta_AUC_Point,Delta_AUC_CI95
+Scenario 1: Closed 1:30 Top-1,02. DeBERTa-v3-base vs 01. Stylometric ML,46,18,0.000617378,True,+11.67%,"[+5.42%, +17.92%]",N/A,N/A
+Scenario 2: Open & Cross-Domain,02. DeBERTa-v3-base vs 01. Stylometric ML,1399,866,2.89282e-29,True,+5.65%,"[+4.66%, +6.62%]",+5.66%,"[+4.90%, +6.36%]"
+Scenario 1: Closed 1:30 Top-1,03. DeBERTa-v3-large vs 01. Stylometric ML,53,20,0.000141637,True,+13.75%,"[+7.08%, +20.83%]",N/A,N/A
+Scenario 2: Open & Cross-Domain,03. DeBERTa-v3-large vs 01. Stylometric ML,1450,846,1.00925e-36,True,+6.40%,"[+5.40%, +7.38%]",+6.65%,"[+5.90%, +7.39%]"
+Scenario 1: Closed 1:30 Top-1,03. DeBERTa-v3-large vs 02. DeBERTa-v3-base,20,15,0.49956,False,+2.08%,"[-2.50%, +7.08%]",N/A,N/A
+Scenario 2: Open & Cross-Domain,03. DeBERTa-v3-large vs 02. DeBERTa-v3-base,601,530,0.0373456,True,+0.75%,"[+0.08%, +1.45%]",+0.99%,"[+0.63%, +1.37%]"

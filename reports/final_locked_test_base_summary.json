@@ -1,0 +1,48 @@
+{
+  "track": "02_deberta_v3_base_4depth_abtt_ood_gated",
+  "selected_model": "02f. DeBERTa-v3-base + 4-Depth + All-but-the-Top Neural OOD Gate",
+  "closed_set_matching": {
+    "mode": "r4_gate_logit",
+    "csls_hub_weight": 0.65
+  },
+  "open_thresholds": {
+    "tau": 0.5787,
+    "delta": 0.11
+  },
+  "system_metrics": {
+    "gpu_device": "NVIDIA L4",
+    "gpu_latency_ms_per_pair": 355.43,
+    "symmetry_max_error": 0.0,
+    "num_parameters_M": 185.97
+  },
+  "scenario_1_closed_set_test": {
+    "overall_top1_acc": 0.7625,
+    "overall_top3_acc": 0.9125,
+    "overall_macro_f1": 0.63633,
+    "domain_mean_top1_acc": 0.69583
+  },
+  "scenario_2_open_cross_test_forced": {
+    "tau": 0.5787,
+    "delta": 0.0,
+    "abstain_pct": 0.0,
+    "roc_auc": 0.90399,
+    "pan_c_at_1": 0.8196,
+    "pan_f_05u": 0.81658,
+    "pan_brier": 0.87089,
+    "pan_overall": 0.84648,
+    "forced_macro_f1": 0.81958,
+    "answered_acc": 0.8196
+  },
+  "scenario_2_open_cross_test_abstention": {
+    "tau": 0.5787,
+    "delta": 0.11,
+    "abstain_pct": 14.04,
+    "roc_auc": 0.90399,
+    "pan_c_at_1": 0.84428,
+    "pan_f_05u": 0.84144,
+    "pan_brier": 0.87237,
+    "pan_overall": 0.85669,
+    "forced_macro_f1": 0.81958,
+    "answered_acc": 0.86124
+  }
+}

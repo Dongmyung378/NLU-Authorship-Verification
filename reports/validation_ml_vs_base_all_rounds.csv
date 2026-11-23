@@ -1,0 +1,6 @@
+Model,Val_Closed_Top1,Val_Closed_Top3,Val_Closed_MacroF1,Val_Open_ROC_AUC,Val_Open_PAN_c@1,Val_Open_PAN_Brier,Val_Open_PAN_Overall,Val_Open_Forced_MacroF1
+01. [Ref] Stylometric ML (Round 3 Final Val),0.67333,0.77333,0.58194,0.83781,0.77404,0.83438,0.79285,0.75353
+02a. DeBERTa-v3-base (1차 기본 2D 보정),0.74667,0.92667,0.64556,0.81546,0.78225,0.82518,0.7926,0.76552
+02c. DeBERTa-v3-base + Neural OOD-Manifold Gate (Abstain d*=0.096),0.75333,0.9,0.65528,0.89119,0.82784,0.86388,0.84193,0.80574
+02e. [Round 3] Multi-Depth L4~6 + Centering Gate (Abstain d*=0.091),0.76,0.88667,0.66667,0.89562,0.83316,0.86714,0.84665,0.80995
+02f. [Round 4] 4-Depth + All-but-the-Top Gate (Abstain d*=0.110),0.77333,0.87333,0.67861,0.90089,0.84055,0.87043,0.85274,0.81651

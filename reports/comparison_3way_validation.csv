@@ -1,0 +1,4 @@
+Track,Val_Closed_Top1,Val_Closed_MacroF1,Val_Open_ROC_AUC,Val_Open_PAN_c@1,Val_Open_PAN_Brier,Val_Open_PAN_Overall
+01. Stylometric ML,0.67333,0.58194,0.83781,0.77404,0.83438,0.79285
+02. DeBERTa-v3-base,0.77333,0.67861,0.90089,0.84055,0.87043,0.85274
+03. DeBERTa-v3-large,0.78,0.69333,0.91388,0.85729,0.87844,0.86656

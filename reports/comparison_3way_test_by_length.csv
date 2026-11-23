@@ -1,0 +1,4 @@
+Length_Bucket,Pairs,01. Stylometric ML_AUC,02. DeBERTa-v3-base_AUC,03. DeBERTa-v3-large_AUC
+Ultra-Short (<60w),4058,0.8287,0.9157,0.9285
+Short (60-180w),2226,0.8848,0.9186,0.9357
+Medium (180-350w),3156,0.8421,0.8752,0.8739

@@ -1,0 +1,6 @@
+Inference_Stage,Val_Closed_Top1,Val_Closed_MacroF1,Val_Open_ROC_AUC,Val_Open_PAN_c@1,Val_Open_PAN_Overall
+1. Large Backbone + Raw Cosine,0.72667,0.63278,0.8198,0.5,0.6172
+2. + Symmetric Interaction Head,0.71333,0.61444,0.81821,0.77272,0.79004
+3. + Impostor AS-Norm Biometric Scaling,0.70667,0.60861,0.81399,0.7685,0.78536
+4. [R1] + 2D Calibrator & CSLS (hw*=0.0),0.71333,0.61583,0.82385,0.78738,0.79685
+5. R2: + 4-Depth & All-but-the-Top Neural OOD Gate (hw=0.85),0.78,0.69556,0.91009,0.8539,0.86368

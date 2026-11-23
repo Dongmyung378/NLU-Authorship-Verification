@@ -1,0 +1,61 @@
+{
+  "track": "03_deberta_v3_large_soup65_35_dualabtt_multistd_agreepca",
+  "selected_hp": {
+    "selected_candidate": "Probe_B_LLRD_HigherLR_PureBCE",
+    "backbone_lr": 1.6e-05,
+    "head_lr": 0.0001,
+    "use_llrd": true,
+    "use_prior_wd": true,
+    "cosent_weight": 0.0,
+    "llrd_gamma": 0.94868,
+    "label_smoothing": 0.02
+  },
+  "soup_weights": {
+    "step_4141": 0.65,
+    "step_4970": 0.35
+  },
+  "closed_set_matching": {
+    "mode": "r4_gate_logit",
+    "csls_hub_weight": 1.15
+  },
+  "open_thresholds": {
+    "tau": 0.5913,
+    "delta": 0.136
+  },
+  "system_metrics": {
+    "gpu_device": "NVIDIA L4",
+    "gpu_latency_ms_per_pair": 32.45,
+    "symmetry_max_error": 0.0,
+    "num_parameters_M": 436.64
+  },
+  "scenario_1_closed_set_test": {
+    "overall_top1_acc": 0.78333,
+    "overall_top3_acc": 0.9125,
+    "overall_macro_f1": 0.65473,
+    "domain_mean_top1_acc": 0.70833
+  },
+  "scenario_2_open_cross_test_forced": {
+    "tau": 0.5913,
+    "delta": 0.0,
+    "abstain_pct": 0.0,
+    "roc_auc": 0.91393,
+    "pan_c_at_1": 0.82712,
+    "pan_f_05u": 0.82542,
+    "pan_brier": 0.87649,
+    "pan_overall": 0.8542,
+    "forced_macro_f1": 0.82711,
+    "answered_acc": 0.82712
+  },
+  "scenario_2_open_cross_test_abstention": {
+    "tau": 0.5913,
+    "delta": 0.136,
+    "abstain_pct": 15.15,
+    "roc_auc": 0.91393,
+    "pan_c_at_1": 0.85556,
+    "pan_f_05u": 0.84611,
+    "pan_brier": 0.87789,
+    "pan_overall": 0.8643,
+    "forced_macro_f1": 0.82711,
+    "answered_acc": 0.87566
+  }
+}

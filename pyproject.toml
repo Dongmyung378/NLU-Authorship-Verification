@@ -1,16 +1,31 @@
 [build-system]
-requires = ['setuptools==75.8.0', 'wheel==0.45.1']
-build-backend = 'setuptools.build_meta'
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
 
 [project]
-name = 'nlu-authorship-verification'
-version = '2.0.0'
-description = 'Document-disjoint authorship verification and calibrated CPU inference'
-readme = 'README.md'
-requires-python = '>=3.12,<3.13'
-
-[project.scripts]
-verify-authorship = 'nlu_authorship.cli:main'
+name = "nlu-authorship-verification"
+version = "2.0.0"
+description = "Authorship verification benchmark and live inference demo comparing 6-Layer Stylometric ML and DeBERTa-v3-large"
+requires-python = ">=3.10"
+dependencies = [
+    "numpy>=1.26.0",
+    "scipy>=1.11.0",
+    "pandas>=2.0.0",
+    "scikit-learn>=1.3.0",
+    "joblib>=1.3.0",
+    "lightgbm>=4.3.0",
+    "catboost>=1.2.5",
+    "nltk>=3.8.1",
+    "torch>=2.2.0",
+    "transformers>=4.44.0",
+    "sentencepiece>=0.2.0",
+]
 
 [tool.setuptools.packages.find]
-include = ['nlu_authorship*', 'scripts*']
+include = ["nlu_authorship*"]
+
+[tool.setuptools.package-data]
+nlu_authorship = ["static/*.html"]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]

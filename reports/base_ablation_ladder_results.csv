@@ -1,0 +1,5 @@
+Step,Decision,Val_Composite,Val_Closed_Top1,Val_Closed_MacroF1,Val_Open_ROC_AUC,Val_Open_PAN_c@1,Val_Open_PAN_Brier,Val_Open_PAN_Overall,Time_Min,Delta_Composite
+Step 0: Vanilla Siamese Baseline,BASELINE,0.7355,0.67333,0.56,0.8005,0.74649,0.8011,0.76897,40.73,0.0
+Step 1: + 6-Layer + ASP + MSD + EntityMask,DROP,0.73367,0.66667,0.56393,0.80827,0.74485,0.80215,0.76974,41.38,-0.00183
+Step 2: + PriorWD + LLRD + CoSENT Loss,DROP,0.70292,0.60667,0.4923,0.79274,0.72728,0.7958,0.75474,38.03,-0.03258
+Step 3: + Greedy Soup + EMA + AS-Norm + CSLS,DROP,0.723,0.62,0.5125,0.8098,0.7616,0.8218,0.77846,48.53,-0.0125

@@ -1,0 +1,5 @@
+name,backbone_lr,head_lr,use_llrd,use_prior_wd,cosent_weight,Valid,Val_Composite,Val_Closed_Top1,Val_Open_AUC,Val_Open_PAN,Final_Loss,Time_Min
+Probe_B_LLRD_HigherLR_PureBCE,1.6e-05,0.0001,True,True,0.0,True,0.71345,0.62667,0.78423,0.76018,0.4476,26.36
+Probe_A_LLRD_Balanced_PureBCE,1.2e-05,8e-05,True,True,0.0,True,0.6918,0.57333,0.77702,0.75559,0.4514,26.36
+Probe_C_LLRD_MildCoSENT,1.2e-05,8e-05,True,True,0.08,True,0.69024,0.56667,0.77912,0.75678,0.6036,26.42
+Probe_D_Uniform_PureBCE,1e-05,7e-05,False,False,0.0,True,0.67642,0.53333,0.77923,0.75347,0.458,26.35

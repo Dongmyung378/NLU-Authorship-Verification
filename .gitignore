@@ -3,6 +3,7 @@ __pycache__/
 *.py[cod]
 .venv/
 venv/
+.pytest_cache/
 
 # Jupyter
 .ipynb_checkpoints/
@@ -13,15 +14,18 @@ venv/
 .DS_Store
 Thumbs.db
 
-# Downloaded model artifacts
+# Downloaded model artifacts and benchmark archives (hosted on Google Drive)
 models/
 *.safetensors
 *.pt
 *.pth
+*.joblib
 .local/
 artifacts/
 *.egg-info/
 outputs/
+data/benchmark_1024/
+data/benchmark_1024.zip
 build/
 dist/
 *.log

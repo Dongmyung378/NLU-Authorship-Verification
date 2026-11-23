@@ -1,0 +1,646 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Authorship Verification — ML vs DeBERTa-v3-large</title>
+  <style>
+    :root {
+      --mit-red: #A31F34;
+      --mit-red-dark: #750014;
+      --mit-red-soft: #F7E8EB;
+      --slate: #334155;
+      --gray: #6B7280;
+      --paper: #FAF8F7;
+      --card: #FFFFFF;
+      --ink: #1C191A;
+      --muted: #5E5A5B;
+      --rule: #E4DEDE;
+      --ok: #1F6E4A;
+      --ok-soft: #E9F5EE;
+      --warn: #8A5A00;
+      --warn-soft: #FDF5E6;
+      --radius: 10px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Malgun Gothic", "Noto Sans KR", sans-serif;
+      line-height: 1.55;
+      font-variant-numeric: tabular-nums;
+    }
+    .topbar {
+      height: 6px;
+      background: var(--mit-red);
+      width: 100%;
+    }
+    .wrap {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 26px 24px 48px;
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      padding-bottom: 18px;
+      border-bottom: 1px solid var(--rule);
+      margin-bottom: 22px;
+    }
+    .eyebrow {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--mit-red);
+      margin: 0 0 6px;
+    }
+    h1 {
+      margin: 0 0 6px;
+      font-size: 26px;
+      font-weight: 750;
+      letter-spacing: -0.02em;
+    }
+    .subtitle {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .lang-toggle {
+      display: inline-flex;
+      border: 1px solid var(--rule);
+      border-radius: 8px;
+      overflow: hidden;
+      background: var(--card);
+      flex-shrink: 0;
+    }
+    .lang-toggle button {
+      border: 0;
+      background: transparent;
+      padding: 7px 12px;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--muted);
+      cursor: pointer;
+    }
+    .lang-toggle button.active {
+      background: var(--mit-red);
+      color: #fff;
+    }
+
+    .controls-bar {
+      display: grid;
+      grid-template-columns: 1.35fr 1fr;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+    .panel {
+      background: var(--card);
+      border: 1px solid var(--rule);
+      border-radius: var(--radius);
+      padding: 16px 18px;
+    }
+    .panel-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin: 0 0 10px;
+    }
+    .model-tabs {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+    .model-btn {
+      text-align: left;
+      padding: 10px 12px;
+      border: 1.5px solid var(--rule);
+      border-radius: 8px;
+      background: var(--paper);
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .model-btn:hover { border-color: var(--mit-red); }
+    .model-btn.active {
+      border-color: var(--mit-red);
+      background: var(--mit-red-soft);
+    }
+    .model-btn strong {
+      display: block;
+      font-size: 13.5px;
+      color: var(--ink);
+    }
+    .model-btn.active strong { color: var(--mit-red-dark); }
+    .model-btn span {
+      display: block;
+      font-size: 11.5px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+    .status-dot {
+      display: inline-block;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      margin-right: 5px;
+      background: #9CA3AF;
+      vertical-align: middle;
+    }
+    .status-dot.ready { background: var(--ok); }
+    .status-dot.missing { background: var(--mit-red); }
+
+    .preset-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    .preset-btn {
+      text-align: left;
+      padding: 8px 11px;
+      border: 1px solid var(--rule);
+      border-radius: 7px;
+      background: var(--paper);
+      font-size: 12px;
+      color: var(--ink);
+      cursor: pointer;
+    }
+    .preset-btn:hover {
+      border-color: var(--mit-red);
+      background: var(--mit-red-soft);
+    }
+    .preset-btn small {
+      display: block;
+      color: var(--muted);
+      font-size: 11px;
+      margin-top: 2px;
+    }
+
+    .editors {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+    .editor-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 8px;
+    }
+    .editor-head strong { font-size: 14px; }
+    .editor-head span { font-size: 12px; color: var(--muted); }
+    textarea {
+      width: 100%;
+      min-height: 185px;
+      resize: vertical;
+      border: 1px solid var(--rule);
+      border-radius: 8px;
+      padding: 12px 14px;
+      font-family: inherit;
+      font-size: 13.5px;
+      line-height: 1.6;
+      color: var(--ink);
+      background: #FFFEFE;
+    }
+    textarea:focus {
+      outline: none;
+      border-color: var(--mit-red);
+      box-shadow: 0 0 0 3px rgba(163, 31, 52, 0.12);
+    }
+
+    .action-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 22px;
+      flex-wrap: wrap;
+    }
+    .action-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .btn-primary {
+      background: var(--mit-red);
+      color: #fff;
+      border: 0;
+      border-radius: 8px;
+      padding: 11px 22px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .btn-primary:hover { background: var(--mit-red-dark); }
+    .btn-primary:disabled { opacity: 0.6; cursor: wait; }
+    .btn-secondary {
+      background: var(--card);
+      color: var(--ink);
+      border: 1px solid var(--rule);
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .btn-secondary:hover { border-color: var(--mit-red); color: var(--mit-red-dark); }
+    .sym-check {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      color: var(--muted);
+      cursor: pointer;
+    }
+    .status-msg {
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .status-msg.error { color: var(--mit-red-dark); font-weight: 600; }
+
+    .results-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(460px, 1fr));
+      gap: 16px;
+    }
+    .result-card {
+      background: var(--card);
+      border: 1px solid var(--rule);
+      border-top: 4px solid var(--slate);
+      border-radius: var(--radius);
+      padding: 18px 20px;
+    }
+    .result-card.dl { border-top-color: var(--mit-red); }
+    .result-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    .result-model {
+      font-size: 14px;
+      font-weight: 750;
+      margin: 0;
+    }
+    .result-meta {
+      font-size: 12px;
+      color: var(--muted);
+      margin: 3px 0 0;
+    }
+    .verdict-badge {
+      padding: 5px 12px;
+      border-radius: 999px;
+      font-size: 12.5px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .verdict-same { background: var(--ok-soft); color: var(--ok); }
+    .verdict-diff { background: var(--mit-red-soft); color: var(--mit-red-dark); }
+    .verdict-uncertain { background: var(--warn-soft); color: var(--warn); }
+
+    .prob-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    .prob-num {
+      font-size: 32px;
+      font-weight: 750;
+      letter-spacing: -0.03em;
+    }
+    .result-card.dl .prob-num { color: var(--mit-red); }
+    .thresh-info {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .gauge-wrap {
+      position: relative;
+      height: 16px;
+      background: #EFECEB;
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 16px;
+    }
+    .gauge-abstain {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      background: repeating-linear-gradient(45deg, rgba(138, 90, 0, 0.14), rgba(138, 90, 0, 0.14) 5px, rgba(138, 90, 0, 0.05) 5px, rgba(138, 90, 0, 0.05) 10px);
+      border-left: 1px dashed #B48224;
+      border-right: 1px dashed #B48224;
+    }
+    .gauge-fill {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      background: var(--slate);
+      opacity: 0.85;
+    }
+    .result-card.dl .gauge-fill { background: var(--mit-red); }
+    .gauge-tau {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: var(--ink);
+    }
+
+    .signal-title {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin: 0 0 8px;
+      padding-top: 12px;
+      border-top: 1px solid var(--rule);
+    }
+    .signal-list {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 7px 14px;
+    }
+    .signal-item {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12.5px;
+      padding: 4px 0;
+      border-bottom: 1px dotted var(--rule);
+    }
+    .signal-item span { color: var(--muted); }
+    .signal-item strong { color: var(--ink); font-weight: 650; }
+
+    @media (max-width: 860px) {
+      .controls-bar, .editors, .results-grid { grid-template-columns: 1fr; }
+      .model-tabs { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar"></div>
+  <div class="wrap">
+    <header>
+      <div>
+        <p class="eyebrow">NLU Authorship Verification · Live Local Inference</p>
+        <h1 data-ko="동일 저자 판별 데모 (ML vs DeBERTa-v3-large)" data-en="Authorship Verification Demo (ML vs DeBERTa-v3-large)">동일 저자 판별 데모 (ML vs DeBERTa-v3-large)</h1>
+        <p class="subtitle" data-ko="영어 글 두 편을 입력하고 전통 문체학 ML 또는 24층 DeBERTa-v3-large 모델로 동일 저자 여부를 비교 검증합니다." data-en="Compare two English passages using either the 6-Layer Stylometric ML pipeline or 24-Layer DeBERTa-v3-large.">영어 글 두 편을 입력하고 전통 문체학 ML 또는 24층 DeBERTa-v3-large 모델로 동일 저자 여부를 비교 검증합니다.</p>
+      </div>
+      <div class="lang-toggle">
+        <button id="lang-ko" class="active" type="button">한국어</button>
+        <button id="lang-en" type="button">EN</button>
+      </div>
+    </header>
+
+    <section class="controls-bar">
+      <div class="panel">
+        <p class="panel-label" data-ko="모델 선택" data-en="Model Selection">모델 선택</p>
+        <div class="model-tabs">
+          <button class="model-btn" data-mode="ml" type="button">
+            <strong><span id="dot-ml" class="status-dot"></span>01. Stylometric ML</strong>
+            <span data-ko="순수 ML · CPU ~32ms · 교차장르 강점" data-en="Pure ML · CPU ~32ms · Cross-Genre">순수 ML · CPU ~32ms · 교차장르 강점</span>
+          </button>
+          <button class="model-btn" data-mode="dl" type="button">
+            <strong><span id="dot-dl" class="status-dot"></span>03. DeBERTa-v3-large</strong>
+            <span data-ko="437M · Dual-ABTT · Open AUC 0.9139" data-en="437M · Dual-ABTT · Open AUC 0.9139">437M · Dual-ABTT · Open AUC 0.9139</span>
+          </button>
+          <button class="model-btn active" data-mode="both" type="button">
+            <strong>ML vs DL Compare</strong>
+            <span data-ko="두 모델 동시 비교 및 신호 대조" data-en="Side-by-side comparison">두 모델 동시 비교 및 신호 대조</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="panel">
+        <p class="panel-label" data-ko="Locked Test 실전 프리셋" data-en="Locked Test Presets">Locked Test 실전 프리셋</p>
+        <div id="preset-grid" class="preset-grid"></div>
+      </div>
+    </section>
+
+    <section class="editors">
+      <div class="panel">
+        <div class="editor-head">
+          <strong>Passage A</strong>
+          <span id="count-a">0 words</span>
+        </div>
+        <textarea id="text-a" placeholder="Enter first English passage..."></textarea>
+      </div>
+      <div class="panel">
+        <div class="editor-head">
+          <strong>Passage B</strong>
+          <span id="count-b">0 words</span>
+        </div>
+        <textarea id="text-b" placeholder="Enter second English passage..."></textarea>
+      </div>
+    </section>
+
+    <div class="action-row">
+      <div class="action-left">
+        <button id="run-btn" class="btn-primary" type="button" data-ko="동일 저자 판별 실행" data-en="Verify Authorship">동일 저자 판별 실행</button>
+        <button id="swap-btn" class="btn-secondary" type="button" data-ko="A ↔ B 순서 바꾸기" data-en="Swap A ↔ B">A ↔ B 순서 바꾸기</button>
+        <label class="sym-check">
+          <input id="sym-box" type="checkbox" checked />
+          <span data-ko="대칭성 실시간 검증 |P(A,B)-P(B,A)|" data-en="Verify order symmetry |P(A,B)-P(B,A)|">대칭성 실시간 검증 |P(A,B)-P(B,A)|</span>
+        </label>
+      </div>
+      <div id="status-msg" class="status-msg"></div>
+    </div>
+
+    <section id="results" class="results-grid"></section>
+  </div>
+
+  <script>
+    let lang = 'ko';
+    let mode = 'both';
+    let presets = [];
+
+    const textA = document.getElementById('text-a');
+    const textB = document.getElementById('text-b');
+    const countA = document.getElementById('count-a');
+    const countB = document.getElementById('count-b');
+    const runBtn = document.getElementById('run-btn');
+    const swapBtn = document.getElementById('swap-btn');
+    const symBox = document.getElementById('sym-box');
+    const statusMsg = document.getElementById('status-msg');
+    const resultsEl = document.getElementById('results');
+
+    function updateCounts() {
+      const wa = textA.value.trim() ? textA.value.trim().split(/\s+/).length : 0;
+      const wb = textB.value.trim() ? textB.value.trim().split(/\s+/).length : 0;
+      countA.textContent = `${wa} words`;
+      countB.textContent = `${wb} words`;
+    }
+    textA.addEventListener('input', updateCounts);
+    textB.addEventListener('input', updateCounts);
+
+    function applyLang() {
+      document.querySelectorAll('[data-ko]').forEach(el => {
+        el.textContent = el.dataset[lang];
+      });
+      document.getElementById('lang-ko').classList.toggle('active', lang === 'ko');
+      document.getElementById('lang-en').classList.toggle('active', lang === 'en');
+      renderPresets();
+    }
+    document.getElementById('lang-ko').onclick = () => { lang = 'ko'; applyLang(); };
+    document.getElementById('lang-en').onclick = () => { lang = 'en'; applyLang(); };
+
+    document.querySelectorAll('.model-btn').forEach(btn => {
+      btn.onclick = () => {
+        mode = btn.dataset.mode;
+        document.querySelectorAll('.model-btn').forEach(b => b.classList.toggle('active', b === btn));
+      };
+    });
+
+    swapBtn.onclick = () => {
+      const tmp = textA.value;
+      textA.value = textB.value;
+      textB.value = tmp;
+      updateCounts();
+    };
+
+    function renderPresets() {
+      const grid = document.getElementById('preset-grid');
+      grid.innerHTML = '';
+      presets.forEach(p => {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'preset-btn';
+        b.innerHTML = `${lang === 'ko' ? p.title_ko : p.title_en}<small>${p.domain} · pair #${p.pair_id}</small>`;
+        b.onclick = () => {
+          textA.value = p.text_1;
+          textB.value = p.text_2;
+          updateCounts();
+        };
+        grid.appendChild(b);
+      });
+    }
+
+    function verdictText(v) {
+      if (lang === 'ko') {
+        if (v === 'same_author') return '동일 저자 (Same Author)';
+        if (v === 'different_author') return '다른 저자 (Different Authors)';
+        return '판단 보류 (Uncertain / Abstain)';
+      }
+      if (v === 'same_author') return 'Same Author';
+      if (v === 'different_author') return 'Different Authors';
+      return 'Uncertain (Abstain)';
+    }
+
+    function renderResultCard(res) {
+      const isDl = res.model_id === 'dl';
+      const vCls = res.verdict === 'same_author' ? 'verdict-same' : (res.verdict === 'different_author' ? 'verdict-diff' : 'verdict-uncertain');
+      const pct = (res.probability * 100).toFixed(2);
+      const low = Math.max(0, (res.tau - res.delta) * 100);
+      const wid = Math.min(100 - low, res.delta * 200);
+      const tauPct = res.tau * 100;
+
+      const sigEntries = isDl ? [
+        ['Raw Backbone Prob', res.signals.raw_backbone_prob.toFixed(4)],
+        ['Dual-ABTT (r=8) Sim', res.signals.abtt_r8_sim.toFixed(4)],
+        ['Band 1 Lexical (L2-6)', res.signals.band1_lexical_sim.toFixed(4)],
+        ['Band 2 Syntax (L8-12)', res.signals.band2_syntax_sim.toFixed(4)],
+        ['Band 3 Discourse (L14-18)', res.signals.band3_discourse_sim.toFixed(4)],
+        ['Band 4 Semantic (L22-24)', res.signals.band4_semantic_sim.toFixed(4)],
+        ['Impostor Top-10 Aff.', res.signals.impostor_top10_affinity.toFixed(4)],
+        ['Token Lengths (A / B)', `${res.signals.tokens_a} / ${res.signals.tokens_b}`],
+      ] : [
+        ['POS-Noise 40k SVM', res.signals.pos_noise_svm_prob.toFixed(4)],
+        ['Surface 60k SVM', res.signals.surface_svm_prob.toFixed(4)],
+        ['Genre-Blind CatBoost', res.signals.genre_blind_prob.toFixed(4)],
+        ['Cohort Mutual Rank', res.signals.cohort_mutual_rank.toFixed(4)],
+        ['Cohort AS-Norm', res.signals.cohort_as_norm.toFixed(4)],
+        ['Compression Sim (CBC)', res.signals.compression_sim.toFixed(4)],
+        ["Burrows' Delta", res.signals.burrows_delta.toFixed(4)],
+        ['Word Lengths (A / B)', `${res.signals.words_a} / ${res.signals.words_b}`],
+      ];
+
+      const sigHtml = sigEntries.map(([k, v]) => `<div class="signal-item"><span>${k}</span><strong>${v}</strong></div>`).join('');
+      return `
+        <article class="result-card ${isDl ? 'dl' : 'ml'}">
+          <div class="result-top">
+            <div>
+              <h2 class="result-model">${res.model_name}</h2>
+              <p class="result-meta">${res.device} · ${res.latency_ms.toFixed(1)} ms · sym=${res.symmetry_error.toExponential(2)}</p>
+            </div>
+            <span class="verdict-badge ${vCls}">${verdictText(res.verdict)}</span>
+          </div>
+          <div class="prob-row">
+            <span class="prob-num">${pct}%</span>
+            <span class="thresh-info">τ=${res.tau.toFixed(4)} · abstain ±${res.delta.toFixed(4)}</span>
+          </div>
+          <div class="gauge-wrap" title="Same-author probability with PAN abstention zone">
+            <div class="gauge-fill" style="width:${pct}%"></div>
+            <div class="gauge-abstain" style="left:${low}%;width:${wid}%"></div>
+            <div class="gauge-tau" style="left:${tauPct}%"></div>
+          </div>
+          <p class="signal-title">${isDl ? '4-Depth & Dual-Rank ABTT Signals' : '6-Layer Stylometric Signals'}</p>
+          <div class="signal-list">${sigHtml}</div>
+        </article>
+      `;
+    }
+
+    async function runVerify() {
+      runBtn.disabled = true;
+      statusMsg.className = 'status-msg';
+      statusMsg.textContent = lang === 'ko' ? '모델 추론 중 (최초 실행 시 가중치 적재 포함)...' : 'Running inference (first run loads weights)...';
+      try {
+        const resp = await fetch('/api/predict', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            model: mode,
+            text_1: textA.value,
+            text_2: textB.value,
+            check_symmetry: symBox.checked,
+          }),
+        });
+        const data = await resp.json();
+        if (!resp.ok) throw new Error(data.error || 'Inference failed');
+        const cards = [];
+        if (data.results.ml) cards.push(renderResultCard(data.results.ml));
+        if (data.results.dl) cards.push(renderResultCard(data.results.dl));
+        resultsEl.innerHTML = cards.join('');
+        statusMsg.textContent = lang === 'ko' ? '판별 완료' : 'Verification complete';
+      } catch (err) {
+        statusMsg.className = 'status-msg error';
+        statusMsg.textContent = err.message;
+      } finally {
+        runBtn.disabled = false;
+      }
+    }
+    runBtn.onclick = runVerify;
+
+    async function init() {
+      const [st, pr] = await Promise.all([
+        fetch('/api/status').then(r => r.json()),
+        fetch('/api/presets').then(r => r.json()),
+      ]);
+      document.getElementById('dot-ml').className = 'status-dot ' + (st.ml.available ? 'ready' : 'missing');
+      document.getElementById('dot-dl').className = 'status-dot ' + (st.dl.available ? 'ready' : 'missing');
+      presets = pr.presets || [];
+      renderPresets();
+      const params = new URLSearchParams(window.location.search);
+      const reqPreset = params.get('preset');
+      const picked = presets.find(p => p.id === reqPreset) || presets[0];
+      if (picked) {
+        textA.value = picked.text_1;
+        textB.value = picked.text_2;
+        updateCounts();
+      }
+      if (params.get('autorun') === '1') {
+        await runVerify();
+      }
+    }
+    init();
+  </script>
+</body>
+</html>

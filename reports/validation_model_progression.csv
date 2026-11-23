@@ -1,0 +1,10 @@
+Model,Val_Closed_Top1_Acc,Val_Closed_Macro_F1,Val_Open_ROC_AUC,Val_Open_PAN_c@1,Val_Open_PAN_Brier,Val_Open_PAN_Overall
+1. Legacy Surface Single LightGBM,0.48667,0.38421,0.76321,0.70035,0.79212,0.73356
+2. Stage-1 Surface 60k LinearSVC,0.4,0.29389,0.71105,0.64567,0.73573,0.68287
+3. Stage-1 POS-Noise 40k Logistic,0.38667,0.27615,0.7075,0.64379,0.77203,0.68725
+4. 6-Layer Suite + LGBM-GBDT,0.60667,0.51722,0.79494,0.71452,0.80685,0.74794
+5. 6-Layer Suite + LGBM-GOSS,0.58667,0.49365,0.79585,0.71475,0.8081,0.74963
+6. 2025 v2 Dense + CatBoost,0.56,0.48115,0.79655,0.71171,0.81272,0.74853
+7. 2025 v2 Heterogeneous Ensemble (OOF Cal),0.6,0.51917,0.80089,0.7137,0.81749,0.75197
+10. [Multi-Scale R1+R2] 8-Expert Super-Ensemble (Abstain d*=0.054),0.62,0.53333,0.8005,0.73479,0.81656,0.75939
+13. [Round 3 Final] OOD-Register Gated Meta (Abstain d*=0.068),0.67333,0.58194,0.83781,0.77404,0.83438,0.79285
