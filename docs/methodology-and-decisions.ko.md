@@ -17,7 +17,7 @@
 
 ---
 
-## 2. Track 01 (`Stylometric ML`) — 3라운드 단계별 개선
+## 2. Track 01 (`Stylometric ML`): 3라운드 단계별 개선
 
 | 단계 | Val Closed Top-1 | Val Open ROC-AUC | Val PAN Overall | 핵심 진단 및 개선 조치 |
 | :--- | :---: | :---: | :---: | :--- |
@@ -33,7 +33,7 @@
 
 ---
 
-## 3. Track 02 (`DeBERTa-v3-base`) — 트러블슈팅, 4단계 절제 실험 & 4차 OOD 보정
+## 3. Track 02 (`DeBERTa-v3-base`): 트러블슈팅, 4단계 절제 실험 & 4차 OOD 보정
 
 ### 원인 규명: `transformers 5.x` 환경의 `FP16` 언더플로
 초기 `DeBERTa-v3-base` 학습이 `loss = 0.6965`(`Val AUC = 0.5152`)에서 멈춘 현상을 추적해, `transformers 5.x`가 Hub에 `float16`으로 저장된 DeBERTa-v3 가중치를 그대로 FP16으로 적재하면서 `AdamW(1.6e-5)` 갱신이 FP16 기계 입실론(`~1e-3`) 아래로 반올림 소멸함을 밝혔습니다. 백본 로드 직후 `.float()`로 FP32 마스터 가중치를 강제해 정상 수렴을 복구했습니다.
@@ -43,9 +43,9 @@
 | 단계 | Val Closed Top-1 | Val Open ROC-AUC | Val PAN Overall | 판정 및 원인 |
 | :--- | :---: | :---: | :---: | :--- |
 | `Step 0`: 기본 대칭 샴 베이스라인 | 67.33% | 0.8005 | 0.7690 | 기준선. |
-| `Step 1`: + 상위 6층 + ASP + MSD + 15% EntityMask | 66.67% | **0.8083** | **0.7697** | **채택** — Open AUC `+0.78%p` 및 Closed Macro-F1 개선. |
-| `Step 2`: + PriorWD + LLRD + CoSENT (`shuffle=False`) | 60.67% | 0.7927 | 0.7547 | **기각** — `CoSENT`용 도메인순 정렬(`shuffle=False`)이 앞 도메인 망각을 유발. |
-| `Step 3`: + Greedy Soup + EMA + AS-Norm + CSLS | 62.00% | **0.8098** | **0.7785** | **채택(S1 분리)** — Open PAN Overall `+0.95%p`; Closed 1:30은 원시 코사인 강제 결합을 분리해 Validation 최적 로짓 자동 선택. |
+| `Step 1`: + 상위 6층 + ASP + MSD + 15% EntityMask | 66.67% | **0.8083** | **0.7697** | **채택**: Open AUC `+0.78%p` 및 Closed Macro-F1 개선. |
+| `Step 2`: + PriorWD + LLRD + CoSENT (`shuffle=False`) | 60.67% | 0.7927 | 0.7547 | **기각**: `CoSENT`용 도메인순 정렬(`shuffle=False`)이 앞 도메인 망각을 유발. |
+| `Step 3`: + Greedy Soup + EMA + AS-Norm + CSLS | 62.00% | **0.8098** | **0.7785** | **채택(S1 분리)**: Open PAN Overall `+0.95%p`; Closed 1:30은 원시 코사인 강제 결합을 분리해 Validation 최적 로짓 자동 선택. |
 
 ### 4단계 순수 신경망 사후 고도화 (재학습 0초)
 전체 2.5 epoch(`shuffle=True`) 학습 직후 기존 도메인은 우수했으나 제로샷 장르 2곳(`Guardian FPR 97.6%`, `ArXiv FPR 94.8%`)의 임베딩 뭉침으로 전체 Val AUC가 `0.8155`에 머물렀습니다.
@@ -55,14 +55,14 @@
 
 ---
 
-## 4. Track 03 (`DeBERTa-v3-large`) — 4-Way HP 프로브, 지연 스냅샷 수프 & Dual-Rank ABTT
+## 4. Track 03 (`DeBERTa-v3-large`): 4-Way HP 프로브, 지연 스냅샷 수프 & Dual-Rank ABTT
 
 ### 24층에서 `LLRD + Prior-WD + Pure BCE`를 선택한 근거
 `shuffle=True` 조건에서 10% 층화 서브셋(`8,486`쌍) 4-Way 프로브를 수행해 Base `Step 2` 하락의 원인이 `LLRD`/`Prior-WD`가 아니라 `shuffle=False`였음을 입증했습니다.
-- `Probe_B (lr=1.6e-5 / 1.0e-4, LLRD gamma=0.94868, Prior-WD 0.01, Pure BCE)`: **Val Composite `0.71345`** (`Closed Top-1 62.67%`, `Open AUC 0.78423`) — 채택.
+- `Probe_B (lr=1.6e-5 / 1.0e-4, LLRD gamma=0.94868, Prior-WD 0.01, Pure BCE)`: **Val Composite `0.71345`** (`Closed Top-1 62.67%`, `Open AUC 0.78423`) / 채택.
 - `Probe_A (1.2e-5, LLRD + Prior-WD, Pure BCE)`: `0.69180`.
-- `Probe_C (1.2e-5, LLRD + Prior-WD, CoSENT 0.08)`: `0.69024` — 보조 CoSENT 손실이 순수 BCE 대비 이득 없음 확인.
-- `Probe_D (1.0e-5, 균일 학습률)`: `0.67642` — LLRD+Prior-WD 대비 `-3.70%p` 열세.
+- `Probe_C (1.2e-5, LLRD + Prior-WD, CoSENT 0.08)`: `0.69024` / 보조 CoSENT 손실이 순수 BCE 대비 이득 없음 확인.
+- `Probe_D (1.0e-5, 균일 학습률)`: `0.67642` / LLRD+Prior-WD 대비 `-3.70%p` 열세.
 
 ### L4 24GB VRAM 관리 및 최종 고도화 (`0.65/0.35` 수프 + Dual-Rank ABTT + AgreePCA)
 - **지연 스냅샷 평가(Deferred Snapshot Evaluation)**: 24층 학습 도중 옵티마이저·Prior-WD 앵커가 GPU에 상주한 상태에서 검증 추론을 실행하면 `L4 22.03 GB` 한계를 초과했습니다. 스냅샷(`50%, 62.5%, 75%, 87.5%, 100%`)을 CPU 디스크에 저장하고 학습 종료 후 옵티마이저를 해제한 뒤 일괄 평가하는 구조로 OOM을 완전히 해소했습니다.

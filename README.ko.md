@@ -6,9 +6,9 @@
 
 전통 문체학과 딥러닝의 실질적인 차이와 상호보완성을 검증하기 위해 **Train · Validation · Locked Test 간 저자 교집합 0명(Dual-Author Disjoint)** 벤치마크 위에서 **피처·예측값을 일절 혼합하지 않은 3개 독립 트랙**을 비교했습니다.
 
-1. **Track 01 (`01_stylometric_ml`)** — 6계층 문체 특징(`6,001`차원) + 10종 다중 스케일/디바이어싱 전문가(`LightGBM`·`CatBoost`·`Linear`) + 내재적 OOD 레지스터 게이트 메타 보정기 (`21.63 MB`, CPU `32.1 ms/pair`).
-2. **Track 02 (`02_deberta_v3_base`)** — 12층 대칭 샴 `microsoft/deberta-v3-base` (`185.97M`) + Greedy Model Soup + 4계층 `All-but-the-Top (r=3)` 잔차 OOD 게이트.
-3. **Track 03 (`03_deberta_v3_large`)** — 24층 대칭 샴 `microsoft/deberta-v3-large` (`436.64M`) + LLRD·Prior-WD + 체크포인트 보간 수프(`0.65 / 0.35`) + 4계층 Multi-Std + Dual-Rank `All-but-the-Top (r=3, 8)` + 대칭 합의축 PCA(`e1 * e2`) + 5-Seed 잔차 OOD 게이트.
+1. **Track 01 (`01_stylometric_ml`)**: 6계층 문체 특징(`6,001`차원) + 10종 다중 스케일/디바이어싱 전문가(`LightGBM`·`CatBoost`·`Linear`) + 내재적 OOD 레지스터 게이트 메타 보정기 (`21.63 MB`, CPU `32.1 ms/pair`).
+2. **Track 02 (`02_deberta_v3_base`)**: 12층 대칭 샴 `microsoft/deberta-v3-base` (`185.97M`) + Greedy Model Soup + 4계층 `All-but-the-Top (r=3)` 잔차 OOD 게이트.
+3. **Track 03 (`03_deberta_v3_large`)**: 24층 대칭 샴 `microsoft/deberta-v3-large` (`436.64M`) + LLRD·Prior-WD + 체크포인트 보간 수프(`0.65 / 0.35`) + 4계층 Multi-Std + Dual-Rank `All-but-the-Top (r=3, 8)` + 대칭 합의축 PCA(`e1 * e2`) + 5-Seed 잔차 OOD 게이트.
 
 ---
 
@@ -98,7 +98,7 @@ python verify_author.py predict --model both --check-symmetry --text-1 "First pa
 
 ## Google Drive 공개 아카이브 및 Colab 학습 링크
 
-- **전체 공개 폴더**: [Google Drive — NLU 아카이브](https://drive.google.com/drive/folders/1ij9ZwlLtimS26bAE9B_D5zL3raAKJody)
+- **전체 공개 폴더**: [Google Drive / NLU 아카이브](https://drive.google.com/drive/folders/1ij9ZwlLtimS26bAE9B_D5zL3raAKJody)
 - **벤치마크 데이터셋**: [benchmark_1024.zip (61.2 MB)](https://drive.google.com/file/d/1Y9xfMRskEUZPYw9f5jdiM6ws9L-Cwdr8/view)
 - **Track 01 (`Stylometric ML`)**: [train_01_stylometric_ml.ipynb (Colab)](https://colab.research.google.com/drive/1jAuZKPe7mcuL9jB9SAIQmGr-jQ-CdjtJ) · [model_01_stylometric_ml.joblib](https://drive.google.com/file/d/1q9T8zLYmnhLqPWT9He8wiqIjA0kvCR1M/view) · [results_01_stylometric_ml.zip](https://drive.google.com/file/d/1ZW4ib1SdDZPzGV1DHB3nREv8Mp7x-VfE/view)
 - **Track 02 (`DeBERTa-v3-base`)**: [train_02_deberta_v3_base.ipynb (Colab)](https://colab.research.google.com/drive/1U6Fv97IcC061XdJlVYWM79D9YSOsD9Bk) · [results_02_deberta_v3_base.zip](https://drive.google.com/file/d/1WjbhPHpdcCVGA8w0fQAyoDd7zMjnDmGO/view)

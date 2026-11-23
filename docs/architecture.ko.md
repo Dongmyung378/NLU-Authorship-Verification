@@ -6,7 +6,7 @@
 
 ---
 
-## 1. Track 01 — 6계층 문체학 ML (`01_stylometric_ml`)
+## 1. Track 01: 6계층 문체학 ML (`01_stylometric_ml`)
 
 ### 특징 추출 (`6,001`차원 = `501` Dense + `5,500` Sparse)
 
@@ -35,7 +35,7 @@
 
 ---
 
-## 2. Tracks 02 & 03 — 대칭 샴 DeBERTa-v3 (`12L` / `24L`)
+## 2. Tracks 02 & 03: 대칭 샴 DeBERTa-v3 (`12L` / `24L`)
 
 ### 백본 및 대칭 헤드
 

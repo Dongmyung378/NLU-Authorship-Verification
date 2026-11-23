@@ -1,4 +1,4 @@
-# 모델 카드: Track 01 — Stylometric ML (`01_stylometric_ml`)
+# 모델 카드: Track 01 / Stylometric ML (`01_stylometric_ml`)
 
 [English](./stylometric-ml.md) | [README](../README.ko.md)
 

@@ -1,8 +1,8 @@
-# Model Card: Track 03 — DeBERTa-v3-large (`03_deberta_v3_large`)
+# Model Card: Track 03 / DeBERTa-v3-large (`03_deberta_v3_large`)
 
 [한국어](./deberta-v3-large.ko.md) | [README](../README.md)
 
-- **Artifact**: `model_03_deberta_v3_large.pt` (`860.27 MB`, `436.64M` params, pure PyTorch tensors including FP16 backbone weights, 256 impostor 4-depth representations, Dual-Rank ABTT matrices, and 5-fold 5-seed `ResidualOODGate` weights — zero `sklearn` pickles)
+- **Artifact**: `model_03_deberta_v3_large.pt` (`860.27 MB`, `436.64M` params, pure PyTorch tensors including FP16 backbone weights, 256 impostor 4-depth representations, Dual-Rank ABTT matrices, and 5-fold 5-seed `ResidualOODGate` weights / zero `sklearn` pickles)
 - **Download**: [Google Drive](https://drive.google.com/file/d/1r19ezaf0Q_nn3qVS43m4nDhAs5jfGkve/view) · [Colab Notebook](https://colab.research.google.com/drive/1ROS0vdfbpZupVoM38Dz41eDB1tCAGjWL)
 - **Backbone & Recipe**: `microsoft/deberta-v3-large` (24L), `LLRD (gamma=0.94868) + Prior-WD (0.01) + Pure Label-Smoothed BCE`, interpolated checkpoint soup (`0.65 * step_4141 + 0.35 * step_4970`), 4-depth Multi-Std (`L2-6`, `L8-12`, `L14-18` mean+std + `L22-24`), Dual-Rank `All-but-the-Top (r=3, 8)`, symmetric agreement PCA (`e1 * e2`, 16d).
 - **Input**: Pair of English passages (`<= 512` tokens each, `1,024` combined budget), strictly order-invariant (`|P(A,B) - P(B,A)| = 0.00`).

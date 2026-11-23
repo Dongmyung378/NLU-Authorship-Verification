@@ -78,7 +78,7 @@ def style_ax(ax) -> None:
 
 def write_thumbnail_svg() -> None:
     svg = f'''<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
-<title id="title">동일 저자 판별 — 순수 문체학 ML vs DeBERTa-v3-base vs DeBERTa-v3-large</title>
+<title id="title">동일 저자 판별: 순수 문체학 ML vs DeBERTa-v3-base vs DeBERTa-v3-large</title>
 <desc id="desc">1,024 토큰 예산과 양방향 저자 배제 분할에서 전통 문체학 ML, DeBERTa-v3-base, DeBERTa-v3-large 세 트랙을 혼합 없이 독립 비교한 구조와 최종 Locked Test 성적(Open ROC-AUC 0.9139, PAN Overall 0.8643, Closed 1:30 Top-1 78.33%)입니다.</desc>
 <style>text{{font-family:'Noto Sans KR','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-variant-numeric:tabular-nums}}</style>
 <rect width="1200" height="760" fill="{PAPER}"/>
@@ -303,14 +303,14 @@ def build_progression_and_fpr_fig() -> None:
     ax2.set_ylim(len(groups) + 0.95, -0.55)
     ax2.set_xlim(0, 112)
     ax2.grid(axis="x", linestyle="-", alpha=0.8)
-    ax2.set_xlabel("False Positive Rate (%) — Lower is Better", fontsize=10)
+    ax2.set_xlabel("False Positive Rate (%) (Lower is Better)", fontsize=10)
     ax2.set_title("Zero-Shot Genre FPR Collapse via OOD Gating", fontsize=12.5, fontweight="bold", loc="left", pad=12)
     from matplotlib.patches import Patch
     legend_handles = [
         Patch(facecolor="#D5CECD", label="Before OOD Gate (Val R1/R2)"),
-        Patch(facecolor=MIT_RED, label="After — Large (Test)"),
-        Patch(facecolor=SLATE, label="After — Base (Test)"),
-        Patch(facecolor=GRAY, label="After — ML (Test)"),
+        Patch(facecolor=MIT_RED, label="After: Large (Test)"),
+        Patch(facecolor=SLATE, label="After: Base (Test)"),
+        Patch(facecolor=GRAY, label="After: ML (Test)"),
     ]
     ax2.legend(handles=legend_handles, loc="lower right", ncol=2, frameon=True, facecolor=WHITE, edgecolor=RULE, fontsize=8.0)
 
@@ -417,7 +417,7 @@ def build_og_image() -> None:
         ax.text(x0 + 0.28, 3.16, title, fontsize=13.5, fontweight="bold", color=INK)
         ax.text(x0 + 0.28, 2.74, sub, fontsize=11.5, color=col if col == MIT_RED else MUTED)
 
-    ax.text(1.0, 1.48, "Final Locked Test — DeBERTa-v3-large (437M)", fontsize=15, fontweight="bold", color=WHITE)
+    ax.text(1.0, 1.48, "Final Locked Test: DeBERTa-v3-large (437M)", fontsize=15, fontweight="bold", color=WHITE)
     ax.text(1.0, 0.94, "Open ROC-AUC 0.9139  |  PAN Overall 0.8643  |  Closed 1:30 Top-1 78.33%  |  Zero-Shot ArXiv 0.9389", fontsize=12.5, color=MIT_RED_SOFT)
 
     fig.savefig(OG_PORTFOLIO, dpi=100, format="jpeg", pil_kwargs={"quality": 92})

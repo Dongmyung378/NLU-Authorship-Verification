@@ -6,7 +6,7 @@ The project separates traditional stylometry (`Track 01`) and neural representat
 
 ---
 
-## 1. Track 01 — 6-Layer Stylometric ML (`01_stylometric_ml`)
+## 1. Track 01: 6-Layer Stylometric ML (`01_stylometric_ml`)
 
 ### Feature Extraction (`6,001` dimensions = `501` dense + `5,500` sparse)
 
@@ -35,7 +35,7 @@ Each passage is decomposed into three complementary linguistic views:
 
 ---
 
-## 2. Tracks 02 & 03 — Symmetric Siamese DeBERTa-v3 (`12L` / `24L`)
+## 2. Tracks 02 & 03: Symmetric Siamese DeBERTa-v3 (`12L` / `24L`)
 
 ### Backbone & Pooling
 

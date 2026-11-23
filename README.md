@@ -6,9 +6,9 @@ Compare two English passages (`<= 512` tokens each, `1,024`-token combined budge
 
 This benchmark evaluates **three strictly separated tracks** (zero cross-paradigm feature or prediction blending) under a **dual-author-disjoint split** (`0` shared authors across Train, Validation, and Locked Test) spanning 9 domains, same-topic hard negatives, cross-topic pairs, and zero-shot unseen genres:
 
-1. **Track 01 (`01_stylometric_ml`)** — 6-layer stylometric feature engineering (`6,001` dims) + 10-expert GBDT/CatBoost/Linear ensemble + intrinsic OOD-register gated meta-calibrator (`21.63 MB`, CPU `32.1 ms/pair`).
-2. **Track 02 (`02_deberta_v3_base`)** — 12-layer symmetric Siamese `microsoft/deberta-v3-base` (`185.97M`) + Greedy Model Soup + 4-depth `All-but-the-Top (r=3)` residual OOD gate.
-3. **Track 03 (`03_deberta_v3_large`)** — 24-layer symmetric Siamese `microsoft/deberta-v3-large` (`436.64M`) + LLRD/Prior-WD + interpolated checkpoint soup (`0.65 / 0.35`) + 4-depth Multi-Std + Dual-Rank `All-but-the-Top (r=3, 8)` + symmetric agreement PCA (`e1 * e2`) + 5-seed residual OOD gate.
+1. **Track 01 (`01_stylometric_ml`)**: 6-layer stylometric feature engineering (`6,001` dims) + 10-expert GBDT/CatBoost/Linear ensemble + intrinsic OOD-register gated meta-calibrator (`21.63 MB`, CPU `32.1 ms/pair`).
+2. **Track 02 (`02_deberta_v3_base`)**: 12-layer symmetric Siamese `microsoft/deberta-v3-base` (`185.97M`) + Greedy Model Soup + 4-depth `All-but-the-Top (r=3)` residual OOD gate.
+3. **Track 03 (`03_deberta_v3_large`)**: 24-layer symmetric Siamese `microsoft/deberta-v3-large` (`436.64M`) + LLRD/Prior-WD + interpolated checkpoint soup (`0.65 / 0.35`) + 4-depth Multi-Std + Dual-Rank `All-but-the-Top (r=3, 8)` + symmetric agreement PCA (`e1 * e2`) + 5-seed residual OOD gate.
 
 ---
 
@@ -101,7 +101,7 @@ Both serialized deployment artifacts (`model_01_stylometric_ml.joblib` using pur
 
 All datasets, single-pass reproducible training notebooks, evaluation bundles, technical reports, and deployment checkpoints are publicly shared on Google Drive:
 
-- **Full Archive Folder**: [Google Drive — NLU Archive](https://drive.google.com/drive/folders/1ij9ZwlLtimS26bAE9B_D5zL3raAKJody)
+- **Full Archive Folder**: [Google Drive / NLU Archive](https://drive.google.com/drive/folders/1ij9ZwlLtimS26bAE9B_D5zL3raAKJody)
 - **Benchmark Dataset**: [benchmark_1024.zip (61.2 MB)](https://drive.google.com/file/d/1Y9xfMRskEUZPYw9f5jdiM6ws9L-Cwdr8/view)
 - **Track 01 (`Stylometric ML`)**: [train_01_stylometric_ml.ipynb (Colab)](https://colab.research.google.com/drive/1jAuZKPe7mcuL9jB9SAIQmGr-jQ-CdjtJ) · [model_01_stylometric_ml.joblib](https://drive.google.com/file/d/1q9T8zLYmnhLqPWT9He8wiqIjA0kvCR1M/view) · [results_01_stylometric_ml.zip](https://drive.google.com/file/d/1ZW4ib1SdDZPzGV1DHB3nREv8Mp7x-VfE/view)
 - **Track 02 (`DeBERTa-v3-base`)**: [train_02_deberta_v3_base.ipynb (Colab)](https://colab.research.google.com/drive/1U6Fv97IcC061XdJlVYWM79D9YSOsD9Bk) · [results_02_deberta_v3_base.zip](https://drive.google.com/file/d/1WjbhPHpdcCVGA8w0fQAyoDd7zMjnDmGO/view)

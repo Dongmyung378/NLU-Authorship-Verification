@@ -1,4 +1,4 @@
-# 모델 카드: Track 03 — DeBERTa-v3-large (`03_deberta_v3_large`)
+# 모델 카드: Track 03 / DeBERTa-v3-large (`03_deberta_v3_large`)
 
 [English](./deberta-v3-large.md) | [README](../README.ko.md)
 

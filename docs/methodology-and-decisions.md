@@ -17,7 +17,7 @@ This document records **why** each model, feature group, training hyperparameter
 
 ---
 
-## 2. Track 01 (`Stylometric ML`) — 3-Round Iterative Progression
+## 2. Track 01 (`Stylometric ML`): 3-Round Iterative Progression
 
 | Stage | Val Closed Top-1 | Val Open ROC-AUC | Val PAN Overall | Key Diagnosis & Engineering Change |
 | :--- | :---: | :---: | :---: | :--- |
@@ -33,7 +33,7 @@ This document records **why** each model, feature group, training hyperparameter
 
 ---
 
-## 3. Track 02 (`DeBERTa-v3-base`) — Troubleshooting, 4-Step Ablation & 4-Round OOD Calibration
+## 3. Track 02 (`DeBERTa-v3-base`): Troubleshooting, 4-Step Ablation & 4-Round OOD Calibration
 
 ### Root Cause: `transformers 5.x` Silent FP16 Underflow
 Initial `DeBERTa-v3-base` training stayed flat at `loss = 0.6965` (`Val AUC = 0.5152`). Disabling `autocast` raised `RuntimeError: expected Half and Float`, revealing that `transformers 5.x` loads DeBERTa-v3's HuggingFace Hub `float16` weights directly in FP16, causing `AdamW` updates (`1.6e-5`) to round to zero below FP16 machine epsilon (`~1e-3`). Calling `AutoModel.from_pretrained(...).float()` with an explicit FP32 assertion immediately restored normal convergence.
@@ -43,9 +43,9 @@ Initial `DeBERTa-v3-base` training stayed flat at `loss = 0.6965` (`Val AUC = 0.
 | Step | Val Closed Top-1 | Val Open ROC-AUC | Val PAN Overall | Verdict & Root Cause |
 | :--- | :---: | :---: | :---: | :--- |
 | `Step 0`: Vanilla Siamese Baseline | 67.33% | 0.8005 | 0.7690 | Baseline. |
-| `Step 1`: + Top-6 Layers + ASP + MSD + 15% EntityMask | 66.67% | **0.8083** | **0.7697** | **KEEP** — improves Open AUC (`+0.78%p`) and Closed Macro-F1. |
-| `Step 2`: + PriorWD + LLRD + CoSENT (`shuffle=False`) | 60.67% | 0.7927 | 0.7547 | **DROP** — domain-sorted `shuffle=False` batches caused sequential forgetting across domains. |
-| `Step 3`: + Greedy Soup + EMA + AS-Norm + CSLS | 62.00% | **0.8098** | **0.7785** | **KEEP (decoupled S1)** — lifted Open PAN Overall `+0.95%p`; decoupled raw cosine AS-Norm from Closed 1:30 matching so S1 selects best validation logit mode. |
+| `Step 1`: + Top-6 Layers + ASP + MSD + 15% EntityMask | 66.67% | **0.8083** | **0.7697** | **KEEP**: improves Open AUC (`+0.78%p`) and Closed Macro-F1. |
+| `Step 2`: + PriorWD + LLRD + CoSENT (`shuffle=False`) | 60.67% | 0.7927 | 0.7547 | **DROP**: domain-sorted `shuffle=False` batches caused sequential forgetting across domains. |
+| `Step 3`: + Greedy Soup + EMA + AS-Norm + CSLS | 62.00% | **0.8098** | **0.7785** | **KEEP (decoupled S1)**: lifted Open PAN Overall `+0.95%p`; decoupled raw cosine AS-Norm from Closed 1:30 matching so S1 selects best validation logit mode. |
 
 ### 4-Round Pure-Neural Post-Hoc Progression (Zero Retraining)
 After full 2.5-epoch training (`shuffle=True`), `Base` reached `news AUC 0.9447` but collapsed on zero-shot genres (`Guardian FPR 97.6%`, `ArXiv FPR 94.8%`, overall Val AUC `0.8155`).
@@ -55,14 +55,14 @@ After full 2.5-epoch training (`shuffle=True`), `Base` reached `news AUC 0.9447`
 
 ---
 
-## 4. Track 03 (`DeBERTa-v3-large`) — HP Probe, Deferred Snapshot Soup & Dual-Rank ABTT
+## 4. Track 03 (`DeBERTa-v3-large`): HP Probe, Deferred Snapshot Soup & Dual-Rank ABTT
 
 ### Why `LLRD + Prior-WD + Pure BCE` Won on 24 Layers
 Re-testing `LLRD + Prior-WD` **with `shuffle=True`** on a 10% stratified probe (`8,486` pairs) proved that the failure in Base Step 2 was caused by `shuffle=False`, not LLRD/Prior-WD:
-- `Probe_B (lr=1.6e-5 / 1.0e-4, LLRD gamma=0.94868, Prior-WD 0.01, Pure BCE)`: **Val Composite `0.71345`** (`Closed Top-1 62.67%`, `Open AUC 0.78423`) — selected.
+- `Probe_B (lr=1.6e-5 / 1.0e-4, LLRD gamma=0.94868, Prior-WD 0.01, Pure BCE)`: **Val Composite `0.71345`** (`Closed Top-1 62.67%`, `Open AUC 0.78423`) / selected.
 - `Probe_A (1.2e-5, LLRD + Prior-WD, Pure BCE)`: `0.69180`.
-- `Probe_C (1.2e-5, LLRD + Prior-WD, CoSENT 0.08)`: `0.69024` — confirmed CoSENT adds no gain over label-smoothed BCE.
-- `Probe_D (1.0e-5, Uniform LR)`: `0.67642` — lagged LLRD+Prior-WD by `-3.70%p`.
+- `Probe_C (1.2e-5, LLRD + Prior-WD, CoSENT 0.08)`: `0.69024` / confirmed CoSENT adds no gain over label-smoothed BCE.
+- `Probe_D (1.0e-5, Uniform LR)`: `0.67642` / lagged LLRD+Prior-WD by `-3.70%p`.
 
 ### L4 24GB VRAM Engineering & Final Card (`0.65/0.35` Soup + Dual-Rank ABTT + AgreePCA)
 - **Deferred Snapshot Evaluation**: Evaluating snapshots mid-training while optimizer states and Prior-WD anchors stayed on GPU overflowed `L4 22.03 GB`. Saving snapshots (`50%, 62.5%, 75%, 87.5%, 100%`) directly to CPU disk and freeing optimizer/anchors before evaluation kept peak VRAM safe (`~19 GB`) with zero recomputation loss.

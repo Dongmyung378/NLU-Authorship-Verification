@@ -1,4 +1,4 @@
-"""Build train_03_deberta_v3_large.ipynb — unified DeBERTa-v3-large training, Dual-ABTT OOD gate & export notebook."""
+"""Build train_03_deberta_v3_large.ipynb: unified DeBERTa-v3-large training, Dual-ABTT OOD gate & export notebook."""
 from __future__ import annotations
 
 import json

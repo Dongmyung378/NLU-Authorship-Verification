@@ -334,7 +334,7 @@ def build_benchmark(
     assert len(val_open_authors & test_open_authors) == 0
 
     # ==========================================================================
-    # PART A: Construct Scenario 1 — Closed-Set 1:N Attribution Cohorts (4 Domains x N=30 = 120 Known Authors)
+    # PART A: Construct Scenario 1 / Closed-Set 1:N Attribution Cohorts (4 Domains x N=30 = 120 Known Authors)
     # ==========================================================================
     print("4. Constructing Scenario 1: Closed-Set 1:30 Attribution (Known Train Authors, Same-Domain Unseen Docs)...")
     closed_anchor_rows = []
@@ -514,7 +514,7 @@ def build_benchmark(
     )
 
     # ==========================================================================
-    # PART C: Construct Scenario 2 — Open & Cross-Domain Verification (Val & Test)
+    # PART C: Construct Scenario 2 / Open & Cross-Domain Verification (Val & Test)
     # ==========================================================================
     def build_open_split(open_authors: set[str], split_tag: str, rng_seed: int) -> pd.DataFrame:
         local_rng = np.random.default_rng(rng_seed)

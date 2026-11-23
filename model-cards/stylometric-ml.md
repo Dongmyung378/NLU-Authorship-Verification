@@ -1,4 +1,4 @@
-# Model Card: Track 01 — Stylometric ML (`01_stylometric_ml`)
+# Model Card: Track 01 / Stylometric ML (`01_stylometric_ml`)
 
 [한국어](./stylometric-ml.ko.md) | [README](../README.md)
 

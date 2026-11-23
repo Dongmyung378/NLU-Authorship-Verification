@@ -1,4 +1,4 @@
-"""Build train_01_stylometric_ml.ipynb — unified stylometric ML training & evaluation notebook."""
+"""Build train_01_stylometric_ml.ipynb: unified stylometric ML training & evaluation notebook."""
 from __future__ import annotations
 
 import json
