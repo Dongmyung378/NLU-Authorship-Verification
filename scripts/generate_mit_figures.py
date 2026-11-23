@@ -270,7 +270,7 @@ def build_progression_and_fpr_fig(lang: str) -> None:
         (0.0, 0.8155, "0.8155\nBase R1", SLATE, (8, -22)),
         (1.0, 0.8912, "0.8912\n+OOD Gate", SLATE, (6, -25)),
         (4.0, 0.9040, "0.9040", SLATE, (8, -3)),
-        (0.0, 0.8239, "0.8239\nLarge R1", MIT_RED_DARK, (-14, 28)),
+        (0.0, 0.8239, "0.8239\nLarge R1", MIT_RED_DARK, (-24, 28)),
         (1.0, 0.9101, "0.9101\n+4D ABTT", MIT_RED_DARK, (-12, 12)),
         (4.0, 0.9139, "0.9139", MIT_RED, (8, 1)),
     ]

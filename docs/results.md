@@ -8,7 +8,7 @@ All metrics below are measured on the locked test split of `benchmark_1024` (`24
 
 ## 1. Three-Track Locked Test Summary
 
-| Track | Closed Top 1 | Closed Top 3 | Closed Macro F1 | Open ROC AUC | PAN c@1 | PAN F_0.5u | PAN Brier | PAN Overall | Forced Macro F1 | Answered Acc | Abstain % |
+| Track | Closed Top-1 | Closed Top-3 | Closed Macro F1 | Open ROC AUC | PAN c@1 | PAN F_0.5u | PAN Brier | PAN Overall | Forced Macro F1 | Answered Acc | Abstain % |
 | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
 | `01. Stylometric ML` | 64.58% | 84.58% | 0.5359 | 0.84740 | 0.78192 | 0.78225 | 0.83867 | 0.80082 | 0.76280 | 79.80% | 14.17% |
 | `02. DeBERTa-v3-base` | 76.25% | **91.25%** | 0.6363 | 0.90399 | 0.84428 | 0.84144 | 0.87237 | 0.85669 | 0.81958 | 86.12% | 14.04% |
@@ -33,7 +33,7 @@ All metrics below are measured on the locked test split of `benchmark_1024` (`24
 | Stratum: `cross_topic` | 2,158 | 0.8340 | 0.8787 | **0.8811** |
 | Stratum: `zero_shot_unseen_genre` (`arxiv`) | 880 | 0.9336 | 0.9093 | **0.9389** |
 | Stratum: `cross_genre` (`guardian` etc.) | 562 | **0.8019** | 0.7385 | 0.7344 |
-| Length: `Ultra Short (<60w/doc)` | 4,058 | 0.8287 | 0.9157 | **0.9285** |
+| Length: `Ultra-Short (<60w/doc)` | 4,058 | 0.8287 | 0.9157 | **0.9285** |
 | Length: `Short (60~180w/doc)` | 2,226 | 0.8848 | 0.9186 | **0.9357** |
 | Length: `Medium (180~350w/doc)` | 3,156 | 0.8421 | **0.8752** | 0.8739 |
 | Domain: `news` | 2,076 | 0.8362 | 0.9538 | **0.9603** |
