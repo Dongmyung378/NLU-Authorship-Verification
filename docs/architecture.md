@@ -40,7 +40,7 @@ Each passage is decomposed into three complementary linguistic views:
 ### Backbone & Pooling
 
 - **Token budget**: `512` tokens per document (`1,024` combined), encoded symmetrically by a shared DeBERTa-v3 encoder (`FP32` master weights under `BF16` autocast).
-- **Weighted Top-50% Layer Pooling**: Softmax-weighted aggregation of upper layers (`L7-L12` on Base, `L13~L24` on Large).
+- **Weighted Top-50% Layer Pooling**: Softmax-weighted aggregation of upper layers (`L7~L12` on Base, `L13~L24` on Large).
 - **Attentive Statistics Pooling (`ASP`)**: Attention-weighted token mean concatenated with attention-weighted token standard deviation (`2 * H`), capturing stylistic rhythm variance.
 - **Symmetric Interaction Head**: Maps `(u, v)` via `[0.5*(u+v), |u-v|, u_unit*v_unit, (u_unit-v_unit)^2, cos(u_unit, v_unit)]` through a LayerNorm-GELU MLP and 5 branch Multi-Sample Dropout (`p = 0.10..0.30`).
 

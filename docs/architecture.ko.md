@@ -40,7 +40,7 @@
 ### 백본 및 대칭 헤드
 
 - **토큰 예산**: 문서당 최대 `512`토큰(쌍 합산 `1,024`토큰), 공유 DeBERTa-v3 인코더(`FP32` 마스터 가중치 + `BF16` autocast).
-- **상위 50% 학습 가능 층 가중 풀링**: `Base` 상위 6층(`L7-L12`), `Large` 상위 12층(`L13~L24`)을 softmax 가중 결합.
+- **상위 50% 학습 가능 층 가중 풀링**: `Base` 상위 6층(`L7~L12`), `Large` 상위 12층(`L13~L24`)을 softmax 가중 결합.
 - **어텐션 통계 풀링 (`ASP`)**: 토큰별 어텐션 가중 평균과 표준편차를 결합(`2 * H`)해 문체 호흡 변동성 반영.
 - **대칭 상호작용 헤드**: `[0.5*(u+v), |u-v|, u_unit*v_unit, (u_unit-v_unit)^2, cos(u_unit, v_unit)]`를 LayerNorm-GELU MLP와 5 branch Multi-Sample Dropout(`p = 0.10..0.30`)으로 분류.
 
