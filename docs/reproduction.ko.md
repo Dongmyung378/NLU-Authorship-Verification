@@ -21,7 +21,8 @@ python verify_author.py status
 sh ./launch-nlu.sh demo
 
 # 명령줄(CLI) 단일 글 쌍 판별 (ml, dl, both 선택)
-python verify_author.py predict --model both --check-symmetry --text-file-1 a.txt --text-file-2 b.txt
+python verify_author.py predict --model both --check-symmetry `
+  --text-file-1 a.txt --text-file-2 b.txt
 
 # 단위·API·대칭성·Locked Test 정합성 테스트 실행
 pytest -v tests/test_inference_and_demo.py

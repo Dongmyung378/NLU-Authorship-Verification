@@ -82,7 +82,8 @@ python verify_author.py download --model dl
 sh ./launch-nlu.sh demo
 
 # 4. 명령줄(CLI)에서 바로 판별
-python verify_author.py predict --model both --check-symmetry --text-1 "First passage..." --text-2 "Second passage..."
+python verify_author.py predict --model both --check-symmetry `
+  --text-1 "First passage..." --text-2 "Second passage..."
 ```
 
 ### Google Drive 공개 아카이브 및 Colab 학습 링크
@@ -107,14 +108,14 @@ pytest -v tests/test_inference_and_demo.py
 ## 저장소 구성
 
 ```text
-nlu_authorship/          ML·DL 독립 추론 엔진, Google Drive 다운로더, 로컬 웹 데모 서버
-notebooks/colab/         단일 실행 재현용 최종 학습 노트북 3종 (01 ML, 02 Base, 03 Large)
-scripts/                 벤치마크 빌더, 무결성 검증, 노트북 생성기, 한·영 MIT Red 차트 렌더러
-docs/                    영문·국문 구조, 설계 판단, 실험 결과, 재현 안내 문서 및 차트
-model-cards/             Track 01 (Stylometric ML) 및 Track 03 (DeBERTa-v3-large) 모델 카드
-reports/                 검증된 요약 JSON 및 3대 모델 통계 비교 CSV
-tests/                   단위·웹 API·순서 대칭성·Locked Test 정합성 테스트
-verify_author.py         CLI 및 웹 데모 실행기 (launch-nlu.bat / launch-nlu.sh 지원)
+nlu_authorship/   ML·DL 독립 추론 엔진, Drive 다운로더, 로컬 웹 데모 서버
+notebooks/colab/  단일 실행 재현용 최종 학습 노트북 3종 (01 ML, 02 Base, 03 Large)
+scripts/          벤치마크 빌더, 무결성 검증, 노트북·한·영 차트 생성기
+docs/             영문·국문 구조, 설계 판단, 결과, 재현 문서 및 차트
+model-cards/      Track 01 (Stylometric ML)·Track 03 (DeBERTa-v3-large) 카드
+reports/          검증된 요약 JSON 및 3대 모델 통계 비교 CSV
+tests/            단위·웹 API·순서 대칭성·Locked Test 정합성 테스트
+verify_author.py  CLI 및 웹 데모 실행기 (launch-nlu.bat / launch-nlu.sh)
 ```
 
 ---

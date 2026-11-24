@@ -82,7 +82,8 @@ python verify_author.py download --model dl
 sh ./launch-nlu.sh demo
 
 # 4. Or run directly from the CLI
-python verify_author.py predict --model both --check-symmetry --text-1 "First passage..." --text-2 "Second passage..."
+python verify_author.py predict --model both --check-symmetry `
+  --text-1 "First passage..." --text-2 "Second passage..."
 ```
 
 ### Public Google Drive Archive & One-Click Colab Reproduction
@@ -107,14 +108,14 @@ Both serialized deployment artifacts (`model_01_stylometric_ml.joblib` using pur
 ## Repository Layout
 
 ```text
-nlu_authorship/          Standalone ML & DL inference engines, Google Drive fetcher, and Web Demo server
-notebooks/colab/         Clean single-pass training notebooks (01 ML, 02 DeBERTa-base, 03 DeBERTa-large)
-scripts/                 Benchmark builder, integrity checker, notebook generators, and EN/KO figure renderer
-docs/                    Bilingual architecture, design decisions, results, reproduction guides, and figures
-model-cards/             Bilingual model cards for Track 01 (Stylometric ML) and Track 03 (DeBERTa-v3-large)
-reports/                 Verified summary JSONs and 3-way statistical comparison CSVs
-tests/                   Unit, web API, order-symmetry, and locked-test parity tests
-verify_author.py         CLI & Web Demo entrypoint (also via launch-nlu.bat / launch-nlu.sh)
+nlu_authorship/   ML & DL inference engines, Drive fetcher, Web Demo server
+notebooks/colab/  Single-pass training notebooks (01 ML, 02 Base, 03 Large)
+scripts/          Benchmark builder, integrity checks, figure/notebook tools
+docs/             Bilingual architecture, decisions, results, guides & plots
+model-cards/      Bilingual model cards (Track 01 ML & Track 03 Large)
+reports/          Verified summary JSONs & 3-way statistical comparison CSVs
+tests/            Unit, Web API, order-symmetry & locked-test parity tests
+verify_author.py  CLI & Web Demo entrypoint (launch-nlu.bat / launch-nlu.sh)
 ```
 
 ---
