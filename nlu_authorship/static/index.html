@@ -462,6 +462,7 @@
     let lang = 'ko';
     let mode = 'both';
     let presets = [];
+    let lastResults = null;
 
     const textA = document.getElementById('text-a');
     const textB = document.getElementById('text-b');
@@ -482,13 +483,26 @@
     textA.addEventListener('input', updateCounts);
     textB.addEventListener('input', updateCounts);
 
+    function renderLastResults() {
+      if (!lastResults) return;
+      const cards = [];
+      if (lastResults.ml) cards.push(renderResultCard(lastResults.ml));
+      if (lastResults.dl) cards.push(renderResultCard(lastResults.dl));
+      resultsEl.innerHTML = cards.join('');
+    }
+
     function applyLang() {
+      document.documentElement.lang = lang;
       document.querySelectorAll('[data-ko]').forEach(el => {
         el.textContent = el.dataset[lang];
       });
       document.getElementById('lang-ko').classList.toggle('active', lang === 'ko');
       document.getElementById('lang-en').classList.toggle('active', lang === 'en');
       renderPresets();
+      renderLastResults();
+      if (lastResults && !statusMsg.classList.contains('error')) {
+        statusMsg.textContent = lang === 'ko' ? '판별 완료' : 'Verification complete';
+      }
     }
     document.getElementById('lang-ko').onclick = () => { lang = 'ko'; applyLang(); };
     document.getElementById('lang-en').onclick = () => { lang = 'en'; applyLang(); };
@@ -605,10 +619,8 @@
         });
         const data = await resp.json();
         if (!resp.ok) throw new Error(data.error || 'Inference failed');
-        const cards = [];
-        if (data.results.ml) cards.push(renderResultCard(data.results.ml));
-        if (data.results.dl) cards.push(renderResultCard(data.results.dl));
-        resultsEl.innerHTML = cards.join('');
+        lastResults = data.results || null;
+        renderLastResults();
         statusMsg.textContent = lang === 'ko' ? '판별 완료' : 'Verification complete';
       } catch (err) {
         statusMsg.className = 'status-msg error';
@@ -620,6 +632,10 @@
     runBtn.onclick = runVerify;
 
     async function init() {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('lang') === 'en' || params.get('lang') === 'ko') {
+        lang = params.get('lang');
+      }
       const [st, pr] = await Promise.all([
         fetch('/api/status').then(r => r.json()),
         fetch('/api/presets').then(r => r.json()),
@@ -627,8 +643,7 @@
       document.getElementById('dot-ml').className = 'status-dot ' + (st.ml.available ? 'ready' : 'missing');
       document.getElementById('dot-dl').className = 'status-dot ' + (st.dl.available ? 'ready' : 'missing');
       presets = pr.presets || [];
-      renderPresets();
-      const params = new URLSearchParams(window.location.search);
+      applyLang();
       const reqPreset = params.get('preset');
       const picked = presets.find(p => p.id === reqPreset) || presets[0];
       if (picked) {

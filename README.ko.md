@@ -10,7 +10,7 @@
 2. **Track 02 (`02_deberta_v3_base`)**: 12층 대칭 샴 `microsoft/deberta-v3-base` (`185.97M`) + Greedy Model Soup + 4계층 `All-but-the-Top (r=3)` 잔차 OOD 게이트.
 3. **Track 03 (`03_deberta_v3_large`)**: 24층 대칭 샴 `microsoft/deberta-v3-large` (`436.64M`) + LLRD·Prior WD + 체크포인트 보간 수프(`0.65 / 0.35`) + 4계층 Multi-Std + Dual-Rank `All-but-the-Top (r=3, 8)` + 대칭 합의축 PCA(`e1 * e2`) + 5-Seed 잔차 OOD 게이트.
 
-![실시간 동일 저자 판별 웹 데모 화면](docs/figures/demo_ui_live.png)
+![실시간 동일 저자 판별 웹 데모 화면 (한국어)](docs/figures/demo_ui_live.ko.png)
 
 ---
 
